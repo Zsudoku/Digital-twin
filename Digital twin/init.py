@@ -1,3 +1,9 @@
+'''
+Date: 2022-03-13 10:14:05
+LastEditors: ZSudoku
+LastEditTime: 2022-03-16 11:06:08
+FilePath: \python\Digital twin\init.py
+'''
 enterNum = 100
 upLoadNum = 2
 LisUpLoadFre = [5,7]
