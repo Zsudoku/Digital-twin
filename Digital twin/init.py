@@ -1,15 +1,16 @@
 '''
 Date: 2022-03-13 10:14:05
 LastEditors: ZSudoku
-LastEditTime: 2022-03-16 11:06:08
-FilePath: \python\Digital twin\init.py
+LastEditTime: 2022-04-03 20:03:29
+FilePath: \Digita-twin\Digital twin\init.py
 '''
-enterNum = 100
-upLoadNum = 2
-LisUpLoadFre = [5,7]
-LisUpLoadFirst = [10,20]
-LisUpLoad = [[1,2,3],[2,3,4]]
+enterNum = 100 #总上货箱数
+upLoadNum = 2  #上货点数量
+LisUpLoadFre = [5,5] #上货频率
+LisUpLoadFirst = [10,20] 
+LisUpLoad = [[1,2,3],[2,3,4]] 
 print("程序开始-----")
+
 #上货点函数,从上货点到第一个交通点
 def UpLoad():
     #上货点数量校验
@@ -41,6 +42,8 @@ def UpLoad():
             LisTime[index].append((j+1)*LisUpLoadFre[index])
         index += 1
     print(LisTime)
+
+#上货点到第一个交通点：
 
 
 def main():
