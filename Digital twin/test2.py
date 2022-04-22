@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-04-17 18:37:31
+LastEditTime: 2022-04-20 20:25:17
 FilePath: \Digital-twin\Digital twin\test2.py
 '''
 # firstNum = 20
@@ -68,9 +68,14 @@ lis = [{'x': 1885.26343, 'y': 18.434639, 'z': 44.90394, 's1': 0, 's2': 0, 'flag'
 #         loadNum += test
 # print(LisLoad)
 
-dir = {'0': 8.5, '1': 18, '2': 10}
-tuple1 = sorted(dir.items(), key=lambda item:item[1], reverse = True)
-print(sorted(dir.items(),key=lambda x:x[0]))
-print()
-print(tuple1)
+# dir = {'0': 8.5, '1': 18, '2': 10}
+# tuple1 = sorted(dir.items(), key=lambda item:item[1], reverse = True)
+# print(sorted(dir.items(),key=lambda x:x[0]))
+# print()
+# print(tuple1)
 
+x1 = 5.5
+x2 = 6.5
+print(max(x1,x2))
+
+print(abs(x1-x2))

@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-10 21:06:05
 LastEditors: ZSudoku
-LastEditTime: 2022-04-17 19:05:37
+LastEditTime: 2022-04-18 15:07:20
 FilePath: \Digital-twin\Digital twin\model_4.py
 入库资产的仿真算法
 input:所有入口到交通点，交通点到所有出口的数据结构信息和相关参数，入库编码子序列(a1,a2,a3,……,at)
@@ -217,19 +217,5 @@ def model_4():
     return 0
 
 if __name__ == '__main__':
-    # CALCupLoadFre(lostTime=lostTime,upLoadNum=2)
-    # CALCupLoadTime(LisCrossTime=LisUpLoadFirstCrossTime,upLoadFre=1)
-    #print(CALCupLoadSign(LisCross))
-    #print(CALCupLoadSameCross(LisCross))
-    #print(CALCupLoadCross(LisCross))
-    #print(CALCupLoadSameCross(LisCross,CALCupLoadCross(LisCross)))
     upLoadNum=len(LisUpLoadFirstCrossTime)
-    # print(CALCupLoadTime(LisUpLoadFirstCrossTime,CALCupLoadFre(lostTime=lostTime,upLoadNum=upLoadNum)))
-    # print(CALCupLoadGoodsNum(upLoadNum,LisGoodsNum))
-    # print(CALCeachUpLoadNum(upLoadNum=upLoadNum,GoodsNum=13))
-    #print(CALCupLoadGoodsNum(upLoadNum,LisGoodsNum))
-    #print(CALCupLoadTime(LisCrossTime,upLoadFre,upLoadNum))
-    #print(CALCupLoadFirstCrossTime(LisCross))
     print(CALCupLoadAllTimeLis())
-    #print(CALCupLoadFirstCrossTime(LisCross))
-    #print(CALCupLoadTime())
