@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-10 21:06:05
 LastEditors: ZSudoku
-LastEditTime: 2022-04-18 15:07:20
+LastEditTime: 2022-04-24 17:06:28
 FilePath: \Digital-twin\Digital twin\model_4.py
 入库资产的仿真算法
 input:所有入口到交通点，交通点到所有出口的数据结构信息和相关参数，入库编码子序列(a1,a2,a3,……,at)
@@ -26,12 +26,12 @@ mod1 = 3
 mod2 = 5
 inrTime = 4 #叠一次货物运行时长
 flodTime = 5 #两次叠箱间的等待时长
-lostTime = inrTime + flodTime
+lostTime = inrTime + flodTime + 7
 #计算上货点的上货频率
 def CALCupLoadFre(lostTime,upLoadNum):
     return lostTime*upLoadNum
 
-LisCross = [[[1,3,8.5],[3,4,15]],[[2,3,18],[3,4,15]],[[5,3,20],[3,4,15]]] 
+LisCross = [[[1,3,13],[3,4,15]],[[2,3,14],[3,4,15]],[[5,3,21],[3,4,15]]] 
 
 #找出上货点的对应数标
 def CALCupLoadSign(LisCross):
@@ -88,7 +88,11 @@ def CALCupLoadTime():
         if(i==0):
             LisupLoadStartTime.append(0)
         else:
-            LisupLoadStartTime.append((LisCrossTime[i-1][1] + (i) * lostTime) - LisCrossTime[i][1])
+            time_t = (LisCrossTime[i-1][1] + (i) * lostTime) - LisCrossTime[i][1]
+            if(time_t <  upLoadFre):
+                LisupLoadStartTime.append(time_t)
+            else:
+                LisupLoadStartTime.append(time_t % upLoadFre)
     dir = {}
     for i in range(upLoadNum):
         dir['%s'%(LisCrossTime[i][0])] = LisupLoadStartTime[i]
@@ -99,9 +103,9 @@ def CALCupLoadTime():
     return LisupLoadStartTime 
 
 #各种类型的上货数量  
-LisGoodsNum = [{'0':13,'1':8,'2':6,'3':7,'4':2}]
+LisGoodsNum = [{'10':8,'11':6,'13':6,'15':7,'16':12}]
 #上货点分配任务量
-def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum):
+def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
     LisupLoadGoodsNum = []
     LisTemp = []
     #按照上货点数量对列表进行分割
@@ -110,7 +114,7 @@ def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum):
     #获取每种资产的上货数量
     for i in LisGoodsNum[0]:
         #print(LisGoodsNum[0][i])
-        LisTemp.append(LisGoodsNum[0][i])
+        LisTemp.append(LisGoodsNum[0][i] * mod)
     #针对每种类型的上货资产，在上货点出进行分割
     LisNum = [0]
     upLoadIndex = 0
@@ -124,6 +128,7 @@ def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum):
             if(upLoadIndex == upLoadNum):
                 upLoadIndex = 0
         upLoadIndex = LisNum[len(LisNum)-1]
+    print(LisupLoadGoodsNum)
     return LisupLoadGoodsNum
 
 #根据上货点数量和货物数量对每个上货点的上货量进行分割
@@ -172,7 +177,7 @@ def CALCupLoadParm(LisCross):
 def CALCupLoadTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     #创造出与货物类型区分开的列表的数据结构
@@ -196,7 +201,7 @@ def CALCupLoadTimeLis():
 def CALCupLoadAllTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     for i in range(len(LisupLoadGoodsNum)):
@@ -212,10 +217,57 @@ def CALCupLoadAllTimeLis():
     LisupLoadTimeLis = sorted(LisupLoadTimeLis)
     return LisupLoadTimeLis
 
+LisupLoadTimeLis = CALCupLoadAllTimeLis()
+####
+global r
+r=set()
+def cal(n=5):
+    dList={};
+    line = list(ans)
+    global r
+    global dr
+    if(len(r)==0 or len(dr)==0):
+        for i in range(0,len(res)):
+            if(CargoNow[i]['s1']==0 and CargoNow[i]['s2']==0):
+                r.add(CargoNow[i]['num'])
+                # r[res[i]['num']]=int(res[i]['type']);
+                dr[CargoNow[i]['num']]=int(CargoNow[i]['line']);
+        # 检验箱之间安全间隔时间是否满足
+    nn=n;
+    for i in range(1,len(LisupLoadTimeLis)):
+        diff=LisupLoadTimeLis[i]-LisupLoadTimeLis[i-1];
+        tem = (i + 1) % nn;
+        if(tem==0):
+            if (diff < 4):
+                LisupLoadTimeLis[i] = LisupLoadTimeLis[i - 1] + 4;
+                continue;
+        if(diff < 9):
+            LisupLoadTimeLis[i]=LisupLoadTimeLis[i-1]+9;
+
+    # 处理list
+    List.reverse();
+    List.append(List[-1]);
+    # 在sort后获取line
+    for i in range(0,len(line)):
+        dList[line[i]]=List[i];
+    
+    
+    res=[];
+    le = len(LisupLoadTimeLis);
+    rest = le % n;
+    cnt = 0;
+    for i in range(4,le,5):
+        res.append(LisupLoadTimeLis[i]+dList[dr[r[cnt]]]);
+        cnt+=1;
+
+    return res;
+
+
+####
 def model_4():
     
     return 0
 
 if __name__ == '__main__':
     upLoadNum=len(LisUpLoadFirstCrossTime)
-    print(CALCupLoadAllTimeLis())
+    
