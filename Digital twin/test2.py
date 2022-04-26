@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-04-24 10:38:04
+LastEditTime: 2022-04-26 15:48:55
 FilePath: \Digital-twin\Digital twin\test2.py
 '''
 # firstNum = 20
@@ -90,3 +90,32 @@ for i in range(10):
     print(i)
     if(i == 2):
         i = 6
+        
+dir = [{'1':789},{'2':6789}]
+
+print(int(list(dir[0].values())[0]))
+
+LisReturnTime = [{'1':123},{'2':float('inf') },{'3':888}]
+
+for i in range(0,len(LisReturnTime)):
+    for j in range(0,len(LisReturnTime)-i-1):
+        if round(list(LisReturnTime[j].values())[0],3)>round(list(LisReturnTime[j+1].values())[0],3):
+            temp = LisReturnTime[j+1]
+            LisReturnTime[j+1] = LisReturnTime[j]
+            LisReturnTime[j] = temp
+print(LisReturnTime)
+
+a = float('inf') 
+a = round(a,3)
+print(a)
+
+import json
+with open('D:\productionLine.json','r') as f:
+    data = json.load(f)
+    print(data)
+    list1 = data['info']
+    list2 = []
+    for i in range(0,len(list1)):
+        if "堆垛机" in list1[i]['id']:
+            list2.append(list1[i])
+    print(list2)
