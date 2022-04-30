@@ -1,13 +1,15 @@
 '''
 Date: 2022-04-10 21:06:05
 LastEditors: ZSudoku
-LastEditTime: 2022-04-24 17:06:28
+LastEditTime: 2022-04-27 15:14:44
 FilePath: \Digital-twin\Digital twin\model_4.py
 入库资产的仿真算法
 input:所有入口到交通点，交通点到所有出口的数据结构信息和相关参数，入库编码子序列(a1,a2,a3,……,at)
 output:资产到达堆垛机入口的时刻序列(t1,t2,t3,……,tn)
 '''
-
+List = []
+CargoNow = []
+ans = []
 #去重
 def delList(L):
     L1 = []

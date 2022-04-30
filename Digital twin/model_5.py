@@ -1,26 +1,34 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-04-26 21:57:44
+LastEditTime: 2022-04-30 14:58:37
 FilePath: \Digital-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 '''
-from jsonschema import RefResolutionError
 import mysql_goodsLocationInfo as CargoNow_sql
 import mysql_productionLineData as ddjData_sql
-
+import copy
 
 CargoNow = [{'x': 1869.90466, 'y': 19.9703217, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 3, 'column': 26, 'type': '10', 'id': 'A-7-3-26', 'bidBatch': '', 'factory': '', 'num': 1}, {'x': 1869.26843, 'y': 7.68457127, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 10, 'type': '10', 'id': 'B-16-2-10', 'bidBatch': '', 'factory': '', 'num': 2}, {'x': 1878.222, 'y': 18.434639, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 16, 'column': 24, 'type': '10', 'id': 'B-8-16-24', 'bidBatch': '', 'factory': '', 'num': 3}, {'x': 1881.42786, 'y': 18.434639, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 21, 'column': 24, 'type': '10', 'id': 'A-15-21-24', 'bidBatch': '', 'factory': '', 'num': 4}, {'x': 1900.63, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 51, 'column': 25, 'type': '10', 'id': 'A-9-51-25', 'bidBatch': '', 'factory': '', 'num': 5}, {'x': 1889.743, 'y': 16.1310234, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 34, 'column': 21, 'type': '10', 'id': 'A-7-34-21', 'bidBatch': '', 'factory': '', 'num': 6}, {'x': 1898.0625, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 47, 'column': 20, 'type': '10', 'id': 'A-15-47-20', 'bidBatch': '', 'factory': '', 'num': 7}, {'x': 1871.82764, 'y': 19.9703979, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 26, 'type': '10', 'id': 'B-8-6-26', 'bidBatch': '', 'factory': '', 'num': 8}, {'x': 1889.10876, 'y': 1.54167175, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 33, 'column': 2, 'type': '11', 'id': 'B-10-33-2', 'bidBatch': '', 'factory': '', 'num': 9}, {'x': 1868.62036, 'y': 15.3631821, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 1, 'column': 20, 'type': '11', 'id': 'B-16-1-20', 'bidBatch': '', 'factory': '', 'num': 10}, {'x': 1878.222, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 16, 'column': 25, 'type': '11', 'id': 'A-9-16-25', 'bidBatch': '', 'factory': '', 'num': 11}, {'x': 1890.38525, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 35, 'column': 24, 'type': '11', 'id': 'B-6-35-24', 'bidBatch': '', 'factory': '', 'num': 12}, {'x': 1892.94763, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 39, 'column': 23, 'type': '11', 'id': 'B-16-39-23', 'bidBatch': '', 'factory': '', 'num': 13}, {'x': 1879.50464, 'y': 16.8989182, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 18, 'column': 22, 'type': '11', 'id': 'A-15-18-22', 'bidBatch': '', 'factory': '', 'num': 14}, {'x': 1871.18518, 'y': 6.14884233, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 5, 'column': 8, 'type': '13', 'id': 'B-16-5-8', 'bidBatch': '', 'factory': '', 'num': 15}, {'x': 1868.62036, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 11, 'type': '13', 'id': 'A-15-1-11', 'bidBatch': '', 'factory': '', 'num': 16}, {'x': 1892.31165, 'y': 10.7560148, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 38, 'column': 14, 'type': '13', 'id': 'A-15-38-14', 'bidBatch': '', 'factory': '', 'num': 17}, {'x': 1874.38452, 'y': 16.1310234, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 10, 'column': 21, 'type': '13', 'id': 'A-13-10-21', 'bidBatch': '', 'factory': '', 'num': 18}, {'x': 1898.70679, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 48, 'column': 18, 'type': '13', 'id': 'A-13-48-18', 'bidBatch': '', 'factory': '', 'num': 19}, {'x': 1898.70679, 'y': 11.5238724, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 48, 'column': 15, 'type': '13', 'id': 'A-15-48-15', 'bidBatch': '', 'factory': '', 'num': 20}, {'x': 1882.06409, 'y': 19.9703217, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 22, 'column': 26, 'type': '15', 'id': 'A-9-22-26', 'bidBatch': '', 'factory': '', 'num': 21}, {'x': 1875.02258, 'y': 7.68457127, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 11, 'column': 10, 'type': '15', 'id': 'A-15-11-10', 'bidBatch': '', 'factory': '', 'num': 22}, {'x': 1898.06311, 'y': 18.434639, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 47, 'column': 24, 'type': '15', 'id': 'B-16-47-24', 'bidBatch': '', 'factory': '', 'num': 23}, {'x': 1874.38452, 'y': 16.1310234, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 10, 'column': 21, 'type': '15', 'id': 'A-11-10-21', 'bidBatch': '', 'factory': '', 'num': 24}, {'x': 1870.54688, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 4, 'column': 20, 'type': '15', 'id': 'A-15-4-20', 'bidBatch': '', 'factory': '', 'num': 25}, {'x': 1869.26843, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 23, 'type': '15', 'id': 'B-16-2-23', 'bidBatch': '', 'factory': '', 'num': 26}, {'x': 1891.02551, 'y': 13.8274679, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 36, 'column': 18, 'type': '15', 'id': 'A-15-36-18', 'bidBatch': '', 'factory': '', 'num': 27}, {'x': 1884.62317, 'y': 16.1310234, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 26, 'column': 21, 'type': '16', 'id': 'B-8-26-21', 'bidBatch': '', 'factory': '', 'num': 28}, {'x': 1871.18518, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 5, 'column': 24, 'type': '16', 'id': 'B-6-5-24', 'bidBatch': '', 'factory': '', 'num': 29}, {'x': 1892.31165, 'y': 13.0595894, 'z': 50.35678, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 38, 'column': 17, 'type': '16', 'id': 'B-14-38-17', 'bidBatch': '', 'factory': '', 'num': 30}, {'x': 1882.71045, 'y': 16.1310616, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 23, 'column': 21, 'type': '16', 'id': 'B-6-23-21', 'bidBatch': '', 'factory': '', 'num': 31}, {'x': 1898.0625, 'y': 18.434639, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 47, 'column': 24, 'type': '16', 'id': 'A-13-47-24', 'bidBatch': '', 'factory': '', 'num': 32}, {'x': 1877.58569, 'y': 10.7560148, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 15, 'column': 14, 'type': '16', 'id': 'B-16-15-14', 'bidBatch': '', 'factory': '', 'num': 33}, {'x': 1888.46655, 'y': 19.2025337, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 32, 'column': 25, 'type': '16', 'id': 'B-8-32-25', 'bidBatch': '', 'factory': '', 'num': 34}, {'x': 1892.94763, 'y': 13.0595894, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 39, 'column': 17, 'type': '16', 'id': 'B-12-39-17', 'bidBatch': '', 'factory': '', 'num': 35}, {'x': 1882.71045, 'y': 13.0595894, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 17, 'type': '16', 'id': 'A-13-23-17', 'bidBatch': '', 'factory': '', 'num': 36}, {'x': 1883.3446, 'y': 19.2024975, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 24, 'column': 25, 'type': '16', 'id': 'A-5-24-25', 'bidBatch': '', 'factory': '', 'num': 37}, {'x': 1896.14722, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 44, 'column': 11, 'type': '16', 'id': 'A-15-44-11', 'bidBatch': '', 'factory': '', 'num': 38}, {'x': 1898.70679, 'y': 19.97036, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 48, 'column': 26, 'type': '16', 'id': 'A-5-48-26', 'bidBatch': '', 'factory': '', 'num': 39}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 40}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 41}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 42}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 43}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 1, 's2': 0, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 44}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 45}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 1, 's2': 0, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 46}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 47}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 48}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 1, 's2': 0, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 49}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 50}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 51}, {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 52}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 53}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 54}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 55}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 56}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 57}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 0, 's2': 1, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 58}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 59}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 0, 's2': 1, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 60}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 61}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 62}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 0, 's2': 1, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 63}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 64}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 65}, {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 66}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 67}, {'x': 1871.82764, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 6, 'type': 10, 'id': 'B-6-6-8', 'bidBatch': '2021年第一批', 'factory': '宁夏隆基', 'num': 68}, {'x': 1873.74841, 'y': 10.7560148, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 14, 'column': 9, 'type': 10, 'id': 'B-8-9-14', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 69}, {'x': 1887.82837, 'y': 7.68457127, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 10, 'column': 31, 'type': 10, 'id': 'B-14-31-10', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 70}, {'x': 1888.46655, 'y': 13.8274679, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 18, 'column': 32, 'type': 11, 'id': 'B-8-32-18', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 71}, {'x': 1889.743, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 34, 'type': 11, 'id': 'A-13-34-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 72}, {'x': 1896.7876, 'y': 6.916702, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 9, 'column': 45, 'type': 11, 'id': 'B-14-45-9', 'bidBatch': '2016年第一批', 'factory': '深圳科陆', 'num': 73}, {'x': 1899.34912, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 49, 'type': 11, 'id': 'A-13-49-3', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 74}, {'x': 1874.38452, 'y': 9.220296, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 12, 'column': 10, 'type': 11, 'id': 'A-9-10-12', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 75}, {'x': 1875.66882, 'y': 16.1310234, 'z': 47.6289978, 's1': 1, 's2': 1, 'flag': 'B', 'line': 12, 'row': 21, 'column': 12, 'type': 11, 'id': 'B-12-12-21', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 76}, {'x': 1896.7876, 'y': 1.54167175, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 2, 'column': 45, 'type': 13, 'id': 'A-5-45-2', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 77}, {'x': 1871.82764, 'y': 1.5416708, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 2, 'column': 6, 'type': 13, 'id': 'A-9-6-2', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 78}, {'x': 1900.63, 'y': 1.54167175, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 2, 'column': 51, 'type': 13, 'id': 'A-13-51-2', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 79}, {'x': 1901.27039, 'y': 1.54167175, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 2, 'column': 52, 'type': 13, 'id': 'A-11-52-2', 'bidBatch': '2021年第一批', 'factory': '苏源杰瑞', 'num': 80}, {'x': 1873.74841, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 9, 'type': 13, 'id': 'A-5-9-1', 'bidBatch': '2019年第一批', 'factory': '深圳科陆', 'num': 81}, {'x': 1880.14307, 'y': 4.613105, 'z': 53.2860031, 's1': 1, 's2': 1, 'flag': 'B', 'line': 16, 'row': 6, 'column': 19, 'type': 15, 'id': 'B-16-19-6', 'bidBatch': '2021年第一批', 'factory': '宁波三星', 'num': 82}, {'x': 1882.71045, 'y': 4.613105, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 6, 'column': 23, 'type': 15, 'id': 'A-11-23-6', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 83}, {'x': 1877.58582, 'y': 11.5238724, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 15, 'column': 15, 'type': 15, 'id': 'A-5-15-15', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 84}]
+#CargoNow = CargoNow_sql.getGoodsLocationInfoVice()
 R = 39
 S = 14
 H = 14
 C = 17
-List=[ 31.84, 32.69, 34.55, 35.41, 37.29, 38.15, 40.02, 40.88, 42.78, 44.70, 46.58 ]
+LineTimeList=[ 31.84, 32.69, 34.55, 35.41, 37.29, 38.15, 40.02, 40.88, 42.78, 44.70, 46.58 ]
 LisCross = [[[1,3,47.11],[3,4,17.78]],[[2,3,5.17],[3,4,17.78]]] #程天宇计算
 #各种类型的上货数量  
 LisGoodsNum = [{'10':8,'11':6,'13':6,'15':7,'16':12}]
+dirInspect = {'10':8,'15':6}
+#3箱一垛或者是5箱一垛
+mod1 = 3
+mod2 = 5
+inrTime = 4 #叠一次货物运行时长
+flodTime = 5 #两次叠箱间的等待时长
+lostTime = inrTime + flodTime 
 
-graph_of_spots = [
+
+graph_of_spots = [  #陈薛强输出
     [1, 10, 9, 2.5],
     [1, 11, 9, 2.1],
     [2, 9, 5, 2.3],
@@ -33,7 +41,9 @@ graph_of_spots = [
     [7, 3, 7, 3.1]
 ]
 
-fold_id = 1  # 叠箱机的 id
+fold_id = 1  # 叠箱机的 id  陈薛强输出
+global LisDdjTime 
+global LisDdjTimeD
 global LisInspect
 global LisReturnTime
 global inspectIndex #已读送检数量
@@ -42,8 +52,9 @@ global LisEnterTime #入库资产到达对应入库口的时间
 global DdjEnterXYZ
 global DdjOutXYZ
 global DdjInspectXYZ
-
-
+global InspectTypeFloorNum
+global ReadInspectTypeNum
+global DirReturnXYZ
 global rrr#每个堆垛机对应的line，二维list
 global ans#所有line编号,一维set
 global r#所有入库的编号,一维set
@@ -59,16 +70,21 @@ r=set()
 ans = set();
 rrr=[];
 
+LisDdjTime = []
+LisDdjTimeD = []
 LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14]},{'5':[11,11]}]#json 文件中获得
 LisReturnTime = []
 LisEnterTime = []
 inspectIndex = 0
 returnIndex = 0
 DdjEnterXYZ = []  #[[[ddj1_x1.ddj1_y1,ddj1_z1],[...]],[[ddj2_x1,...],[....]],...[]]
-DdjOutXYZ = []    
+DdjOutXYZ = []  
+DirReturnXYZ = {}  
 DdjInspectXYZ = []   #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
+InspectTypeFloorNum = []
+ReadInspectTypeNum = []
 #cty model_3
-def emu(org,die,tStop=[]):
+def emu(org,die,tStop=[]): #算法二输出，叠箱机编号，
     # 记录无入边的
     ru = set();
     # 存放上货点
@@ -90,7 +106,7 @@ def emu(org,die,tStop=[]):
             d0.add(org[i][1]);
             # tran.add(ed[key]);
     # 假设已有叠箱机编号
-    die = 1;
+    # die = 1;
     # 首交通点 到 叠箱机
     # 直接全算，没算法
     res={};
@@ -132,12 +148,7 @@ def upLoad():
     
     return 0
 
-#3箱一垛或者是5箱一垛
-mod1 = 3
-mod2 = 5
-inrTime = 4 #叠一次货物运行时长
-flodTime = 5 #两次叠箱间的等待时长
-lostTime = inrTime + flodTime 
+
 #计算上货点的上货频率
 def CALCupLoadFre(lostTime,upLoadNum):
     return lostTime*upLoadNum
@@ -237,7 +248,7 @@ def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
             if(upLoadIndex == upLoadNum):
                 upLoadIndex = 0
         upLoadIndex = LisNum[len(LisNum)-1]
-    print(LisupLoadGoodsNum)
+    #print(LisupLoadGoodsNum)
     return LisupLoadGoodsNum
 
 #根据上货点数量和货物数量对每个上货点的上货量进行分割
@@ -332,7 +343,7 @@ def CALCupLoadAllTimeLis():
         #         LisupLoadTimeLis.append(time)
         #     index += 1
         
-    print(LisupLoadParm)
+    #print(LisupLoadParm)
     LisupLoadTimeLis = sorted(LisupLoadTimeLis)
     return LisupLoadTimeLis
 
@@ -379,6 +390,7 @@ def getLine():
 # global r
 # r=set()
 def cal(LisCode, n=5):
+    global LineTimeList
     global ans
     ans = set()
     #取出所有货架编号
@@ -417,11 +429,11 @@ def cal(LisCode, n=5):
             LisupLoadTimeLis[i] = LisupLoadTimeLis[i - 1] + 9;
 
     # 处理list
-    List.reverse();
-    List.append(List[-1]);
+    LineTimeList.reverse();
+    LineTimeList.append(LineTimeList[-1]);
     # 在sort后获取line
     for i in range(0, len(line)):
-        dList[line[i]] = List[i];
+        dList[line[i]] = LineTimeList[i];
     rres = [];
     le = len(LisupLoadTimeLis);
     rest = le % n;
@@ -588,7 +600,7 @@ def GetS_H(LisDdjCode):
     for i in range(len(LisReturnTime)):
         LisReturnTime[i]['%d'%(LisTemp_S[i])] = float('inf') 
     #print(LisDdjCode)
-    print(LisS_H)
+    #print(LisS_H)
     #print(LisReturnTime)
     return LisS_H
 #GetS_H(LisDdjCode)
@@ -676,7 +688,7 @@ def CALCDayInspectFloor():
         for j in range(len(LisF[i]['%d'%(L[i])])):
             LisF[i]['%d'%(L[i])].append(100/len(LisF[i]['%d'%(L[i])])) 
 
-    #print(LisF)  #计算当日送检楼层实际检定的资产型号序列
+    #print("LisF",LisF)  #计算当日送检楼层实际检定的资产型号序列
     return LisF
 # LisF = CALCDayInspectFloor()
 
@@ -710,13 +722,14 @@ def CALCDayInspectType():
             for k in LisInspect[j]['%d'%(LF[j])]:
                 if k == List[i]:
                     LisT[i]['%d'%(List[i])].append(LF[j])
-    #print(LisT)
+    #print("LisT",LisT)
     return LisT
 #LisT = CALCDayInspectType()
 #print(LisT)
 dirInspect = {'10':8,'15':6}
 #分配当日送检资产的楼层权重：
 def CALCDayInspectIW():
+    global InspectTypeFloorNum 
     LisF = CALCDayInspectFloor()
     LisT = CALCDayInspectType()
     global LisInspect
@@ -737,40 +750,137 @@ def CALCDayInspectIW():
         L[i] = {}
         L[i]['%d'%(LF[i])] = LisF[i]['%d'%(LF[i])][-1]
         #print(LisF[i]['%d'%(LF[i])][-1])
+    LisT_GoodNUm =  copy.deepcopy(LisT)
     for i in range(len(LisT)):
         for j in range(len(LisT[i]['%d'%(List[i])])):
+                temp = LisT[i]['%d'%(List[i])][j]
+                LisT[i]['%d'%(List[i])][j] = {}
+                LisT[i]['%d'%(List[i])][j]['%d'%(temp)] = 0
+                
+    # print("LisT_GoodNUm",LisT_GoodNUm)        
+    # print("LisT",LisT)
+    # temp = LisT[0].get('10')[0] 
+    # LisT[0].get('10')[0]  = {}
+    # LisT[0].get('10')[0]['%d'%(temp)] = 0
+    # print(LisT[0].get('10'))
+    
+    for i in range(len(LisT_GoodNUm)):
+        for j in range(len(LisT_GoodNUm[i]['%d'%(List[i])])):
             for m in range(len(LisF)):
                 for k in L[m]:
                     # print("LisT[i]['%d'%(List[i])][j]",LisT[i]['%d'%(List[i])][j])
                     # print("k",k)
-                    if( int(k) == int(LisT[i]['%d'%(List[i])][j])):
-                        LisT[i]['%d'%(List[i])][j] = int(L[m].get('%s'%(k)))
+                    if( int(k) == int(LisT_GoodNUm[i]['%d'%(List[i])][j])):
+                        LisT_GoodNUm[i]['%d'%(List[i])][j] = int(L[m].get('%s'%(k)))
+    #print("LisT_k",LisT_GoodNUm)
+    LisNum = []
     for i in range(len(List)):
         temp = 0
-        for j in range(len(LisT[i]['%d'%(List[i])])):
-            temp += LisT[i]['%d'%(List[i])][j]
-        for j in range(len(LisT[i]['%d'%(List[i])])):
-            LisT[i]['%d'%(List[i])][j] = LisT[i]['%d'%(List[i])][j] / temp
-            LisT[i]['%d'%(List[i])][j] = round(LisT[i]['%d'%(List[i])][j] * dirInspect.get('%d'%(List[i])))
-    
+        for j in range(len(LisT_GoodNUm[i]['%d'%(List[i])])):
+            temp += LisT_GoodNUm[i]['%d'%(List[i])][j]
+        for j in range(len(LisT_GoodNUm[i]['%d'%(List[i])])):
+            LisT_GoodNUm[i]['%d'%(List[i])][j] = LisT_GoodNUm[i]['%d'%(List[i])][j] / temp
+            LisT_GoodNUm[i]['%d'%(List[i])][j] = round(LisT_GoodNUm[i]['%d'%(List[i])][j] * dirInspect.get('%d'%(List[i])))
+            LisNum.append(LisT_GoodNUm[i]['%d'%(List[i])][j])
+    #LisNum = [1,2,3,4]
+    #print("LisNum",LisNum)
+    Num_p = 0
+    for i in range(len(LisT)):
+        for k in range(len(LisT[i].get('%d'%(List[i])))):
+            for u in LisT[i].get('%d'%(List[i]))[k]:
+                LisT[i].get('%d'%(List[i]))[k]['%d'%(int(u))] = LisNum[Num_p]
+                Num_p += 1
+    global ReadInspectTypeNum
+    ReadInspectTypeNum = {}
+    for i in range(len(LisT)):
+        ReadInspectTypeNum['%d'%(List[i])] = 0
+    for i in range(len(LisT)):
+        Len = len(LisT[i].get('%d'%(List[i])))
+        for j in range(Len):
+            if len(LisT[i].get('%d'%(List[i]))) == 1:
+                break
+            LisT[i].get('%d'%(List[i]))[0] = dict(LisT[i].get('%d'%(List[i]))[0],**LisT[i].get('%d'%(List[i]))[j])
+        while True:
+            if(len(LisT[i].get('%d'%(List[i])))>1):
+                del(LisT[i].get('%d'%(List[i]))[-1])
+            else:
+                break
+            
+    #print(ReadInspectTypeNum)
+    #print(LisT)
     # print("L",L)
-    print("LisT",LisT)
+    #print("LisT_GoodNUm",LisT_GoodNUm)
+    InspectTypeFloorNum = LisT
     return LisT
-LisT = CALCDayInspectIW()
-
+#LisT = CALCDayInspectIW() 
+#根据堆垛机编码和楼层号，返回堆垛机的送检/回库口
+def GetLisInspectXY(ddj,floor):
+    global DdjInspectXYZ  #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
+    #print(DdjInspectXYZ[floor-2][ddj-1])
+    return DdjInspectXYZ[floor-2][ddj-1]
 
 
 #根据编码，获得堆垛机送检口的坐标
-def GetInspectXY(p):
+def GetInspectXY(p,Flag):
+    global DirReturnXYZ
+    global InspectTypeFloorNum
+    global ReadInspectTypeNum
+    if(CALCjudgeType(p) == 'H'):
+        return DirReturnXYZ['%d'%(p+S)]
+    type_p = CALCjudgeType(p)
+    if(len(InspectTypeFloorNum) == 0):
+        CALCDayInspectIW() 
+    # print("DdjInspectXYZ",DdjInspectXYZ)
+    # print("InspectTypeFloorNum",InspectTypeFloorNum)
     ddj = CALCStacker(p)
     LisInspectXY = [1000,1000]
     Model = CargoNow[p-1]['type']
+    p_Floor = 0
     
+    # for i in range(len(InspectTypeFloorNum)):
+    #     for j in InspectTypeFloorNum[i]:
+    #         if int(j) == int(Model):
+                
+    #             InspectTypeFloorNum[i].get('%d'%(int(j)))
+    #             print(InspectTypeFloorNum[i].get('%d'%(int(j))))
+    for i in range(len(InspectTypeFloorNum)):
+        for j in InspectTypeFloorNum[i]:
+            if int(j) == int(Model):
+                temp = InspectTypeFloorNum[i].get('%d'%(int(j)))
+    presentNum = 0
+    for i in temp[0]:
+        Num = ReadInspectTypeNum.get('%d'%(Model)) 
+        #print(temp[0])
+        if(Num - presentNum < temp[0].get('%d'%(int(i)))):
+            p_Floor = int(i)
+            Num += 1
+            ReadInspectTypeNum['%d'%(Model)] = Num
+            break
+        else:
+            presentNum = temp[0].get('%d'%(int(i)))
+    if(Flag == False):
+        tempNum = ReadInspectTypeNum['%d'%(Model)]
+        tempNum -= 1
+        ReadInspectTypeNum['%d'%(Model)] = tempNum
+    LisInspectXY = GetLisInspectXY(ddj,p_Floor)
+    #print("temp",temp)
+    if(type_p == 'S'):
+        DirReturnXYZ['%d'%(p)] = LisInspectXY
     return LisInspectXY
 
 #根据两个编码判断送检/回库口是否相同
 def GetSameFlag(p,second_p):
-    SameFlag = False
+    if(CALCjudgeType(p) == 'H'):
+        for i in LisReturnTime[0]:
+            p = int(i)
+        for i in LisReturnTime[1]:
+            second_p = int(i)
+    LisP = GetInspectXY(p,False)
+    LisSecond_P = GetInspectXY(second_p,False)
+    if(LisP[1] == LisSecond_P[1]):
+        SameFlag = True
+    else:
+        SameFlag = False
     
     return SameFlag
 
@@ -780,11 +890,28 @@ def GetOutXY(p):
     LisOutXY = DdjOutXYZ[ddj-1]    
     return LisOutXY
 #根据编码计算检定时间
+"""
+单相表:30min --- 1800
+三相表:3h45min --- 10800 + 2700 = 13500
+互感器:30min --- 1800
+采集终端:4h --- 14400
+HPLC:15min --- 900
+"""
 def GetInspectTime(p):
     if(CargoNow[p-1]['type'] == 11 or CargoNow[p-1]['type'] == 15 or CargoNow[p-1]['type'] == 16):#三相表
-        inspectTime = 7200
-    else:
+        inspectTime = 13500
+    elif(CargoNow[p-1]['type'] == 10):#单相表
         inspectTime = 1800
+    elif(CargoNow[p-1]['type'] == 13):#互感器
+        inspectTime = 1800
+    elif(CargoNow[p-1]['type'] == 10):#采集终端
+        inspectTime = 14400
+    elif(CargoNow[p-1]['type'] == 17 or CargoNow[p-1]['type'] == 18 or CargoNow[p-1]['type'] == 19):#HPLC
+        inspectTime = 900
+    #elif()
+    else:
+        print("GetInspectTime Error!")
+        inspectTime = 900
     return inspectTime
 
 #回库编码的排序
@@ -876,7 +1003,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     ddj = CALCStacker(p)    #获取编码p的堆垛机序号
     
     if(second_p > 0 and third_p == -1): #第三个编码为-1，前两个为一般编码
-        third_p_type = second_p_type
+        third_p_type = 'R'
     elif(second_p == -1 and third_p == -1):#后两个编码都为-1
         second_p_type = -1
         third_p_type = 'R'
@@ -900,7 +1027,8 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 first_x = CargoNow[second_p-1]['x']
                 first_y = CargoNow[second_p-1]['y']
                 #送检口
-                LisInspectXY = GetInspectXY(p)
+                LisInspectXY = GetInspectXY(p,True)
+                LisInspectXY = GetInspectXY(second_p,True)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 second_x = inspectX
@@ -912,13 +1040,13 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 first_x = CargoNow[second_p-1]['x']
                 first_y = CargoNow[second_p-1]['y']
                 #p的送检口
-                LisInspectXY = GetInspectXY(p)
+                LisInspectXY = GetInspectXY(p,True)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 second_x = inspectX
                 second_y = inspectY 
                 #second_p的送检口
-                LisInspectXY = GetInspectXY(second_p)
+                LisInspectXY = GetInspectXY(second_p,True)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 third_x = inspectX
@@ -938,7 +1066,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             else:
                 #回库口不同，当前堆垛机处于第一个回库口，取一垛货物，之后从回库口1移动到回库口2
                 #获取回库口2的坐标
-                LisInspectXY = GetInspectXY(second_p)
+                LisInspectXY = GetInspectXY(second_p,False)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 first_x = inspectX
@@ -972,7 +1100,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             first_y = CargoNow[p-1]['y']
         elif(p_type == 'S'):
             #送检，堆垛机当前在货位，取一垛货，移动到送检口放货
-            LisInspectXY = GetInspectXY(p)
+            LisInspectXY = GetInspectXY(p,True)
             inspectX = LisInspectXY[0]
             inspectY = LisInspectXY[1]
             first_x = inspectX
@@ -1005,7 +1133,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         last_x = CargoNow[third_p-1]['x']
         last_y = CargoNow[third_p-1]['y']
     elif(third_p_type == 'H'):
-        LisInspectXY = GetInspectXY(third_p)
+        LisInspectXY = GetInspectXY(third_p,False)
         inspectX = LisInspectXY[0]
         inspectY = LisInspectXY[1]
         last_x = inspectX
@@ -1057,7 +1185,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     elif(p_type=='S'):
         global inspectIndex
         if(TwoFlag == True):
-            SameFlag = GetSameFlag(p,second_p)
+            #SameFlag = GetSameFlag(p,second_p)
             if(SameFlag == True):
                 #当前堆垛机已在资产p位置上，首先是取货，之后移动到second_p的货位上
                 walkTime1 = CALCWalkTime(abs(CargoNow[p-1]['x'] - first_x),abs(CargoNow[p-1]['y'] - first_y))
@@ -1125,11 +1253,11 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         #print()
     elif(p_type=='H'):
         if(TwoFlag == True):
-            SameFlag = GetSameFlag(p,second_p)
+            #SameFlag = GetSameFlag(p,second_p)
             if(SameFlag == True):
                 #连续取两垛，回库口相同
                 #获取堆垛机当前的位置，取两垛货
-                LisInspectXY = GetInspectXY(p)
+                LisInspectXY = GetInspectXY(p,False)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 #堆垛机从当前位置移动到货位1，放一垛货
@@ -1149,7 +1277,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             else:
                 #回库口不同
                 #获取堆垛机当前位置，取一垛货
-                LisInspectXY = GetInspectXY(p)
+                LisInspectXY = GetInspectXY(p,False)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 #堆垛机从当前位置移动到回库口2，取一垛货
@@ -1169,7 +1297,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 pass
         else:
             #堆垛机当前位于回库口，取一垛货，移动到货位1，放一垛货
-            LisInspectXY = GetInspectXY(p)
+            LisInspectXY = GetInspectXY(p,False)
             inspectX = LisInspectXY[0]
             inspectY = LisInspectXY[1]
             walkTime1 = CALCWalkTime(abs(inspectX - first_x),abs(inspectY - first_y))
@@ -1207,9 +1335,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         print("ReadCode p_type error!")
     return TI
 
-global LisDdjTime 
-LisDdjTime = []
-LisDdjTimeD = []
+
 def Read(LisDdjCode):
     DdjNum = len(LisDdjCode)
     for i in range(DdjNum):
@@ -1244,11 +1370,75 @@ def Read(LisDdjCode):
 # print(LisDdjTime)
 
 #获得堆垛机所需数据，主要是坐标
-def GetDdjDataXYZ():
+def initCode():
+    CargoNow = [{'x': 1869.90466, 'y': 19.9703217, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 3, 'column': 26, 'type': '10', 'id': 'A-7-3-26', 'bidBatch': '', 'factory': '', 'num': 1}, {'x': 1869.26843, 'y': 7.68457127, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 10, 'type': '10', 'id': 'B-16-2-10', 'bidBatch': '', 'factory': '', 'num': 2}, {'x': 1878.222, 'y': 18.434639, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 16, 'column': 24, 'type': '10', 'id': 'B-8-16-24', 'bidBatch': '', 'factory': '', 'num': 3}, {'x': 1881.42786, 'y': 18.434639, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 21, 'column': 24, 'type': '10', 'id': 'A-15-21-24', 'bidBatch': '', 'factory': '', 'num': 4}, {'x': 1900.63, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 51, 'column': 25, 'type': '10', 'id': 'A-9-51-25', 'bidBatch': '', 'factory': '', 'num': 5}, {'x': 1889.743, 'y': 16.1310234, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 34, 'column': 21, 'type': '10', 'id': 'A-7-34-21', 'bidBatch': '', 'factory': '', 'num': 6}, {'x': 1898.0625, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 47, 'column': 20, 'type': '10', 'id': 'A-15-47-20', 'bidBatch': '', 'factory': '', 'num': 7}, {'x': 1871.82764, 'y': 19.9703979, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 26, 'type': '10', 'id': 'B-8-6-26', 'bidBatch': '', 'factory': '', 'num': 8}, {'x': 1889.10876, 'y': 1.54167175, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 33, 'column': 2, 'type': '11', 'id': 'B-10-33-2', 'bidBatch': '', 'factory': '', 'num': 9}, {'x': 1868.62036, 'y': 15.3631821, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 1, 'column': 20, 'type': '11', 'id': 'B-16-1-20', 'bidBatch': '', 'factory': '', 'num': 10}, {'x': 1878.222, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 16, 'column': 25, 'type': '11', 'id': 'A-9-16-25', 'bidBatch': '', 'factory': '', 'num': 11}, {'x': 1890.38525, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 35, 'column': 24, 'type': '11', 'id': 'B-6-35-24', 'bidBatch': '', 'factory': '', 'num': 12}, {'x': 1892.94763, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 39, 'column': 23, 'type': '11', 'id': 'B-16-39-23', 'bidBatch': '', 'factory': '', 'num': 13}, {'x': 1879.50464, 'y': 16.8989182, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 18, 'column': 22, 'type': '11', 'id': 'A-15-18-22', 'bidBatch': '', 'factory': '', 'num': 14}, {'x': 1871.18518, 'y': 6.14884233, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 5, 'column': 8, 'type': '13', 'id': 'B-16-5-8', 'bidBatch': '', 'factory': '', 'num': 15}, {'x': 1868.62036, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 11, 'type': '13', 'id': 'A-15-1-11', 'bidBatch': '', 'factory': '', 'num': 16}, {'x': 1892.31165, 'y': 10.7560148, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 38, 'column': 14, 'type': '13', 'id': 'A-15-38-14', 'bidBatch': '', 'factory': '', 'num': 17}, {'x': 1874.38452, 'y': 16.1310234, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 10, 'column': 21, 'type': '13', 'id': 'A-13-10-21', 'bidBatch': '', 'factory': '', 'num': 18}, {'x': 1898.70679, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 48, 'column': 18, 'type': '13', 'id': 'A-13-48-18', 'bidBatch': '', 'factory': '', 'num': 19}, {'x': 1898.70679, 'y': 11.5238724, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 48, 'column': 15, 'type': '13', 'id': 'A-15-48-15', 'bidBatch': '', 'factory': '', 'num': 20}, {'x': 1882.06409, 'y': 19.9703217, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 22, 'column': 26, 'type': '15', 'id': 'A-9-22-26', 'bidBatch': '', 'factory': '', 'num': 21}, {'x': 1875.02258, 'y': 7.68457127, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 11, 'column': 10, 'type': '15', 'id': 'A-15-11-10', 'bidBatch': '', 'factory': '', 'num': 22}, {'x': 1898.06311, 'y': 18.434639, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 47, 'column': 24, 'type': '15', 'id': 'B-16-47-24', 'bidBatch': '', 'factory': '', 'num': 23}, {'x': 1874.38452, 'y': 16.1310234, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 10, 'column': 21, 'type': '15', 'id': 'A-11-10-21', 'bidBatch': '', 'factory': '', 'num': 24}, {'x': 1870.54688, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 4, 'column': 20, 'type': '15', 'id': 'A-15-4-20', 'bidBatch': '', 'factory': '', 'num': 25}, {'x': 1869.26843, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 23, 'type': '15', 'id': 'B-16-2-23', 'bidBatch': '', 'factory': '', 'num': 26}, {'x': 1891.02551, 'y': 13.8274679, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 36, 'column': 18, 'type': '15', 'id': 'A-15-36-18', 'bidBatch': '', 'factory': '', 'num': 27}, {'x': 1884.62317, 'y': 16.1310234, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 26, 'column': 21, 'type': '16', 'id': 'B-8-26-21', 'bidBatch': '', 'factory': '', 'num': 28}, {'x': 1871.18518, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 5, 'column': 24, 'type': '16', 'id': 'B-6-5-24', 'bidBatch': '', 'factory': '', 'num': 29}, {'x': 1892.31165, 'y': 13.0595894, 'z': 50.35678, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 38, 'column': 17, 'type': '16', 'id': 'B-14-38-17', 'bidBatch': '', 'factory': '', 'num': 30}, {'x': 1882.71045, 'y': 16.1310616, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 23, 'column': 21, 'type': '16', 'id': 'B-6-23-21', 'bidBatch': '', 'factory': '', 'num': 31}, {'x': 1898.0625, 'y': 18.434639, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 47, 'column': 24, 'type': '16', 'id': 'A-13-47-24', 'bidBatch': '', 'factory': '', 'num': 32}, {'x': 1877.58569, 'y': 10.7560148, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 15, 'column': 14, 'type': '16', 'id': 'B-16-15-14', 'bidBatch': '', 'factory': '', 'num': 33}, {'x': 1888.46655, 'y': 19.2025337, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 32, 'column': 25, 'type': '16', 'id': 'B-8-32-25', 'bidBatch': '', 'factory': '', 'num': 34}, {'x': 1892.94763, 'y': 13.0595894, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 39, 'column': 17, 'type': '16', 'id': 'B-12-39-17', 'bidBatch': '', 'factory': '', 'num': 35}, {'x': 1882.71045, 'y': 13.0595894, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 17, 'type': '16', 'id': 'A-13-23-17', 'bidBatch': '', 'factory': '', 'num': 36}, {'x': 1883.3446, 'y': 19.2024975, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 24, 'column': 25, 'type': '16', 'id': 'A-5-24-25', 'bidBatch': '', 'factory': '', 'num': 37}, {'x': 1896.14722, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 44, 'column': 11, 'type': '16', 'id': 'A-15-44-11', 'bidBatch': '', 'factory': '', 'num': 38}, {'x': 1898.70679, 'y': 19.97036, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 48, 'column': 26, 'type': '16', 'id': 'A-5-48-26', 'bidBatch': '', 'factory': '', 'num': 39}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 40}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 41}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 42}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 43}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 1, 's2': 0, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 44}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 45}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 1, 's2': 0, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 46}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 47}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 48}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 1, 's2': 0, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 49}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 50}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 51}, {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 52}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 53}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 54}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 55}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 56}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 57}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 0, 's2': 1, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 58}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 59}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 0, 's2': 1, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 60}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 61}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 62}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 0, 's2': 1, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 63}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 64}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 65}, {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 66}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 67}, {'x': 1871.82764, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 6, 'type': 10, 'id': 'B-6-6-8', 'bidBatch': '2021年第一批', 'factory': '宁夏隆基', 'num': 68}, {'x': 1873.74841, 'y': 10.7560148, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 14, 'column': 9, 'type': 10, 'id': 'B-8-9-14', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 69}, {'x': 1887.82837, 'y': 7.68457127, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 10, 'column': 31, 'type': 10, 'id': 'B-14-31-10', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 70}, {'x': 1888.46655, 'y': 13.8274679, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 18, 'column': 32, 'type': 11, 'id': 'B-8-32-18', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 71}, {'x': 1889.743, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 34, 'type': 11, 'id': 'A-13-34-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 72}, {'x': 1896.7876, 'y': 6.916702, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 9, 'column': 45, 'type': 11, 'id': 'B-14-45-9', 'bidBatch': '2016年第一批', 'factory': '深圳科陆', 'num': 73}, {'x': 1899.34912, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 49, 'type': 11, 'id': 'A-13-49-3', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 74}, {'x': 1874.38452, 'y': 9.220296, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 12, 'column': 10, 'type': 11, 'id': 'A-9-10-12', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 75}, {'x': 1875.66882, 'y': 16.1310234, 'z': 47.6289978, 's1': 1, 's2': 1, 'flag': 'B', 'line': 12, 'row': 21, 'column': 12, 'type': 11, 'id': 'B-12-12-21', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 76}, {'x': 1896.7876, 'y': 1.54167175, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 2, 'column': 45, 'type': 13, 'id': 'A-5-45-2', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 77}, {'x': 1871.82764, 'y': 1.5416708, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 2, 'column': 6, 'type': 13, 'id': 'A-9-6-2', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 78}, {'x': 1900.63, 'y': 1.54167175, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 2, 'column': 51, 'type': 13, 'id': 'A-13-51-2', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 79}, {'x': 1901.27039, 'y': 1.54167175, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 2, 'column': 52, 'type': 13, 'id': 'A-11-52-2', 'bidBatch': '2021年第一批', 'factory': '苏源杰瑞', 'num': 80}, {'x': 1873.74841, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 9, 'type': 13, 'id': 'A-5-9-1', 'bidBatch': '2019年第一批', 'factory': '深圳科陆', 'num': 81}, {'x': 1880.14307, 'y': 4.613105, 'z': 53.2860031, 's1': 1, 's2': 1, 'flag': 'B', 'line': 16, 'row': 6, 'column': 19, 'type': 15, 'id': 'B-16-19-6', 'bidBatch': '2021年第一批', 'factory': '宁波三星', 'num': 82}, {'x': 1882.71045, 'y': 4.613105, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 6, 'column': 23, 'type': 15, 'id': 'A-11-23-6', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 83}, {'x': 1877.58582, 'y': 11.5238724, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 15, 'column': 15, 'type': 15, 'id': 'A-5-15-15', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 84}]
+    #CargoNow = CargoNow_sql.getGoodsLocationInfoVice()
+    R = 39
+    S = 14
+    H = 14
+    C = 17
+    LineTimeList=[ 31.84, 32.69, 34.55, 35.41, 37.29, 38.15, 40.02, 40.88, 42.78, 44.70, 46.58 ]
+    LisCross = [[[1,3,47.11],[3,4,17.78]],[[2,3,5.17],[3,4,17.78]]] #程天宇计算
+    #各种类型的上货数量  
+    LisGoodsNum = [{'10':8,'11':6,'13':6,'15':7,'16':12}]
+
+    graph_of_spots = [
+        [1, 10, 9, 2.5],
+        [1, 11, 9, 2.1],
+        [2, 9, 5, 2.3],
+        [3, 4, 2, 2.4],
+        [3, 5, 2, 1.5],
+        [3, 6, 2, 1.4],
+        [4, 2, 1, 2.5],
+        [6, 1, 3, 3],
+        [7, 3, 8, 3.4],
+        [7, 3, 7, 3.1]
+    ]
+
+    fold_id = 1  # 叠箱机的 id
+    global LisInspect
+    global LisReturnTime
+    global inspectIndex #已读送检数量
+    global returnIndex  #已读回库数量
+    global LisEnterTime #入库资产到达对应入库口的时间
     global DdjEnterXYZ
     global DdjOutXYZ
     global DdjInspectXYZ
-    DdjData = ddjData_sql.getStacks()
+    global InspectTypeFloorNum
+    global ReadInspectTypeNum
+    global DirReturnXYZ
+    global rrr#每个堆垛机对应的line，二维list
+    global ans#所有line编号,一维set
+    global r#所有入库的编号,一维set
+    global dr#每个入库编号对应的line编号,一维dict3
+    global lineToDdj
+    global idToL
+    global LisDdjTime
+    lineToDdj={};
+    idToL={};
+    # global LisupLoadTimeLis #上货点到叠箱机的时间序列
+    dr = {}
+    r=set()
+    ans = set();
+    rrr=[];
+
+    LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14]},{'5':[11,11]}]#json 文件中获得
+    LisReturnTime = []
+    LisEnterTime = []
+    inspectIndex = 0
+    returnIndex = 0
+    DdjEnterXYZ = []  #[[[ddj1_x1.ddj1_y1,ddj1_z1],[...]],[[ddj2_x1,...],[....]],...[]]
+    DdjOutXYZ = []  
+    DirReturnXYZ = {}  
+    DdjInspectXYZ = []   #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
+    InspectTypeFloorNum = []
+    ReadInspectTypeNum = []
+    LisDdjTime = []
+def GetDdjDataXYZ(DdjData):
+    global DdjEnterXYZ
+    global DdjOutXYZ
+    global DdjInspectXYZ
+    #DdjData = ddjData_sql.getStacks()
     Lisfloor = []
     for i in range(len(DdjData)):
         for j in DdjData[i]:
@@ -1274,8 +1464,8 @@ def GetDdjDataXYZ():
                 DdjInspectXYZ[3].append(DdjData[i].get('%s'%(j)))
                 
 
-def Fitness(LisCode):
-    GetDdjDataXYZ()
+def Fitness(LisCode,DdjData):
+    GetDdjDataXYZ(DdjData)
     global LisDdjTime 
     LisDdjCode = getLisDdjCode(LisCode) #按照堆垛机区分
     GetS_H(LisDdjCode)
@@ -1283,12 +1473,13 @@ def Fitness(LisCode):
     LisDdjTime = sorted(LisDdjTime, reverse=True)
     return LisDdjTime[0]
 
-def enSimpleCode(LisCode:list):
+def enSimpleCode(LisCode:list,DdjData):
+    initCode()
     global LisEnterTime
     if(type(LisCode) == list and type(LisCode[0]) == int and type(LisCode[-1]) == int):
-        print("yes!")
+        #print("yes!")
         LisEnterTime = cal(LisCode,5) #叠箱机到堆垛机入库口
-        fitness = round(Fitness(LisCode),3)
+        fitness = round(Fitness(LisCode,DdjData),3)
         return fitness
     else:
         print("LisCode Error!")
@@ -1296,7 +1487,10 @@ def enSimpleCode(LisCode:list):
 
 
 LisCode = [76, 2, 9, 14, 39, 22, 82, 60, 70, 58, 4, 59, 30, 74, 20, 80, 8, 71, 54, 48, 83, 65, 51, 75, 12, 36, 66, 34, 28, 73, 56, 13, 64, 68, 55, 24, 11, 45, 49, 26, 79, 46, 33, 18, 15, 10, 5, 27, 72, 31, 29, 23, 52, 38, 35, 6, 41, 25, 16, 69, 43, 19, 44, 1, 42, 40, 17, 84, 62, 32, 67, 61, 53, 63, 7, 50, 78, 37, 21, 77, 3, 57, 81, 47]
-print(enSimpleCode(LisCode))
+#print(len(LisCode))
+DdjData = ddjData_sql.getStacks()
+print(enSimpleCode(LisCode,DdjData))
+print(enSimpleCode(LisCode,DdjData))
 #print(cal(LisCode,5))
 
 # print(len(CargoNow_sql.getGoodsLocationInfoVice()))
