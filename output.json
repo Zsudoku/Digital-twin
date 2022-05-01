@@ -1,0 +1,79 @@
+{
+    "version": 0.2,
+    "system": "Dynamitic_Digitaltwin",
+    "stage": "ResponseDeduction",
+    "type": "//Dynamitic",
+    "time": "2022-04-30",
+    "runTime": 0,
+    "data": {
+        "responseCode": 101,
+        "userName": "admin",
+        "planNames": null,
+        "taskContent": {
+            "loadPointTask": [
+                {
+                    "taskNumber": 0,
+                    "equipmentName": "上货点1",
+                    "loadPosition": null,
+                    "assertType": 0,
+                    "assertId": 0,
+                    "target": null,
+                    "workStatus": "运行",
+                    "cumulativeTask": 0,
+                    "currentTask": 0,
+                    "outTask": 0,
+                    "equipmentFrequency": 0,
+                    "maintenanceStatus": 0
+                }
+            ],
+            "stackerMachines": [
+                {
+                    "taskType": 0,
+                    "taskNumber": 1,
+                    "equipmentName": "堆垛机3",
+                    "workStatus": "运行",
+                    "totalTask": 0,
+                    "currentTask": 0,
+                    "equipmentFrequency": 0,
+                    "maintenanceStatus": 0,
+                    "stackerGetItems": [
+                        {
+                            "getPosition": "id",
+                            "getAssertType1": 0,
+                            "getAssert1Id": 1,
+                            "getDirection1": "A",
+                            "getAssertType2": 0,
+                            "getAssert2Id": 1,
+                            "getDirection2": "A"
+                        },
+                        {
+                            "getPosition": "id",
+                            "getAssertType1": 0,
+                            "getAssert1Id": 1,
+                            "getDirection1": "A",
+                            "getAssertType2": 0,
+                            "getAssert2Id": 1,
+                            "getDirection2": "A"
+                        }
+                    ],
+                    "statckPutItems": [
+                        {
+                            "putPosition": "id",
+                            "putAssertType1": 0,
+                            "putDirection1": "A",
+                            "putAssertType2": 0,
+                            "putDirection2": "A"
+                        },
+                        {
+                            "putPosition": "id",
+                            "putAssertType1": 0,
+                            "putDirection1": "A",
+                            "putAssertType2": 0,
+                            "putDirection2": "A"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

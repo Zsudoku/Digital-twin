@@ -1,9 +1,11 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-04-29 15:49:51
+LastEditTime: 2022-04-30 20:50:23
 FilePath: \Digital-twin\Digital twin\test2.py
 '''
+from __future__ import unicode_literals
+import codecs
 # firstNum = 20
 # arithNUm = 15
 # ListNUM = []
@@ -128,9 +130,109 @@ lis = [{'x': 1885.26343, 'y': 18.434639, 'z': 44.90394, 's1': 0, 's2': 0, 'flag'
 
 list = [1,2,3,4]
 import json
-control={'first':1,'second':2,'third':[{'fourth':4,'fifth':5},{'sixth':6,'seventh':7}]}
-control['third'][0]['fourth'] = 999
+# task={'first':1,'second':2,'third':[{'fourth':4,'fifth':5},{'sixth':6,'seventh':7}]}
+# control['third'][0]['fourth'] = 999
 #data={"bw": 100,"delay": "1ms","jitter": None,"loss": 0,"max_queue_size": None,"speedup": 0,
-#        "use_htb": True}
-json.dump(control,open('configuration.json','w'),indent=4)
+# #        "use_htb": True}
+# json.dump(control,open('configuration.json','w'),indent=4)
 #json.dump(data,open('configuration.json','w'),indent=4)
+null=None
+TaskFlow = {
+    "version":0.2,
+    "system": "Dynamitic_Digitaltwin",
+    "stage": "ResponseDeduction",
+    "type":"//Dynamitic",
+    "time": "2022-04-30",
+    "runTime": 0,
+    "data": {
+        "responseCode": 101,
+        "userName": "admin",
+        "planNames": null,
+        "taskContent": 
+        {
+            "loadPointTask": [
+                {
+                    "taskNumber": 0, #//0表示当前设备没有任务，有数字表示有任务且有任务号
+                    "equipmentName": "上货点1",
+                    "loadPosition": null,
+                    "assertType": 0,  #//1-6
+                    "assertId": 0, #//资产ID  0
+                    "target": null, #//移动目标位置
+                    "workStatus": "运行", #//"运行"
+                    "cumulativeTask": 0, #//累计任务量  1的总量
+                    "currentTask": 0, #//当前任务量
+                    "outTask": 0, #//表示总出库  给值
+                    "equipmentFrequency": 0, #//设备频次
+                    "maintenanceStatus": 0 #//维保状态
+                }
+            ],
+            "stackerMachines": #//堆垛机任务集合
+                [
+                    {
+                        "taskType": 0, #//移库入库、检定出库、检定入库、配送出库  -1表示仅仅是移动  
+                        "taskNumber": 1,
+                        "equipmentName": "堆垛机3",
+                        "workStatus": "运行", #//运行
+                        "totalTask": 0, #//总任务量数
+                        "currentTask": 0, #//已完成任务数
+                        "equipmentFrequency": 0, #//设备频次
+                        "maintenanceStatus": 0, #//维保状态
+                        
+                        "stackerGetItems": 
+                        [
+                        {
+                            "getPosition": "id", #/取货点目标 "A-1-1-1" " "
+                            "getAssertType1": 0, #//第1取货叉取货资产类型  实际类型
+                            "getAssert1Id": 1, #//资产ID
+                            "getDirection1": "A", #//第1取货叉取货方向  null
+                            "getAssertType2": 0, #//第2取货叉取货资产类型
+                            "getAssert2Id": 1, #//资产ID
+                            "getDirection2": "A" #//第2取货叉取货方向,如果只取一个，这里传 null
+                        },
+                        {
+                            "getPosition": "id", #//取货点目标  null
+                            "getAssertType1": 0, #//第1取货叉取货资产类型
+                            "getAssert1Id": 1, #//资产ID
+                            "getDirection1": "A", #//第1取货叉取货方向
+                            "getAssertType2": 0, #//第2取货叉取货资产类型
+                            "getAssert2Id": 1, #//资产ID
+                            "getDirection2": "A" #//第2取货叉取货方向
+                        }
+                        ],
+                        
+                        "statckPutItems":
+                        [
+                        {
+                            "putPosition": "id", #//放货点目标 
+                            "putAssertType1": 0, #//第1取货叉放货资产类型
+                            "putDirection1": "A", #//第1放货叉放货方向
+                            "putAssertType2": 0, #//第1放货叉取货资产类型
+                            "putDirection2": "A" #/第2放货叉放货方向
+                        },
+
+                        {
+                            "putPosition": "id", #//放货点目标
+                            "putAssertType1": 0, #//第1取货叉放货资产类型
+                            "putDirection1": "A", #//第1放货叉放货方向
+                            "putAssertType2": 0, #//第1放货叉取货资产类型
+                            "putDirection2": "A" #//第2放货叉放货方向
+                        }
+
+                        ]
+                    }
+                    
+                ]
+        }
+    }
+}
+
+print( "上货点:",TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] )
+print("堆垛机名称:",TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'])
+print("堆垛机get:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'])#'stackerGetItems'   'statckPutItems'
+print("堆垛机put:",TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'])
+print("堆垛机getID1:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'])
+#json.dump(TaskFlow,open('taskflow.json','w'),indent=4,ensure_ascii=False)
+# fp = codecs.open('output.json', 'w+', 'utf-8')
+# fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
+# fp.close()
+
