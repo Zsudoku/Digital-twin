@@ -1,8 +1,8 @@
 '''
 Date: 2022-04-26 15:41:59
 LastEditors: ZSudoku
-LastEditTime: 2022-04-26 15:58:39
-FilePath: \Digital-twin\Digital twin\mysql_goodsLocationInfo.py
+LastEditTime: 2022-05-03 16:14:29
+FilePath: \Digita-twin\Digital twin\mysql_goodsLocationInfo.py
 '''
 import datetime
 
@@ -106,7 +106,7 @@ def insertGoodsLocationInfoVice(lists):
         bidBatch = i["bidBatch"]
         factory = i["factory"]
         num = i["num"]
-        sql = f"insert into goods_location_info_vice " \
+        sql = f"insert into goods_locations_info_vice " \
               f"(x, y, z, s1, s2, flag, line, r0w, c0lumn, type, id, bidBatch, factory, num, sign)" \
               f"values ({x}, {y}, {z}, {s1}, {s2}, '{flag}', {line}, {r0w}, {c0lumn}, {type}, '{id}', " \
               f"'{bidBatch}', '{factory}', {num}, {sign})"
@@ -120,7 +120,7 @@ def insertGoodsLocationInfoVice(lists):
 def getGoodsLocationInfoVice():
     res = []
     sign = getMaxSignVice()
-    sql = f"select * from goods_location_info_vice where sign = '{sign}' "
+    sql = f"select * from goods_locations_info_vice where sign = '{sign}' "
     cursor.execute(sql)
     fetchAll = cursor.fetchall()
     # 每一条数据
@@ -146,7 +146,7 @@ def getGoodsLocationInfoVice():
 
 
 def getMaxSignVice():
-    sql = "select max(sign) from goods_location_info_vice"
+    sql = "select max(sign) from goods_locations_info_vice"
     cursor.execute(sql)
     fetchAll = cursor.fetchall()
     if fetchAll[0][0] is None:

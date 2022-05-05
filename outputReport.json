@@ -1,0 +1,282 @@
+{
+    "version": 0.2,
+    "system": "Dynamitic_Digitaltwin",
+    "stage": "ResponseReport",
+    "time": "2021-11-19-16-51",
+    "runTime": 0,
+    "data": {
+        "responseCode": -101,
+        "userName": "admin",
+        "reports": [
+            {
+                "planName": "nam1",
+                "reportContent": {
+                    "original_plan": {
+                        "summary": {
+                            "efficiency": 128,
+                            "line_usage": 74,
+                            "cargo_usage": 85,
+                            "ave_work_hour": 585
+                        },
+                        "detail": [
+                            {
+                                "date": "2022-01-02",
+                                "cargo_usage": 85,
+                                "modules": [
+                                    {
+                                        "type": "10",
+                                        "R": 8,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 8,
+                                        "H": 8,
+                                        "C": 3,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "11",
+                                        "R": 6,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 6,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "13",
+                                        "R": 6,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 5,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "15",
+                                        "R": 7,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 6,
+                                        "H": 6,
+                                        "C": 3,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "16",
+                                        "R": 12,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 0,
+                                        "distributionArea": "廊坊"
+                                    }
+                                ],
+                                "handling_capacity": 700,
+                                "cargo_status": {
+                                    "newCount": 400,
+                                    "oldCount": 350
+                                },
+                                "lineInfo": [
+                                    {
+                                        "lineName": "line1",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "line2",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    }
+                                ],
+                                "stacker_work_time": [
+                                    {
+                                        "stacker_id": 1,
+                                        "normal_time": 17796.063,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 2,
+                                        "normal_time": 17278.647,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 3,
+                                        "normal_time": 15912.076,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 4,
+                                        "normal_time": 15884.152,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 5,
+                                        "normal_time": 15595.94,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 6,
+                                        "normal_time": 132.959,
+                                        "ex_work_time": 0
+                                    }
+                                ]
+                            }
+                        ],
+                        "risks": [
+                            "content1",
+                            "content2",
+                            "content3"
+                        ]
+                    },
+                    "optimized_plan": {
+                        "summary": {
+                            "efficiency": 128,
+                            "line_usage": 74,
+                            "cargo_usage": 85,
+                            "ave_work_hour": 585
+                        },
+                        "detail": [
+                            {
+                                "date": "2022-01-02",
+                                "cargo_usage": 85,
+                                "modules": [
+                                    {
+                                        "type": "10",
+                                        "R": 80,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 8,
+                                        "H": 8,
+                                        "C": 3,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "11",
+                                        "R": 60,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 6,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "13",
+                                        "R": 60,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 5,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "15",
+                                        "R": 70,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 6,
+                                        "H": 6,
+                                        "C": 3,
+                                        "distributionArea": "廊坊"
+                                    },
+                                    {
+                                        "type": "16",
+                                        "R": 12,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 0,
+                                        "H": 0,
+                                        "C": 0,
+                                        "distributionArea": "廊坊"
+                                    }
+                                ],
+                                "handling_capacity": 700,
+                                "cargo_status": {
+                                    "newCount": 400,
+                                    "oldCount": 350
+                                },
+                                "lineInfo": [
+                                    {
+                                        "lineName": "line1",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "line2",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    }
+                                ],
+                                "stacker_work_time": [
+                                    {
+                                        "stacker_id": 1,
+                                        "normal_time": 28800,
+                                        "ex_work_time": 2666.337
+                                    },
+                                    {
+                                        "stacker_id": 2,
+                                        "normal_time": 17429.465,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 3,
+                                        "normal_time": 16968.151,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 4,
+                                        "normal_time": 14803.02,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 5,
+                                        "normal_time": 3261.273,
+                                        "ex_work_time": 0
+                                    },
+                                    {
+                                        "stacker_id": 6,
+                                        "normal_time": 1044.696,
+                                        "ex_work_time": 0
+                                    }
+                                ]
+                            }
+                        ],
+                        "risks": [
+                            "content1",
+                            "content2",
+                            "content3"
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

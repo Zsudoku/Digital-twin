@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-02 20:46:22
+LastEditTime: 2022-05-03 15:24:33
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -554,6 +554,8 @@ def FoldToDdj():
     for i in range(len(LisToDdj)):
         if i%11 == 0 or i%11 == 1:
             LisToDdjX[0].append(LisToDdj[i])
+        elif i%11 == 10:
+            LisToDdjX[5].append(LisToDdj[i])
         elif i%11 == 2 or i%11 == 3:
             LisToDdjX[1].append(LisToDdj[i])
         elif i%11 == 4 or i%11 == 5:
@@ -562,8 +564,7 @@ def FoldToDdj():
             LisToDdjX[3].append(LisToDdj[i])
         elif i%11 == 8 or i%11 == 9:
             LisToDdjX[4].append(LisToDdj[i])
-        elif i%11 == 10:
-            LisToDdjX[5].append(LisToDdj[i])
+        
     return LisToDdjX
 
 ####model_4 over

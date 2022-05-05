@@ -1,11 +1,12 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-05-02 14:04:12
+LastEditTime: 2022-05-05 21:46:16
 FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
 import codecs
+import copy
 # firstNum = 20
 # arithNUm = 15
 # ListNUM = []
@@ -146,7 +147,7 @@ TaskFlow = {
     "version":0.2,
     "system": "Dynamitic_Digitaltwin",
     "stage": "ResponseDeduction",
-    "type":"//Dynamitic",
+    "type":"#Dynamitic",
     "time": "2022-04-30",
     "runTime": 0,
     "data": {
@@ -157,70 +158,70 @@ TaskFlow = {
         {
             "loadPointTask": [
                 {
-                    "taskNumber": 0, #//0表示当前设备没有任务，有数字表示有任务且有任务号
+                    "taskNumber": 0, ##0表示当前设备没有任务，有数字表示有任务且有任务号
                     "equipmentName": "上货点1",
                     "loadPosition": null,
-                    "assertType": 0,  #//1-6
-                    "assertId": 0, #//资产ID  0
-                    "target": null, #//移动目标位置
-                    "workStatus": "运行", #//"运行"
-                    "cumulativeTask": 0, #//累计任务量  1的总量
-                    "currentTask": 0, #//当前任务量
-                    "outTask": 0, #//表示总出库  给值
-                    "equipmentFrequency": 0, #//设备频次
-                    "maintenanceStatus": 0 #//维保状态
+                    "assertType": 0,  ##1-6
+                    "assertId": 0, ##资产ID  0
+                    "target": null, ##移动目标位置
+                    "workStatus": "运行", ##"运行"
+                    "cumulativeTask": 0, ##累计任务量  1的总量
+                    "currentTask": 0, ##当前任务量
+                    "outTask": 0, ##表示总出库  给值
+                    "equipmentFrequency": 0, ##设备频次
+                    "maintenanceStatus": 0 ##维保状态
                 }
             ],
-            "stackerMachines": #//堆垛机任务集合
+            "stackerMachines": ##堆垛机任务集合
                 [
                     {
-                        "taskType": 1, #//移库入库、检定出库、检定入库、配送出库  -1表示仅仅是移动  
+                        "taskType": 1, ##移库入库、检定出库、检定入库、配送出库  -1表示仅仅是移动  
                         "taskNumber": 1,
                         "equipmentName": "堆垛机3",
-                        "workStatus": "运行", #//运行
-                        "totalTask": 0, #//总任务量数
-                        "currentTask": 0, #//已完成任务数
-                        "equipmentFrequency": 0, #//设备频次
-                        "maintenanceStatus": 0, #//维保状态
+                        "workStatus": "运行", ##运行
+                        "totalTask": 0, ##总任务量数
+                        "currentTask": 0, ##已完成任务数
+                        "equipmentFrequency": 0, ##设备频次
+                        "maintenanceStatus": 0, ##维保状态
                         
                         "stackerGetItems": 
                         [
                         {
                             "getPosition": "id", #/取货点目标 "A-1-1-1" " "
-                            "getAssertType1": 0, #//第1取货叉取货资产类型  实际类型
-                            "getAssert1Id": 1, #//资产ID
-                            "getDirection1": "A", #//第1取货叉取货方向  null
-                            "getAssertType2": 0, #//第2取货叉取货资产类型
-                            "getAssert2Id": 1, #//资产ID
-                            "getDirection2": "A" #//第2取货叉取货方向,如果只取一个，这里传 null
+                            "getAssertType1": 0, ##第1取货叉取货资产类型  实际类型
+                            "getAssert1Id": 1, ##资产ID
+                            "getDirection1": "A", ##第1取货叉取货方向  null
+                            "getAssertType2": 0, ##第2取货叉取货资产类型
+                            "getAssert2Id": 1, ##资产ID
+                            "getDirection2": "A" ##第2取货叉取货方向,如果只取一个，这里传 null
                         },
                         {
-                            "getPosition": "id", #//取货点目标  null
-                            "getAssertType1": 0, #//第1取货叉取货资产类型
-                            "getAssert1Id": 1, #//资产ID
-                            "getDirection1": "A", #//第1取货叉取货方向
-                            "getAssertType2": 0, #//第2取货叉取货资产类型
-                            "getAssert2Id": 1, #//资产ID
-                            "getDirection2": "A" #//第2取货叉取货方向
+                            "getPosition": "id", ##取货点目标  null
+                            "getAssertType1": 0, ##第1取货叉取货资产类型
+                            "getAssert1Id": 1, ##资产ID
+                            "getDirection1": "A", ##第1取货叉取货方向
+                            "getAssertType2": 0, ##第2取货叉取货资产类型
+                            "getAssert2Id": 1, ##资产ID
+                            "getDirection2": "A" ##第2取货叉取货方向
                         }
                         ],
                         
                         "statckPutItems":
                         [
                         {
-                            "putPosition": "id", #//放货点目标 
-                            "putAssertType1": 0, #//第1取货叉放货资产类型
-                            "putDirection1": "A", #//第1放货叉放货方向
-                            "putAssertType2": 0, #//第1放货叉取货资产类型
+                            "putPosition": "id", ##放货点目标 
+                            "putAssertType1": 0, ##第1取货叉放货资产类型
+                            "putDirection1": "A", ##第1放货叉放货方向
+                            "putAssertType2": 0, ##第1放货叉取货资产类型
                             "putDirection2": "A" #/第2放货叉放货方向
                         },
 
                         {
-                            "putPosition": "id", #//放货点目标
-                            "putAssertType1": 0, #//第1取货叉放货资产类型
-                            "putDirection1": "A", #//第1放货叉放货方向
-                            "putAssertType2": 0, #//第1放货叉取货资产类型
-                            "putDirection2": "A" #//第2放货叉放货方向
+                            "putPosition": "id", ##放货点目标
+                            "putAssertType1": 0, ##第1取货叉放货资产类型
+                            "putDirection1": "A", ##第1放货叉放货方向
+                            "putAssertType2": 0, ##第1放货叉取货资产类型
+                            "putDirection2": "A" ##第2放货叉放货方向
                         }
 
                         ]
@@ -231,19 +232,547 @@ TaskFlow = {
     }
 }
 
-print( "上货点:",TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] )
-print("堆垛机名称:",TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'])
-print("堆垛机get:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'])#'stackerGetItems'   'statckPutItems'
-print("堆垛机put:",TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'])
-print("堆垛机getID1:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'])
-#json.dump(TaskFlow,open('taskflow.json','w'),indent=4,ensure_ascii=False)
+# print( "上货点:",TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] )
+# print("堆垛机名称:",TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'])
+# print("堆垛机get:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'])#'stackerGetItems'   'statckPutItems'
+# print("堆垛机put:",TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'])
+# print("堆垛机getID1:",TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'])
+# #json.dump(TaskFlow,open('taskflow.json','w'),indent=4,ensure_ascii=False)
+# # fp = codecs.open('output.json', 'w+', 'utf-8')
+# # fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
+# # fp.write(",\n")
+# # fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
+# # fp.close()
+# TaskFlow['version'] = "堆垛机%d号"%(2)
 # fp = codecs.open('output.json', 'w+', 'utf-8')
 # fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
-# fp.write(",\n")
-# fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
 # fp.close()
-TaskFlow['version'] = "堆垛机%d号"%(2)
-fp = codecs.open('output.json', 'w+', 'utf-8')
-fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
+# print("堆垛机taskType",TaskFlow['data']['taskContent']['stackerMachines'][0]['taskType'])
+
+report = {
+    "version": 0.2,
+    "system": "Dynamitic_Digitaltwin",
+    "stage": "ResponseReport", #响应推演
+    "time": "2021-11-19-16-51",
+    "runTime": 0,
+    #Dynamitic
+    "data": {
+    #请求识别码
+    "responseCode": -101,
+    #用户名 唯一
+    "userName": "admin",
+    "reports": [
+    {
+        "planName": "nam1", #原计划方案名
+        "reportContent": {
+        "original_plan ": { # 原方案
+        "summary":          #方案综述
+    { 
+        "efficiency": 128, # 综合效率（百分比） 
+        "line_usage": 74, # 线体平均利用率 （百分比）
+        "cargo_usage": 85, # 立库利用效率 （百分比）
+        "ave_work_hour": 585 # 日平均工作时长（分钟）
+    },
+
+    "detail": [ # 每天的细节
+    {
+        "date": "2022-01-02", # 日期
+        "cargo_usage": 85, # 立库利用效率 （百分比）
+        "modules": 
+    [ # 各种货物
+        {
+            "type": "module1", # 货物类型
+            "R": 500, # 移库数量
+            "arrivedBatch": "2621212128223", #到货批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+            "bidBatch": "2020第二批", #招标批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+            "S": 500, # 检定数量
+            "H": 500, # 回库数量
+            "C": 500, # 配送数量
+            "distributionArea": "廊坊" #配送区域，如果现在没有数据就填写这个值  /*************************新增**************************************/
+        }
+
+    # 其他类型货物...
+    ],
+    "handling_capacity": 700, # 吞吐量
+    "cargo_status": { # 立库货物数量
+    "newCount": 400, # 新品数量
+    "oldCount": 350 # 成品数量
+    },
+    "lineInfo":
+    #检定线体信息           /*************************新增**************************************/
+    [
+        {
+            "lineName": "line1",
+            "useRate": 0.78, #线体利用率
+            "workTime": "119:45:44", #正常工作时长
+            "overTime": "119:45:44", #加班工作时长
+            "assertType": 0, #资产类型
+            "checkCount": 0, #检测数量
+            "backStorage": 0, #回库数量
+            "inStorage": 0, #入检定线数量
+            "humanTime": "119:45:44" #人工台时长
+        },
+        {
+            "lineName": "line2",
+            "useRate": 0.78, #线体利用率
+            "workTime": "119:45:44", #正常工作时长
+            "overTime": "119:45:44", #加班工作时长
+            "assertType": 0,
+            "checkCount": 0,
+            "backStorage": 0, #回库数量
+            "inStorage": 0, #入检定线数量
+            "humanTime": "119:45:44" #人工台时长
+        }
+    ],
+    "stacker_work_time": 
+    [ # 堆垛机工作时长（一天）
+        {
+            "stacker_id": 1, # 堆垛机 id
+            "normal_time": 7000, # 正常工作时长
+            "ex_work_time": 996 # 加班时间工作时长
+        }
+
+    # 其他堆垛机...
+    ]
+    }
+
+    # 后续日期...
+    ],
+
+    "risks": 
+    [ #存在风险项           /*************************新增**************************************/
+        "content1",
+        "content2",
+        "content3"
+    ]
+
+    },
+    "optimized_plan ":
+    { # 优化方案
+        "summary": 
+        { # 方案总述
+            "efficiency": 128, # 综合效率（百分比） 
+            "line_usage": 74, # 线体平均利用率 （百分比）
+            "cargo_usage": 85, # 立库利用效率 （百分比）
+            "ave_work_hour": 585 # 日平均工作时长（分钟）
+
+        },
+
+        "detail": 
+        [ # 每天的细节
+            {
+            "date": "2022-01-02", # 日期
+            "cargo_usage": 85, # 立库利用效率 （百分比）
+            "modules": 
+            [ # 各种货物
+                {
+                "type": "module1", # 货物类型
+                "R": 500, # 移库数量
+                "arrivedBatch": "2621212128223", #到货批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                "bidBatch": "2020第二批", #招标批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                "S": 500, # 检定数量
+                "H": 500, # 回库数量
+                "C": 500, # 配送数量
+                "distributionArea": "廊坊" #配送区域，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                }
+
+                # 其他类型货物...
+            ],
+            "handling_capacity": 700, # 吞吐量
+            "cargo_status": 
+            { # 立库货物数量
+                "newCount": 400, # 新品数量
+                "oldCount": 350 # 成品数量
+            },
+            "lineInfo": #检定线体信息           /*************************新增**************************************/
+            [
+                {
+                    "lineName": "line1",
+                    "useRate": 0.78, #线体利用率
+                    "workTime": "119:45:44", #正常工作时长
+                    "overTime": "119:45:44", #加班工作时长
+                    "assertType": 0, #资产类型
+                    "checkCount": 0, #检测数量
+                    "backStorage": 0, #回库数量
+                    "inStorage": 0, #入检定线数量
+                    "humanTime": "119:45:44" #人工台时长
+                },
+                {
+                    "lineName": "line2",
+                    "useRate": 0.78, #线体利用率
+                    "workTime": "119:45:44", #正常工作时长
+                    "overTime": "119:45:44", #加班工作时长
+                    "assertType": 0,
+                    "checkCount": 0,
+                    "backStorage": 0, #回库数量
+                    "inStorage": 0, #入检定线数量
+                    "humanTime": "119:45:44" #人工台时长
+                }
+            ],
+            "stacker_work_time": 
+            [ # 堆垛机工作时长（一天）
+                {
+                    "stacker_id": 1, # 堆垛机 id
+                    "normal_time": 7000, # 正常工作时长
+                    "ex_work_time": 996 # 加班时间工作时长
+                }
+
+            # 其他堆垛机...
+            ]
+        }
+
+        # 后续日期...
+        ],
+
+    "risks": 
+    [ #存在风险项           /*************************新增**************************************/
+        "content1",
+        "content2",
+        "content3"
+    ]
+    }
+
+    } 
+
+    },
+
+    {
+    "planName": "nam2", #原计划方案名
+    "reportContent": 
+    {
+        "original_plan ": 
+        { # 原方案
+            "summary": 
+            { # 方案总述
+                "efficiency": 128, # 综合效率（百分比） 
+                "line_usage": 74, # 线体平均利用率 （百分比）
+                "cargo_usage": 85, # 立库利用效率 （百分比）
+                "ave_work_hour": 585, # 日平均工作时长（分钟）
+                "stacker_work_time":  # 堆垛机工作时长（一周）
+                [
+                    {
+                        "stacker_id": 1, # 堆垛机 id
+                        "normal_time": 7000, # 正常工作时长
+                        "ex_work_time": 996 # 加班时间工作时长
+                    }
+                # 其他堆垛机...
+                ]
+            },
+
+            "detail": 
+            [ # 每天的细节
+                {
+                    "date": "2022-01-02", # 日期
+                    "cargo_usage": 85, # 立库利用效率 （百分比）
+                    "modules": 
+                    [ # 各种货物
+                        {
+                            "type": "module1", # 货物类型
+                            "R": 500, # 移库数量
+                            "arrivedBatch": "2621212128223", #到货批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                            "bidBatch": "2020第二批", #招标批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                            "S": 500, # 检定数量
+                            "H": 500, # 回库数量
+                            "C": 500, # 配送数量
+                            "distributionArea": "廊坊" #配送区域，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                        }
+
+                        # 其他类型货物...
+                    ],
+                    "handling_capacity": 700, # 吞吐量
+                    "cargo_status": 
+                    { # 立库货物数量
+                        "newCount": 400, # 新品数量
+                        "oldCount": 350 # 成品数量
+                    },
+                    "lineInfo": #检定线体信息           /*************************新增**************************************/
+                    [
+                        {
+                            "lineName": "line1",
+                            "useRate": 0.78, #线体利用率
+                            "workTime": "119:45:44", #正常工作时长
+                            "overTime": "119:45:44", #加班工作时长
+                            "assertType": 0, #资产类型
+                            "checkCount": 0, #检测数量
+                            "backStorage": 0, #回库数量
+                            "inStorage": 0, #入检定线数量
+                            "humanTime": "119:45:44" #人工台时长
+                        },
+                        {
+                            "lineName": "line2",
+                            "useRate": 0.78, #线体利用率
+                            "workTime": "119:45:44", #正常工作时长
+                            "overTime": "119:45:44", #加班工作时长
+                            "assertType": 0,
+                            "checkCount": 0,
+                            "backStorage": 0, #回库数量
+                            "inStorage": 0, #入检定线数量
+                            "humanTime": "119:45:44" #人工台时长
+                        }
+                    ]
+                }
+
+            # 后续日期...
+            ],
+
+            "risks": 
+            [ #存在风险项           /*************************新增**************************************/
+                "content1",
+                "content2",
+                "content3"
+            ]
+        },
+        "optimized_plan ": 
+        { # 原方案
+            "summary": 
+            { # 方案总述
+                "efficiency": 128, # 综合效率（百分比） 
+                "line_usage": 74, # 线体平均利用率 （百分比）
+                "cargo_usage": 85, # 立库利用效率 （百分比）
+                "ave_work_hour": 585, # 日平均工作时长（分钟）
+                "stacker_work_time":
+                [ # 堆垛机工作时长（一周）
+                    {
+                        "stacker_id": 1, # 堆垛机 id
+                        "normal_time": 7000, # 正常工作时长
+                        "ex_work_time": 996 # 加班时间工作时长
+                    }
+
+                # 其他堆垛机...
+                ]
+            },
+
+            "detail": 
+            [ # 每天的细节
+                {
+                    "date": "2022-01-02", # 日期
+                    "cargo_usage": 85, # 立库利用效率 （百分比）
+                    "modules": 
+                    [ # 各种货物
+                        {
+                            "type": "module1", # 货物类型
+                            "R": 500, # 移库数量
+                            "arrivedBatch": "2621212128223", #到货批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                            "bidBatch": "2020第二批", #招标批次，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                            "S": 500, # 检定数量
+                            "H": 500, # 回库数量
+                            "C": 500, # 配送数量
+                            "distributionArea": "廊坊" #配送区域，如果现在没有数据就填写这个值  /*************************新增**************************************/
+                        }
+
+                        # 其他类型货物...
+                    ],
+                    "handling_capacity": 700, # 吞吐量
+                    "cargo_status": 
+                    { # 立库货物数量
+                        "newCount": 400, # 新品数量
+                        "oldCount": 350 # 成品数量
+                    },
+                    "lineInfo": #检定线体信息           /*************************新增**************************************/
+                    [
+                        {
+                            "lineName": "line1",
+                            "useRate": 0.78, #线体利用率
+                            "workTime": "119:45:44", #正常工作时长
+                            "overTime": "119:45:44", #加班工作时长
+                            "assertType": 0, #资产类型
+                            "checkCount": 0, #检测数量
+                            "backStorage": 0, #回库数量
+                            "inStorage": 0, #入检定线数量
+                            "humanTime": "119:45:44" #人工台时长
+                        },
+                        {
+                            "lineName": "line2",
+                            "useRate": 0.78, #线体利用率
+                            "workTime": "119:45:44", #正常工作时长
+                            "overTime": "119:45:44", #加班工作时长
+                            "assertType": 0,
+                            "checkCount": 0,
+                            "backStorage": 0, #回库数量
+                            "inStorage": 0, #入检定线数量
+                            "humanTime": "119:45:44" #人工台时长
+                        }
+                    ]
+                }
+
+                # 后续日期...
+            ],
+
+                "risks": 
+                [ #存在风险项           /*************************新增**************************************/
+                    "content1",
+                    "content2",
+                    "content3"
+                ]
+        }
+
+    } 
+
+    }
+    ]
+    }
+}
+
+report2 = {
+    "version": 0.2,
+    "system": "Dynamitic_Digitaltwin",
+    "stage": "ResponseReport",
+    "time": "2021-11-19-16-51",
+    "runTime": 0,
+    "data": {
+        "responseCode": -101,
+        "userName": "admin",
+        "reports": [
+            {
+                "planName": "nam1",
+                "reportContent": {
+                    "original_plan": {
+                        "summary": {
+                            "efficiency": 128,
+                            "line_usage": 74,
+                            "cargo_usage": 85,
+                            "ave_work_hour": 585
+                        },
+                        "detail": [
+                            {
+                                "date": "2022-01-02",
+                                "cargo_usage": 85,
+                                "modules": [
+                                    {
+                                        "type": "module1",
+                                        "R": 500,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 500,
+                                        "H": 500,
+                                        "C": 500,
+                                        "distributionArea": "廊坊"
+                                    }
+                                ],
+                                "handling_capacity": 700,
+                                "cargo_status": {
+                                    "newCount": 400,
+                                    "oldCount": 350
+                                },
+                                "lineInfo": [
+                                    {
+                                        "lineName": "line1",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "line2",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    }
+                                ],
+                                "stacker_work_time": [
+                                    {
+                                        "stacker_id": 1,
+                                        "normal_time": 7000,
+                                        "ex_work_time": 996
+                                    }
+                                ]
+                            }
+                        ],
+                        "risks": [
+                            "content1",
+                            "content2",
+                            "content3"
+                        ]
+                    },
+                    "optimized_plan": {
+                        "summary": {
+                            "efficiency": 128,
+                            "line_usage": 74,
+                            "cargo_usage": 85,
+                            "ave_work_hour": 585
+                        },
+                        "detail": [
+                            {
+                                "date": "2022-01-02",
+                                "cargo_usage": 85,
+                                "modules": [
+                                    {
+                                        "type": "module1",
+                                        "R": 500,
+                                        "arrivedBatch": "2621212128223",
+                                        "bidBatch": "2020第二批",
+                                        "S": 500,
+                                        "H": 500,
+                                        "C": 500,
+                                        "distributionArea": "廊坊"
+                                    }
+                                ],
+                                "handling_capacity": 700,
+                                "cargo_status": {
+                                    "newCount": 400,
+                                    "oldCount": 350
+                                },
+                                "lineInfo": [
+                                    {
+                                        "lineName": "line1",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "line2",
+                                        "useRate": 0.78,
+                                        "workTime": "119:45:44",
+                                        "overTime": "119:45:44",
+                                        "assertType": 0,
+                                        "checkCount": 0,
+                                        "backStorage": 0,
+                                        "inStorage": 0,
+                                        "humanTime": "119:45:44"
+                                    }
+                                ],
+                                "stacker_work_time": [
+                                    {
+                                        "stacker_id": 1,
+                                        "normal_time": 7000,
+                                        "ex_work_time": 996
+                                    }
+                                ]
+                            }
+                        ],
+                        "risks": [
+                            "content1",
+                            "content2",
+                            "content3"
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}
+# report2['data']['reports'].append({})
+
+# report2['data']['reports'][2] = copy.deepcopy(report2['data']['reports'][0])
+# report2['data']['reports'][2]['planName'] = "9999999"
+
+print(report2['data']['reports'][0]['reportContent']['original_plan']['detail'][0]['modules'])
+
+fp = codecs.open('outputReport.json', 'w+', 'utf-8')
+fp.write(json.dumps(report2,ensure_ascii=False,indent=4))
 fp.close()
-print("堆垛机taskType",TaskFlow['data']['taskContent']['stackerMachines'][0]['taskType'])
+print(report2['data']['reports'][0]['reportContent']['original_plan']['summary'])
