@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-05-06 17:00:42
+LastEditTime: 2022-05-06 20:58:08
 FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
@@ -777,8 +777,6 @@ fp.write(json.dumps(report2,ensure_ascii=False,indent=4))
 fp.close()
 print(report2['data']['reports'][0]['reportContent']['original_plan']['summary'])
 
+import datetime
 
-Lis = [[],[],[],[]]
-Lis[1].append(123)
-Lis[1].append(123)
-print(Lis)
+print("123%(s)456"%("***"))
