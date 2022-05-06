@@ -16,7 +16,7 @@
                             "efficiency": 128,
                             "line_usage": 74,
                             "cargo_usage": 85,
-                            "ave_work_hour": 585
+                            "ave_work_hour": 12927.099
                         },
                         "detail": [
                             {
@@ -81,57 +81,94 @@
                                 },
                                 "lineInfo": [
                                     {
-                                        "lineName": "line1",
+                                        "lineName": "2楼检定线",
                                         "useRate": 0.78,
-                                        "workTime": "119:45:44",
-                                        "overTime": "119:45:44",
-                                        "assertType": 0,
-                                        "checkCount": 0,
-                                        "backStorage": 0,
-                                        "inStorage": 0,
+                                        "workTime": "03:49:21",
+                                        "overTime": "00:00:00",
+                                        "assertType": [
+                                            11,
+                                            17,
+                                            13,
+                                            15,
+                                            16
+                                        ],
+                                        "checkCount": 3,
+                                        "backStorage": 3,
+                                        "inStorage": 3,
                                         "humanTime": "119:45:44"
                                     },
                                     {
-                                        "lineName": "line2",
+                                        "lineName": "3楼检定线",
                                         "useRate": 0.78,
-                                        "workTime": "119:45:44",
-                                        "overTime": "119:45:44",
-                                        "assertType": 0,
-                                        "checkCount": 0,
-                                        "backStorage": 0,
-                                        "inStorage": 0,
+                                        "workTime": "04:16:41",
+                                        "overTime": "00:00:00",
+                                        "assertType": [
+                                            10
+                                        ],
+                                        "checkCount": 4,
+                                        "backStorage": 4,
+                                        "inStorage": 4,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "4楼检定线",
+                                        "useRate": 0.78,
+                                        "workTime": "04:18:08",
+                                        "overTime": "00:00:00",
+                                        "assertType": [
+                                            10,
+                                            14
+                                        ],
+                                        "checkCount": 4,
+                                        "backStorage": 4,
+                                        "inStorage": 4,
+                                        "humanTime": "119:45:44"
+                                    },
+                                    {
+                                        "lineName": "5楼检定线",
+                                        "useRate": 0.78,
+                                        "workTime": "03:49:24",
+                                        "overTime": "00:00:00",
+                                        "assertType": [
+                                            11,
+                                            15,
+                                            16
+                                        ],
+                                        "checkCount": 3,
+                                        "backStorage": 3,
+                                        "inStorage": 3,
                                         "humanTime": "119:45:44"
                                     }
                                 ],
                                 "stacker_work_time": [
                                     {
                                         "stacker_id": 1,
-                                        "normal_time": 17796.063,
+                                        "normal_time": 15922.397,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 2,
-                                        "normal_time": 17278.647,
+                                        "normal_time": 15880.656,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 3,
-                                        "normal_time": 15912.076,
+                                        "normal_time": 15867.816,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 4,
-                                        "normal_time": 15884.152,
+                                        "normal_time": 15692.257,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 5,
-                                        "normal_time": 15595.94,
+                                        "normal_time": 14065.871,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 6,
-                                        "normal_time": 132.959,
+                                        "normal_time": 133.599,
                                         "ex_work_time": 0
                                     }
                                 ]
@@ -141,7 +178,8 @@
                             "content1",
                             "content2",
                             "content3"
-                        ]
+                        ],
+                        "handling_capacity": 84
                     },
                     "optimized_plan": {
                         "summary": {
@@ -238,32 +276,32 @@
                                 "stacker_work_time": [
                                     {
                                         "stacker_id": 1,
-                                        "normal_time": 28800,
-                                        "ex_work_time": 2666.337
+                                        "normal_time": 25341.449,
+                                        "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 2,
-                                        "normal_time": 17429.465,
+                                        "normal_time": 19805.006,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 3,
-                                        "normal_time": 16968.151,
+                                        "normal_time": 18357.181,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 4,
-                                        "normal_time": 14803.02,
+                                        "normal_time": 15590.212,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 5,
-                                        "normal_time": 3261.273,
+                                        "normal_time": 3905.903,
                                         "ex_work_time": 0
                                     },
                                     {
                                         "stacker_id": 6,
-                                        "normal_time": 1044.696,
+                                        "normal_time": 1048.343,
                                         "ex_work_time": 0
                                     }
                                 ]

@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-03 15:24:33
+LastEditTime: 2022-05-06 16:09:33
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -1328,7 +1328,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             pass
         else:
             #当前位置在货位，移动到送检口
-            walkTime1 = CALCWalkTime(abs(CargoNow[p-1]['x'] - first_x),abs(CargoNow[p-1]['y']))
+            walkTime1 = CALCWalkTime(abs(CargoNow[p-1]['x'] - first_x),abs(CargoNow[p-1]['y'] - first_y))
             #从送检口移动到下个编码初始位置
             walkTime2 = CALCWalkTime(abs(first_x - last_x),abs(first_y - last_y))
             #计算时间
