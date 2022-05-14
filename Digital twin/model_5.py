@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-06 16:09:33
+LastEditTime: 2022-05-14 14:27:35
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -1080,7 +1080,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     second_p_type = CALCjudgeType(second_p) #获取编码second_p的类型
     #回库编码的变化
     if(p_type == 'H'):
-        if(second_p == 'H'):
+        if(second_p_type == 'H'):
             for i in LisReturnTime[0]:
                 p = int(i) - S
             for i in LisReturnTime[1]:

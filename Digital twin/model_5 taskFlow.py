@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-01 20:20:13
 LastEditors: ZSudoku
-LastEditTime: 2022-05-07 14:27:51
+LastEditTime: 2022-05-14 14:51:06
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 '''
 '''
@@ -21,6 +21,8 @@ from time import gmtime
 
 import datetime
 
+from InPutCodeOptimization import *
+from InPutCodeOriginal import *
 from InPutData import *
 import mysql_goodsLocationInfo as CargoNow_sql
 import mysql_productionLineData as ddjData_sql
@@ -1442,7 +1444,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     second_p_type = CALCjudgeType(second_p) #获取编码second_p的类型
     #回库编码的变化
     if(p_type == 'H'):
-        if(second_p == 'H'):
+        if(second_p_type == 'H'):
             for i in LisReturnTime[0]:
                 p = int(i) - S
             for i in LisReturnTime[1]:
@@ -1630,8 +1632,10 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType1'] = CargoNow[second_p-1]['type']
-            
+            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+            if(p == second_p):
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
+                print("p:",p,"second_p:",second_p)
             
             #一次入库两垛
             #放到货位1上
@@ -1703,8 +1707,8 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['totalTask'] = DdjTotalTask[ddj-1]
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType1'] = CargoNow[p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CALCFloor(second_y)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[second_p-1]['type']
@@ -1753,11 +1757,11 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType1'] = CargoNow[second_p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CALCFloor(second_y)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CALCFloor(third_y)
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType1'] = CargoNow[second_p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['runTime'] = TI
                 CreatJson()
                 #当前堆垛机已在资产p位置上，首先是取货，之后移动到second_p的货位上
@@ -1881,7 +1885,10 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType1'] = CargoNow[second_p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+                if(p == second_p):
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
+                    print("p:",p,"second_p:",second_p)
                 #连续取两垛，回库口相同
                 
                 #堆垛机从当前位置移动到货位1，放一垛货
@@ -1942,12 +1949,14 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CALCFloor(inspectY)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CALCFloor(first_y)
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType1'] = CargoNow[second_p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType1'] = CargoNow[second_p-1]['type']
-                
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+                if(p == second_p):
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
+                    print("p:",p,"second_p:",second_p)
                 #堆垛机从当前位置移动到回库口2，取一垛货
                 walkTime1 = CALCWalkTime(abs(inspectX - first_x),abs(inspectY - first_y))
                 #堆垛机从回库口2移动到货位1，放一垛货
@@ -2026,7 +2035,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType1'] = CargoNow[second_p-1]['type']
+            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = '一楼出库放货点'
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putDirection1'] = CargoNow[p-1]['flag']
@@ -2766,11 +2775,13 @@ def main():
         for i in range(len(CargoOriginal)):
             global PlanFlag
             PlanFlag = False
-            LisCode = CALCLisCode()
+            #LisCode = CALCLisCode()
+            LisCode = LisOriginalCode[Days]
             enSimpleCode(LisCode,DdjData)
             GetOriginalReport()
             PlanFlag = True
-            LisCode = CALCLisCode()
+            #LisCode = CALCLisCode()
+            LisCode = LisOptimizedCode[Days]
             enSimpleCode(LisCode,DdjData)
             GetOptimizedReport()
             Days += 1
