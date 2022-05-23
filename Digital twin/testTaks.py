@@ -1,8 +1,8 @@
 '''
 Date: 2022-05-21 14:42:21
 LastEditors: ZSudoku
-LastEditTime: 2022-05-21 14:42:22
-FilePath: \Digital-twin\Digital twin\testTaks.py
+LastEditTime: 2022-05-21 15:40:25
+FilePath: \Digita-twin\Digital twin\testTaks.py
 '''
 import json
 
@@ -14,15 +14,17 @@ import json
 with open('D:\\test.json', 'r', encoding='utf-8') as load_f:
     
     test_data = json.load(load_f)
-
-count = 0
-for i in range(len(test_data)):
-    for j in range(i,len(test_data)):
-        if(i == j):
-            continue
-        if(abs(test_data[i]['runTime'] - test_data[j]['runTime']) < 0.1):
-            #print(test_data[i],"*******",test_data[j])
-            count += 1
+print(len(test_data['采集终端']))
+for i in test_data:
+    print(i)
+# count = 0
+# for i in range(len(test_data)):
+#     for j in range(i,len(test_data)):
+#         if(i == j):
+#             continue
+#         if(abs(test_data[i]['runTime'] - test_data[j]['runTime']) < 0.1):
+#             #print(test_data[i],"*******",test_data[j])
+#             count += 1
 print(len(test_data))            
-print(count)
+# print(count)
 
