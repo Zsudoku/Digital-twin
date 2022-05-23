@@ -1,8 +1,8 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-05-06 20:58:08
-FilePath: \Digita-twin\Digital twin\test2.py
+LastEditTime: 2022-05-21 19:35:58
+FilePath: \Digital-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
 import codecs
