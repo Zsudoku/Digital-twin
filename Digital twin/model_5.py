@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-24 11:25:01
+LastEditTime: 2022-05-24 11:31:58
 FilePath: \Digital-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -1275,7 +1275,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #计算时间
             waitTime1 = GetEnterWaitTime(p,TI)
             waitTime2 = GetEnterWaitTime(second_p,TI)
-            waitTime = waitTime1 + waitTime2
+            waitTime = waitTime1 + waitTime2 + 80
             TI += waitTime + grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
             TDI += grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
         else:
@@ -1288,6 +1288,9 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #货位移动到下个编码初始位置
             walkTime2 = CALCWalkTime(abs(first_x - last_x),abs(first_y - last_y))
             #计算时间
+            waitTime1 = GetEnterWaitTime(p,TI)
+            #waitTime2 = GetEnterWaitTime(second_p,TI)
+            waitTime = waitTime1 + waitTime2 + 80
             TI += waitTime + grabTime + walkTime1 + walkTime2 + placeTime
             TDI += grabTime + walkTime1 + walkTime2 + placeTime
     elif(p_type=='S'):
