@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-14 14:27:35
+LastEditTime: 2022-05-25 11:44:00
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -89,7 +89,7 @@ LisGoodsNum = []
 dirInspect = {}
 LisDdjTime = []
 LisDdjTimeD = []
-LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14]},{'5':[11,11]}]#json 文件中获得
+LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14,12]},{'5':[11,11]}]#json 文件中获得
 LisReturnTime = []
 LisEnterTime = []
 inspectIndex = 0
@@ -994,6 +994,8 @@ def GetInspectTime(p):
         inspectTime = 1800
     elif(CargoNow[p-1]['type'] == 13):#互感器
         inspectTime = 1800
+    elif(CargoNow[p-1]['type'] == 12):#集中器
+        inspectTime = 14400
     elif(CargoNow[p-1]['type'] == 10):#采集终端
         inspectTime = 14400
     elif(CargoNow[p-1]['type'] == 17 or CargoNow[p-1]['type'] == 18 or CargoNow[p-1]['type'] == 19):#HPLC
@@ -1535,7 +1537,7 @@ def initCode(ThisCargoNow):
         elif(CargoNow[i]['s1'] == 1 and CargoNow[i]['s2'] == 1):
             C += 1
     
-    LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14]},{'5':[11,11]}]#json 文件中获得
+    LisInspect = [{'2':[11,17,13]},{'3':[10]},{'4':[10,14,12]},{'5':[11,11]}]#json 文件中获得
     LisReturnTime = []
     LisEnterTime = []
     inspectIndex = 0

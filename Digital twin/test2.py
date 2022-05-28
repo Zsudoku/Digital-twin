@@ -1,8 +1,8 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-05-21 19:35:58
-FilePath: \Digital-twin\Digital twin\test2.py
+LastEditTime: 2022-05-24 15:15:33
+FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
 import codecs
@@ -770,13 +770,15 @@ report2 = {
 # report2['data']['reports'][2] = copy.deepcopy(report2['data']['reports'][0])
 # report2['data']['reports'][2]['planName'] = "9999999"
 
-print(report2['data']['reports'][0]['reportContent']['original_plan']['detail'][0]['modules'])
+# print(report2['data']['reports'][0]['reportContent']['original_plan']['detail'][0]['modules'])
 
-fp = codecs.open('outputReport.json', 'w+', 'utf-8')
-fp.write(json.dumps(report2,ensure_ascii=False,indent=4))
-fp.close()
-print(report2['data']['reports'][0]['reportContent']['original_plan']['summary'])
+# fp = codecs.open('outputReport.json', 'w+', 'utf-8')
+# fp.write(json.dumps(report2,ensure_ascii=False,indent=4))
+# fp.close()
+# print(report2['data']['reports'][0]['reportContent']['original_plan']['summary'])
 
-import datetime
+# import datetime
 
-print("123%(s)456"%("***"))
+# print("123%(s)456"%("***"))
+# fp = codes.open('月优化计划/月度入库计划.json,r,'gb2312')
+
