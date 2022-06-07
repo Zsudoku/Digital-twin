@@ -1,11 +1,4 @@
 '''
-Date: 2022-05-01 20:20:13
-LastEditors: ZSudoku
-LastEditTime: 2022-05-28 18:40:05
-FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
-
-'''
-'''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
 LastEditTime: 2022-05-01 16:15:16
