@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-05-28 18:39:24
+LastEditTime: 2022-06-10 15:00:29
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -476,9 +476,9 @@ def cal(LisCode, n=5):
     if (len(r) == 0 or len(dr) == 0):
         for i in range(0, len(CargoNow)):
             if (CargoNow[i]['s1'] == 0 and CargoNow[i]['s2'] == 0):
-                r.add(CargoNow[i]['num'])
-                # r[res[i]['num']]=int(res[i]['type']);
-                dr[CargoNow[i]['num']] = int(CargoNow[i]['line']);
+                r.add(CargoNow[i]['item'])
+                # r[res[i]['item']]=int(res[i]['type']);
+                dr[CargoNow[i]['item']] = int(CargoNow[i]['line']);
 
     rTot = [];
     for i in LisCode:
@@ -605,7 +605,7 @@ def CALCStacker(id):
     #idToL是否为空
     if(len(idToL)==0):
         for i in range(0, len(CargoNow)):
-            idToL[CargoNow[i]['num']] = CargoNow[i]['line']
+            idToL[CargoNow[i]['item']] = CargoNow[i]['line']
         # dat({},{},{},{},set(),0);    
         for i in idToL:
             tem = lineToDdj[idToL[i]];
@@ -850,7 +850,10 @@ def CALCDayInspectIW():
     for i in range(len(LisF)):
         L.append([])
         L[i] = {}
-        L[i]['%d'%(LF[i])] = LisF[i]['%d'%(LF[i])][-1]
+        try:
+            L[i]['%d'%(LF[i])] = LisF[i]['%d'%(LF[i])][-1]
+        except  IndexError:
+            pass
         #print(LisF[i]['%d'%(LF[i])][-1])
     LisT_GoodNUm =  copy.deepcopy(LisT)
     for i in range(len(LisT)):
@@ -1290,7 +1293,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #计算时间
             waitTime1 = GetEnterWaitTime(p,TI)
             #waitTime2 = GetEnterWaitTime(second_p,TI)
-            waitTime = waitTime1 + waitTime2 + 80
+            waitTime = waitTime1  + 80
             TI += waitTime + grabTime + walkTime1 + walkTime2 + placeTime
             TDI += grabTime + walkTime1 + walkTime2 + placeTime
     elif(p_type=='S'):
@@ -1670,7 +1673,8 @@ def Fitness(LisCode,DdjData):
     GetS_H(LisDdjCode)
     Read(LisDdjCode)
     LisDdjTime = sorted(LisDdjTime, reverse=True)
-    Punish = PunishCount * 100000
+    #Punish = PunishCount * 100000
+    Punish = 0
     return LisDdjTime[0] + Punish 
 
 def enSimpleCode(LisCode:list,DdjData,ThisCargoNow):
@@ -1695,7 +1699,10 @@ def CALCLisCode(CargoNowt):
 
 #LisCode = [76, 2, 9, 14, 39, 22, 82, 60, 70, 58, 4, 59, 30, 74, 20, 80, 8, 71, 54, 48, 83, 65, 51, 75, 12, 36, 66, 34, 28, 73, 56, 13, 64, 68, 55, 24, 11, 45, 49, 26, 79, 46, 33, 18, 15, 10, 5, 27, 72, 31, 29, 23, 52, 38, 35, 6, 41, 25, 16, 69, 43, 19, 44, 1, 42, 40, 17, 84, 62, 32, 67, 61, 53, 63, 7, 50, 78, 37, 21, 77, 3, 57, 81, 47]
 #print(len(LisCode))
-ThisCargoNow = CargoNow_sql.getGoodsLocationInfoVice()
+#ThisCargoNow = CargoNow_sql.getGoodsLocationInfoVice()
+from InPutData import *
+
+ThisCargoNow = CargoOriginal[0]
 LisCode = CALCLisCode(ThisCargoNow)
 
 DdjData = ddjData_sql.getStacks()
