@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-10 15:00:29
+LastEditTime: 2022-06-15 17:58:14
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -1488,6 +1488,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         pass
     else:
         print("ReadCode p_type error!")
+    #TDI TI 
     return TI
 
 
@@ -1509,7 +1510,8 @@ def Read(LisDdjCode):
         TimeGapC = 0
         k = 0
         for j in range(len(LisDdjCode[i])):
-            
+            #LisDdjTimeD[6]
+            #LisDdjTime
             if(k+3 <= len(LisDdjCode[i])):
                 LisDdjTime[i] =round(ReadCode(LisDdjTime[i],LisDdjTime[i],LisDdjCode[i][k],LisDdjCode[i][k+1],LisDdjCode[i][k+2]),3)
             elif(k+2 == len(LisDdjCode[i])):
