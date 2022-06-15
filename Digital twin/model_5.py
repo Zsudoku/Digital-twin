@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-15 17:58:14
+LastEditTime: 2022-06-15 19:30:16
 FilePath: \Digita-twin\Digital twin\model_5.py
 立库模块，主要计算堆垛机的任务
 
@@ -1489,6 +1489,8 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     else:
         print("ReadCode p_type error!")
     #TDI TI 
+    LisTime = []
+    #jty
     return TI
 
 
@@ -1505,19 +1507,21 @@ def Read(LisDdjCode):
     # print(LisDdjCode[3][1])
     # print(LisDdjCode[3][2])
     # print(LisDdjCode[3][3])
+    LisDdjTimeD = []
     for i in range(DdjNum):
         TimeGapS = 0
         TimeGapC = 0
         k = 0
+        LisDdjTimeD.append(0)
         for j in range(len(LisDdjCode[i])):
             #LisDdjTimeD[6]
             #LisDdjTime
             if(k+3 <= len(LisDdjCode[i])):
-                LisDdjTime[i] =round(ReadCode(LisDdjTime[i],LisDdjTime[i],LisDdjCode[i][k],LisDdjCode[i][k+1],LisDdjCode[i][k+2]),3)
+                LisDdjTime[i] =round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],LisDdjCode[i][k+1],LisDdjCode[i][k+2]),3)#jty
             elif(k+2 == len(LisDdjCode[i])):
-                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTime[i],LisDdjCode[i][k],LisDdjCode[i][k+1],-1),3)
+                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],LisDdjCode[i][k+1],-1),3)
             elif(k+1 == len(LisDdjCode[i])):
-                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTime[i],LisDdjCode[i][k],-1,-1),3)
+                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],-1,-1),3)
             elif(k == len(LisDdjCode[i])):
                 break
             if(k+1 == len(LisDdjCode[i])):
@@ -1673,11 +1677,11 @@ def Fitness(LisCode,DdjData):
     global LisDdjTime 
     LisDdjCode = getLisDdjCode(LisCode) #按照堆垛机区分
     GetS_H(LisDdjCode)
-    Read(LisDdjCode)
+    Read(LisDdjCode)#jty
     LisDdjTime = sorted(LisDdjTime, reverse=True)
     #Punish = PunishCount * 100000
     Punish = 0
-    return LisDdjTime[0] + Punish 
+    return LisDdjTime[0] + Punish #jty
 
 def enSimpleCode(LisCode:list,DdjData,ThisCargoNow):
     global CargoNow
