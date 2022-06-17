@@ -1,13 +1,10 @@
 '''
-Date: 2022-04-19 15:33:19
+Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-15 19:30:16
+LastEditTime: 2022-06-17 20:37:22
 FilePath: \Digita-twin\Digital twin\model_5.py
-立库模块，主要计算堆垛机的任务
-
-LisEnterTime 任务流修改,函数FoldToDdj()
-
 '''
+
 import random
 
 from pymysql import Time
@@ -73,6 +70,8 @@ global TimeGapC #出库时间间隔
 global TimeGapSLine #送检基准时间
 global TimeGapCLine #出库基准时间
 global PunishCount #惩罚量
+global LisTypeOrder#入库的顺序（类型）
+global DirEnterTypeNum#入库资产的类型以及对应的箱数
 global rrr#每个堆垛机对应的line，二维list
 global ans#所有line编号,一维set
 global r#所有入库的编号,一维set
@@ -112,6 +111,7 @@ DirReturnXYZ = {}
 DdjInspectXYZ = []   #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
 InspectTypeFloorNum = []
 ReadInspectTypeNum = []
+DirEnterTypeNum = {}
 
 #去重
 def delList(L):
@@ -292,9 +292,20 @@ def CALCupLoadTime():
         LisupLoadStartTime.append(tuple[i][1])
     return LisupLoadStartTime 
 
+#根据资产类型判断 x箱一垛，返回x
+def CALCmod(type):
+    if(type == '11' or type == '15' or type == '16' or type == '10' or type == '17' or type == '18' or type == '19'):
+        return 5
+    elif(type == '12' or type == '13' or type == '14' ):
+        return 3
+    else:
+        print("CALCmod type Error!","type",type)
+        return 3
+    pass
 
 #上货点分配任务量
-def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
+def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum):
+    global DirEnterTypeNum
     LisupLoadGoodsNum = []
     LisTemp = []
     #按照上货点数量对列表进行分割
@@ -303,7 +314,9 @@ def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
     #获取每种资产的上货数量
     for i in LisGoodsNum[0]:
         #print(LisGoodsNum[0][i])
+        mod = CALCmod(i)
         LisTemp.append(LisGoodsNum[0][i] * mod)
+        DirEnterTypeNum[i] = LisGoodsNum[0][i] * mod
     #针对每种类型的上货资产，在上货点出进行分割
     LisNum = [0]
     upLoadIndex = 0
@@ -366,7 +379,7 @@ def CALCupLoadParm(LisCross):
 def CALCupLoadTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     #创造出与货物类型区分开的列表的数据结构
@@ -390,7 +403,7 @@ def CALCupLoadTimeLis():
 def CALCupLoadAllTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     for i in range(len(LisupLoadGoodsNum)):
@@ -548,12 +561,26 @@ def cal(LisCode, n=5):
 
 def FoldToDdj():
     global LineTimeList
+    global DirEnterTypeNum
+    global LisTypeOrder
+    #DirEnterTypeNum['16'] = 352#test
     LineTimeList = sorted(LineTimeList,reverse=True)
     LisupLoadTimeLis = CALCupLoadAllTimeLis()
+    typeNum = 0
+    LisTypeOrder = []
+    for i in DirEnterTypeNum:
+        typeNum += 1
+        LisTypeOrder.append(i)
     LisToDdj = []
     k = 1
+    typeYet = 0#已经读取的类型数量
+    mod =  CALCmod(LisTypeOrder[typeYet])#3箱或者5箱一垛
     for i in range(len(LisupLoadTimeLis)):
-        if k%5 == 0:
+        if k > DirEnterTypeNum['%s'%LisTypeOrder[typeYet]]:
+            typeYet += 1
+            mod = CALCmod(LisTypeOrder[typeYet])
+            k = 1
+        if k%mod == 0:#根据当前数量
             LisToDdj.append(LisupLoadTimeLis[i])
         k += 1
     for i in range(len(LisToDdj)):
@@ -1491,37 +1518,37 @@ def ReadCode(TI,TDI,p,second_p,third_p):
     #TDI TI 
     LisTime = []
     #jty
-    return TI
+    LisTITDI=[TI,TDI]
+    return LisTITDI
 
 
 def Read(LisDdjCode):
     global TimeGapS
     global TimeGapC
+    global LisDdjTimeD
     DdjNum = len(LisDdjCode)
+    LisDdjTimeD = []
     for i in range(DdjNum):
         LisDdjTime.append(0)
         LisDdjTimeD.append(0)
-        # LisDdjTimeD[i] = 0
-        # LisDdjTime[i] = 0
-    # print(LisDdjCode)
-    # print(LisDdjCode[3][1])
-    # print(LisDdjCode[3][2])
-    # print(LisDdjCode[3][3])
-    LisDdjTimeD = []
     for i in range(DdjNum):
         TimeGapS = 0
         TimeGapC = 0
         k = 0
-        LisDdjTimeD.append(0)
         for j in range(len(LisDdjCode[i])):
-            #LisDdjTimeD[6]
-            #LisDdjTime
+            Listemp=[]
             if(k+3 <= len(LisDdjCode[i])):
-                LisDdjTime[i] =round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],LisDdjCode[i][k+1],LisDdjCode[i][k+2]),3)#jty
+                Listemp = ReadCode(LisDdjTime[i], LisDdjTimeD[i], LisDdjCode[i][k], LisDdjCode[i][k + 1],LisDdjCode[i][k + 2])
+                LisDdjTimeD[i] = round(Listemp[1], 3)  # jty
+                LisDdjTime[i] =round(Listemp[0],3)#jty
             elif(k+2 == len(LisDdjCode[i])):
-                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],LisDdjCode[i][k+1],-1),3)
+                Listemp=ReadCode(LisDdjTime[i], LisDdjTimeD[i], LisDdjCode[i][k], LisDdjCode[i][k + 1], -1)
+                LisDdjTimeD[i] = round(Listemp[1],3)
+                LisDdjTime[i] = round(Listemp[0],3)
             elif(k+1 == len(LisDdjCode[i])):
-                LisDdjTime[i] = round(ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],-1,-1),3)
+                Listemp=ReadCode(LisDdjTime[i],LisDdjTimeD[i],LisDdjCode[i][k],-1,-1)
+                LisDdjTimeD[i] = round(Listemp[1],3)
+                LisDdjTime[i] = round(Listemp[0],3)
             elif(k == len(LisDdjCode[i])):
                 break
             if(k+1 == len(LisDdjCode[i])):
@@ -1529,6 +1556,10 @@ def Read(LisDdjCode):
             if(CALCjudgeType(LisDdjCode[i][k]) == CALCjudgeType(LisDdjCode[i][k+1])):
                 k += 1
             k += 1
+    temp = 0
+    for i in range(len(LisDdjTimeD)):
+        temp += LisDdjTimeD[i]
+    LisDdjTimeD[0] = temp
 # GetS_H(LisDdjCode)
 # Read(LisDdjCode)
 #print(LisReturnTime)
@@ -1592,6 +1623,8 @@ def initCode(ThisCargoNow):
     global TimeGapSLine #送检基准时间
     global TimeGapCLine #出库基准时间
     global PunishCount #惩罚量
+    global LisTypeOrder#入库的顺序（类型）
+    global DirEnterTypeNum#入库资产的类型以及对应的箱数
     global rrr#每个堆垛机对应的line，二维list
     global ans#所有line编号,一维set
     global r#所有入库的编号,一维set
@@ -1640,6 +1673,8 @@ def initCode(ThisCargoNow):
     InspectTypeFloorNum = []
     ReadInspectTypeNum = []
     LisDdjTime = []
+    DirEnterTypeNum = {}
+    LisTypeOrder = []
     LisGoodsNum = CALCLisGoodsNum()
     dirInspect = CALCdirInspect()
 def GetDdjDataXYZ(DdjData):
@@ -1671,17 +1706,73 @@ def GetDdjDataXYZ(DdjData):
             if '五楼取放货点' in j:
                 DdjInspectXYZ[3].append(DdjData[i].get('%s'%(j)))
                 
+#排列组合，C
+def FunC(m,n):
+    a=b=result=1 
+    if m < n:
+        print("n不能于m且均为整数") 
+    elif ((type(m)!=int) or (type(n)!=int)): 
+        print("n不能于m且均为整数") 
+    else:
+        minNI=min(n,m-n)#使运算最简便 
+        for j in range(0,minNI):
+        #使变量a,b让所的分母相乘后除以所有的分
+            a=a*(m-j)
+            b=b*(minNI-j)
+            result=a//b#在此使“/”和“//”均可，因为a除以b为整数 
+    return result
+#print(FunC(4,2))  ---6
+
+#对上货编码按照类型进行排序
+def SortEnterCode(LisCode):
+    item = FunC(len(LisTypeOrder),2)#排列组合次数
+    LisItemTemp = []#储存每个类型的匹配次数
+    temp = len(LisTypeOrder)
+    for i in range(len(LisTypeOrder) - 1):
+        LisItemTemp.append(temp - 1)
+        temp -= 1
+    #print(LisItemTemp)
+    #开始按照 LisTypeOrder 存储的顺序进行匹配
+    num = 0#当前匹配的类型索引
+    numPassive = 1# 当前被匹配的类型索引 
+    for x in range (item):
+        if x+1 > LisItemTemp[num]:
+            num += 1
+            pass
+            #进入下一个匹配
+        for i in range (len(LisCode)):
+            if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
+                if CargoNow[LisCode[i] - 1]['type'] == LisTypeOrder[num]:
+                    for j in range (len(LisCode)):
+                        if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
+                            if CargoNow[LisCode[j] - 1]['type'] == LisTypeOrder[numPassive]:
+                                if j < i:
+                                    temp = LisCode[i]
+                                    LisCode[i] = LisCode[j]
+                                    LisCode[j] = temp
+                                    break
+                        pass
+                pass
+        # 自增或者重置 numPassive
+        if numPassive == len(LisTypeOrder):
+            numPassive = 1
+        else:
+            numPassive += 1
+    pass
+    return LisCode
+
 
 def Fitness(LisCode,DdjData):
     GetDdjDataXYZ(DdjData)
     global LisDdjTime 
+    LisCode = SortEnterCode(LisCode)
     LisDdjCode = getLisDdjCode(LisCode) #按照堆垛机区分
     GetS_H(LisDdjCode)
     Read(LisDdjCode)#jty
     LisDdjTime = sorted(LisDdjTime, reverse=True)
     #Punish = PunishCount * 100000
     Punish = 0
-    return LisDdjTime[0] + Punish #jty
+    return LisDdjTime[0] + LisDdjTimeD[0]*100 #jty
 
 def enSimpleCode(LisCode:list,DdjData,ThisCargoNow):
     global CargoNow
@@ -1712,7 +1803,7 @@ ThisCargoNow = CargoOriginal[0]
 LisCode = CALCLisCode(ThisCargoNow)
 
 DdjData = ddjData_sql.getStacks()
-enSimpleCode(LisCode,DdjData,ThisCargoNow)
+#enSimpleCode(LisCode,DdjData,ThisCargoNow)
 print(LisCode)
 print(enSimpleCode(LisCode,DdjData,ThisCargoNow))
 # print(enSimpleCode(LisCode,DdjData))

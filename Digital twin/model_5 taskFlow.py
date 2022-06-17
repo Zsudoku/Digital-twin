@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-14 15:10:08
+LastEditTime: 2022-06-17 21:15:40
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -25,8 +25,6 @@ import json
 
 global PlanFlag
 #PlanFlag = False
-#CargoNow = [{'x': 1869.90466, 'y': 19.9703217, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 3, 'column': 26, 'type': '10', 'id': 'A-7-3-26', 'bidBatch': '', 'factory': '', 'num': 1}, {'x': 1869.26843, 'y': 7.68457127, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 10, 'type': '10', 'id': 'B-16-2-10', 'bidBatch': '', 'factory': '', 'num': 2}, {'x': 1878.222, 'y': 18.434639, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 16, 'column': 24, 'type': '10', 'id': 'B-8-16-24', 'bidBatch': '', 'factory': '', 'num': 3}, {'x': 1881.42786, 'y': 18.434639, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 21, 'column': 24, 'type': '10', 'id': 'A-15-21-24', 'bidBatch': '', 'factory': '', 'num': 4}, {'x': 1900.63, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 51, 'column': 25, 'type': '10', 'id': 'A-9-51-25', 'bidBatch': '', 'factory': '', 'num': 5}, {'x': 1889.743, 'y': 16.1310234, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 34, 'column': 21, 'type': '10', 'id': 'A-7-34-21', 'bidBatch': '', 'factory': '', 'num': 6}, {'x': 1898.0625, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 47, 'column': 20, 'type': '10', 'id': 'A-15-47-20', 'bidBatch': '', 'factory': '', 'num': 7}, {'x': 1871.82764, 'y': 19.9703979, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 26, 'type': '10', 'id': 'B-8-6-26', 'bidBatch': '', 'factory': '', 'num': 8}, {'x': 1889.10876, 'y': 1.54167175, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 33, 'column': 2, 'type': '11', 'id': 'B-10-33-2', 'bidBatch': '', 'factory': '', 'num': 9}, {'x': 1868.62036, 'y': 15.3631821, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 1, 'column': 20, 'type': '11', 'id': 'B-16-1-20', 'bidBatch': '', 'factory': '', 'num': 10}, {'x': 1878.222, 'y': 19.2024612, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 16, 'column': 25, 'type': '11', 'id': 'A-9-16-25', 'bidBatch': '', 'factory': '', 'num': 11}, {'x': 1890.38525, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 35, 'column': 24, 'type': '11', 'id': 'B-6-35-24', 'bidBatch': '', 'factory': '', 'num': 12}, {'x': 1892.94763, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 39, 'column': 23, 'type': '11', 'id': 'B-16-39-23', 'bidBatch': '', 'factory': '', 'num': 13}, {'x': 1879.50464, 'y': 16.8989182, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 18, 'column': 22, 'type': '11', 'id': 'A-15-18-22', 'bidBatch': '', 'factory': '', 'num': 14}, {'x': 1871.18518, 'y': 6.14884233, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 5, 'column': 8, 'type': '13', 'id': 'B-16-5-8', 'bidBatch': '', 'factory': '', 'num': 15}, {'x': 1868.62036, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 11, 'type': '13', 'id': 'A-15-1-11', 'bidBatch': '', 'factory': '', 'num': 16}, {'x': 1892.31165, 'y': 10.7560148, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 38, 'column': 14, 'type': '13', 'id': 'A-15-38-14', 'bidBatch': '', 'factory': '', 'num': 17}, {'x': 1874.38452, 'y': 16.1310234, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 10, 'column': 21, 'type': '13', 'id': 'A-13-10-21', 'bidBatch': '', 'factory': '', 'num': 18}, {'x': 1898.70679, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 48, 'column': 18, 'type': '13', 'id': 'A-13-48-18', 'bidBatch': '', 'factory': '', 'num': 19}, {'x': 1898.70679, 'y': 11.5238724, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 48, 'column': 15, 'type': '13', 'id': 'A-15-48-15', 'bidBatch': '', 'factory': '', 'num': 20}, {'x': 1882.06409, 'y': 19.9703217, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 22, 'column': 26, 'type': '15', 'id': 'A-9-22-26', 'bidBatch': '', 'factory': '', 'num': 21}, {'x': 1875.02258, 'y': 7.68457127, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 11, 'column': 10, 'type': '15', 'id': 'A-15-11-10', 'bidBatch': '', 'factory': '', 'num': 22}, {'x': 1898.06311, 'y': 18.434639, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 47, 'column': 24, 'type': '15', 'id': 'B-16-47-24', 'bidBatch': '', 'factory': '', 'num': 23}, {'x': 1874.38452, 'y': 16.1310234, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 10, 'column': 21, 'type': '15', 'id': 'A-11-10-21', 'bidBatch': '', 'factory': '', 'num': 24}, {'x': 1870.54688, 'y': 15.3631821, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 4, 'column': 20, 'type': '15', 'id': 'A-15-4-20', 'bidBatch': '', 'factory': '', 'num': 25}, {'x': 1869.26843, 'y': 17.6667786, 'z': 53.286, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 2, 'column': 23, 'type': '15', 'id': 'B-16-2-23', 'bidBatch': '', 'factory': '', 'num': 26}, {'x': 1891.02551, 'y': 13.8274679, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 36, 'column': 18, 'type': '15', 'id': 'A-15-36-18', 'bidBatch': '', 'factory': '', 'num': 27}, {'x': 1884.62317, 'y': 16.1310234, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 26, 'column': 21, 'type': '16', 'id': 'B-8-26-21', 'bidBatch': '', 'factory': '', 'num': 28}, {'x': 1871.18518, 'y': 18.434639, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 5, 'column': 24, 'type': '16', 'id': 'B-6-5-24', 'bidBatch': '', 'factory': '', 'num': 29}, {'x': 1892.31165, 'y': 13.0595894, 'z': 50.35678, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 38, 'column': 17, 'type': '16', 'id': 'B-14-38-17', 'bidBatch': '', 'factory': '', 'num': 30}, {'x': 1882.71045, 'y': 16.1310616, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 23, 'column': 21, 'type': '16', 'id': 'B-6-23-21', 'bidBatch': '', 'factory': '', 'num': 31}, {'x': 1898.0625, 'y': 18.434639, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 47, 'column': 24, 'type': '16', 'id': 'A-13-47-24', 'bidBatch': '', 'factory': '', 'num': 32}, {'x': 1877.58569, 'y': 10.7560148, 'z': 53.2860031, 's1': 0, 's2': 0, 'flag': 'B', 'line': 16, 'row': 15, 'column': 14, 'type': '16', 'id': 'B-16-15-14', 'bidBatch': '', 'factory': '', 'num': 33}, {'x': 1888.46655, 'y': 19.2025337, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 32, 'column': 25, 'type': '16', 'id': 'B-8-32-25', 'bidBatch': '', 'factory': '', 'num': 34}, {'x': 1892.94763, 'y': 13.0595894, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 39, 'column': 17, 'type': '16', 'id': 'B-12-39-17', 'bidBatch': '', 'factory': '', 'num': 35}, {'x': 1882.71045, 'y': 13.0595894, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 17, 'type': '16', 'id': 'A-13-23-17', 'bidBatch': '', 'factory': '', 'num': 36}, {'x': 1883.3446, 'y': 19.2024975, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 24, 'column': 25, 'type': '16', 'id': 'A-5-24-25', 'bidBatch': '', 'factory': '', 'num': 37}, {'x': 1896.14722, 'y': 8.452438, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 44, 'column': 11, 'type': '16', 'id': 'A-15-44-11', 'bidBatch': '', 'factory': '', 'num': 38}, {'x': 1898.70679, 'y': 19.97036, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 48, 'column': 26, 'type': '16', 'id': 'A-5-48-26', 'bidBatch': '', 'factory': '', 'num': 39}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 40}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 41}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 42}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 43}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 1, 's2': 0, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 44}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 45}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 1, 's2': 0, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 46}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 47}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 48}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 1, 's2': 0, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 49}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 50}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 51},
-# {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 52}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 53}, {'x': 1886.54578, 'y': 17.6667786, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 23, 'column': 29, 'type': 10, 'id': 'A-13-29-23', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 54}, {'x': 1883.98486, 'y': 8.452438, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 11, 'column': 25, 'type': 10, 'id': 'A-9-25-11', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 55}, {'x': 1872.464, 'y': 5.380984, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 7, 'column': 7, 'type': 10, 'id': 'B-8-7-7', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 56}, {'x': 1871.82764, 'y': 3.84524536, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 5, 'column': 6, 'type': 10, 'id': 'B-8-6-5', 'bidBatch': '2021年第一批', 'factory': '杭州炬华', 'num': 57}, {'x': 1883.98486, 'y': 17.6667786, 'z': 47.6289978, 's1': 0, 's2': 1, 'flag': 'B', 'line': 12, 'row': 23, 'column': 25, 'type': 10, 'id': 'B-12-25-23', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 58}, {'x': 1876.30713, 'y': 6.14884233, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 13, 'type': 10, 'id': 'B-6-13-8', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 59}, {'x': 1889.10876, 'y': 15.3631821, 'z': 45.8976822, 's1': 0, 's2': 1, 'flag': 'A', 'line': 11, 'row': 20, 'column': 33, 'type': 10, 'id': 'A-11-33-20', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 60}, {'x': 1871.18518, 'y': 15.3632011, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 20, 'column': 5, 'type': 10, 'id': 'B-6-5-20', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 61}, {'x': 1870.54688, 'y': 13.8274679, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 18, 'column': 4, 'type': 15, 'id': 'A-13-4-18', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 62}, {'x': 1899.98157, 'y': 19.2024975, 'z': 50.3567772, 's1': 0, 's2': 1, 'flag': 'B', 'line': 14, 'row': 25, 'column': 50, 'type': 15, 'id': 'B-14-50-25', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 63}, {'x': 1877.58582, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 15, 'type': 15, 'id': 'A-5-15-1', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 64}, {'x': 1893.59387, 'y': 4.613105, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 6, 'column': 40, 'type': 15, 'id': 'B-8-40-6', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 65}, {'x': 1885.90771, 'y': 2.3095293, 'z': 48.62794, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 28, 'type': 15, 'id': 'A-13-28-3', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 66}, {'x': 1883.3446, 'y': 4.613105, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 6, 'column': 24, 'type': 15, 'id': 'A-9-24-6', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 67}, {'x': 1871.82764, 'y': 6.14884233, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 8, 'column': 6, 'type': 10, 'id': 'B-6-6-8', 'bidBatch': '2021年第一批', 'factory': '宁夏隆基', 'num': 68}, {'x': 1873.74841, 'y': 10.7560148, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 14, 'column': 9, 'type': 10, 'id': 'B-8-9-14', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 69}, {'x': 1887.82837, 'y': 7.68457127, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 10, 'column': 31, 'type': 10, 'id': 'B-14-31-10', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 70}, {'x': 1888.46655, 'y': 13.8274679, 'z': 42.17527, 's1': 1, 's2': 1, 'flag': 'B', 'line': 8, 'row': 18, 'column': 32, 'type': 11, 'id': 'B-8-32-18', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 71}, {'x': 1889.743, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 34, 'type': 11, 'id': 'A-13-34-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 72}, {'x': 1896.7876, 'y': 6.916702, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 9, 'column': 45, 'type': 11, 'id': 'B-14-45-9', 'bidBatch': '2016年第一批', 'factory': '深圳科陆', 'num': 73}, {'x': 1899.34912, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 49, 'type': 11, 'id': 'A-13-49-3', 'bidBatch': '2019年第二批', 'factory': '杭州炬华', 'num': 74}, {'x': 1874.38452, 'y': 9.220296, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 12, 'column': 10, 'type': 11, 'id': 'A-9-10-12', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 75}, {'x': 1875.66882, 'y': 16.1310234, 'z': 47.6289978, 's1': 1, 's2': 1, 'flag': 'B', 'line': 12, 'row': 21, 'column': 12, 'type': 11, 'id': 'B-12-12-21', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 76}, {'x': 1896.7876, 'y': 1.54167175, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 2, 'column': 45, 'type': 13, 'id': 'A-5-45-2', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 77}, {'x': 1871.82764, 'y': 1.5416708, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 2, 'column': 6, 'type': 13, 'id': 'A-9-6-2', 'bidBatch': '2016年第一批', 'factory': '宁波三星', 'num': 78}, {'x': 1900.63, 'y': 1.54167175, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 2, 'column': 51, 'type': 13, 'id': 'A-13-51-2', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 79}, {'x': 1901.27039, 'y': 1.54167175, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 2, 'column': 52, 'type': 13, 'id': 'A-11-52-2', 'bidBatch': '2021年第一批', 'factory': '苏源杰瑞', 'num': 80}, {'x': 1873.74841, 'y': 0.7738123, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 1, 'column': 9, 'type': 13, 'id': 'A-5-9-1', 'bidBatch': '2019年第一批', 'factory': '深圳科陆', 'num': 81}, {'x': 1880.14307, 'y': 4.613105, 'z': 53.2860031, 's1': 1, 's2': 1, 'flag': 'B', 'line': 16, 'row': 6, 'column': 19, 'type': 15, 'id': 'B-16-19-6', 'bidBatch': '2021年第一批', 'factory': '宁波三星', 'num': 82}, {'x': 1882.71045, 'y': 4.613105, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 6, 'column': 23, 'type': 15, 'id': 'A-11-23-6', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 83}, {'x': 1877.58582, 'y': 11.5238724, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 15, 'column': 15, 'type': 15, 'id': 'A-5-15-15', 'bidBatch': '2020年第一批', 'factory': '杭州炬华', 'num': 84}]
 #CargoNow = CargoNow_sql.getGoodsLocationInfoVice()
 # R = 39
 # S = 14
@@ -88,6 +86,8 @@ global DdjInspectXYZ
 global InspectTypeFloorNum
 global ReadInspectTypeNum
 global DirReturnXYZ
+global LisTypeOrder#入库的顺序（类型）
+global DirEnterTypeNum#入库资产的类型以及对应的箱数
 global rrr#每个堆垛机对应的line，二维list
 global ans#所有line编号,一维set
 global r#所有入库的编号,一维set
@@ -122,6 +122,7 @@ returnIndex = 0
 DdjEnterXYZ = []  #[[[ddj1_x1.ddj1_y1,ddj1_z1],[...]],[[ddj2_x1,...],[....]],...[]]
 DdjOutXYZ = []  
 DirReturnXYZ = {}  
+DirEnterTypeNum = {}
 DdjInspectXYZ = []   #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
 InspectTypeFloorNum = []
 ReadInspectTypeNum = []
@@ -189,6 +190,8 @@ def initCode(flag):
     global InspectTypeFloorNum
     global ReadInspectTypeNum
     global DirReturnXYZ
+    global LisTypeOrder#入库的顺序（类型）
+    global DirEnterTypeNum#入库资产的类型以及对应的箱数
     global rrr#每个堆垛机对应的line，二维list
     global ans#所有line编号,一维set
     global r#所有入库的编号,一维set
@@ -221,6 +224,8 @@ def initCode(flag):
     DdjEnterXYZ = []  #[[[ddj1_x1.ddj1_y1,ddj1_z1],[...]],[[ddj2_x1,...],[....]],...[]]
     DdjOutXYZ = []  
     DirReturnXYZ = {}  
+    DirEnterTypeNum = {}
+    LisTypeOrder = []
     DdjInspectXYZ = []   #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
     InspectTypeFloorNum = []
     ReadInspectTypeNum = []
@@ -536,9 +541,20 @@ def CALCupLoadTime():
         LisupLoadStartTime.append(tuple[i][1])
     return LisupLoadStartTime 
 
+#根据资产类型判断 x箱一垛，返回x
+def CALCmod(type):
+    if(type == '11' or type == '15' or type == '16' or type == '10' or type == '17' or type == '18' or type == '19'):
+        return 5
+    elif(type == '12' or type == '13' or type == '14' ):
+        return 3
+    else:
+        print("CALCmod type Error!","type",type)
+        return 3
+    pass
 
 #上货点分配任务量
-def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
+def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum):
+    global DirEnterTypeNum
     LisupLoadGoodsNum = []
     LisTemp = []
     #按照上货点数量对列表进行分割
@@ -547,7 +563,9 @@ def CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod):
     #获取每种资产的上货数量
     for i in LisGoodsNum[0]:
         #print(LisGoodsNum[0][i])
+        mod = CALCmod(i)
         LisTemp.append(LisGoodsNum[0][i] * mod)
+        DirEnterTypeNum[i] = LisGoodsNum[0][i] * mod
     #针对每种类型的上货资产，在上货点出进行分割
     LisNum = [0]
     upLoadIndex = 0
@@ -610,7 +628,7 @@ def CALCupLoadParm(LisCross):
 def CALCupLoadTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     #创造出与货物类型区分开的列表的数据结构
@@ -634,7 +652,7 @@ def CALCupLoadTimeLis():
 def CALCupLoadAllTimeLis():
     upLoadNum = len(CALCupLoadFirstCrossTime(LisCross))
     LisupLoadStartTime = CALCupLoadTime()
-    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,mod2)
+    LisupLoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
     LisupLoadParm = CALCupLoadParm(LisCross)
     LisupLoadTimeLis = []
     for i in range(len(LisupLoadGoodsNum)):
@@ -661,53 +679,7 @@ def CALCupLoadAllTimeLis():
     return LisupLoadTimeLis
 ###
 
-### 上货点任务流
-def TaskUpLoad():
-    initCode(PlanFlag)
-    global LisGoodsNum
-    LisupLoadParm = CALCupLoadParm(LisCross)
-    LisGoodsNum = CALCLisGoodsNum()
-    LisCrossTime = CALCupLoadFirstCrossTime(LisCross)
-    LisCrossTime = sorted(LisCrossTime.items(), key=lambda item:item[1], reverse = True) #按照 value 倒序排序
-    #LisCrossTime =  sorted(LisCrossTime,reverse=True)
-    upLoadNum = len(LisCrossTime)
-    LoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum,5)
-    LisUpLoadType = list(LisGoodsNum[0].keys())
-    for i in range(len(LisUpLoadType)):
-        LisUpLoadType[i] = int(LisUpLoadType[i])
-    LisUpLoadType = sorted(LisUpLoadType)
-    # print(LisUpLoadType)
-    # print(LoadGoodsNum)
-    # print(LisupLoadParm)
-    LisUpLoadTotal = []
-    for i in range(len(LoadGoodsNum)):
-        total = 0
-        for j in LoadGoodsNum[i]:
-            total += j
-        LisUpLoadTotal.append(total)
-        
-    LisRunTime = [[],[]]
-    for upLoadName in range(len(LoadGoodsNum)):
-        runTime = 0
-        readYet = 0
-        for i in range(len(LoadGoodsNum[upLoadName])):
-            for j in range(LoadGoodsNum[upLoadName][i]):
-                runTime =  LisupLoadParm[upLoadName][0] + LisupLoadParm[upLoadName][1]*(j+readYet)
-                LisRunTime[upLoadName].append(runTime)
-                initJson()
-                TaskFlow['data']['taskContent']['stackerMachines'] = null
-                TaskFlow['version'] = "上货点%d"%(upLoadName+1)
-                TaskFlow['runTime'] = runTime
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = "上货点%d"%(upLoadName+1)
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['assertType'] = LisUpLoadType[i]
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['cumulativeTask'] = LisUpLoadTotal[upLoadName]
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
-                CreatJson()
-            readYet += LoadGoodsNum[upLoadName][i]
-    #print(LisRunTime)
-    pass
-####
+
 
 
 def getLine():
@@ -838,12 +810,26 @@ def cal(LisCode, n=5):
 
 def FoldToDdj():
     global LineTimeList
+    global DirEnterTypeNum
+    global LisTypeOrder
+    #DirEnterTypeNum['16'] = 352#test
     LineTimeList = sorted(LineTimeList,reverse=True)
     LisupLoadTimeLis = CALCupLoadAllTimeLis()
+    typeNum = 0
+    LisTypeOrder = []
+    for i in DirEnterTypeNum:
+        typeNum += 1
+        LisTypeOrder.append(i)
     LisToDdj = []
     k = 1
+    typeYet = 0#已经读取的类型数量
+    mod =  CALCmod(LisTypeOrder[typeYet])#3箱或者5箱一垛
     for i in range(len(LisupLoadTimeLis)):
-        if k%5 == 0:
+        if k > DirEnterTypeNum['%s'%LisTypeOrder[typeYet]]:
+            typeYet += 1
+            mod = CALCmod(LisTypeOrder[typeYet])
+            k = 1
+        if k%mod == 0:#根据当前数量
             LisToDdj.append(LisupLoadTimeLis[i])
         k += 1
     for i in range(len(LisToDdj)):
@@ -1242,7 +1228,7 @@ def CALCDayInspectIW():
 #LisT = CALCDayInspectIW() 
 #根据堆垛机编码和楼层号，返回堆垛机的送检/回库口
 def GetLisInspectXY(ddj,floor):
-    global DdjInspectXYZ  #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
+    #global DdjInspectXYZ  #[[二楼[堆垛机序号[堆垛机坐标]],[]]]
     #print(DdjInspectXYZ[floor-2][ddj-1])
     return DdjInspectXYZ[floor-2][ddj-1]
 
@@ -1661,10 +1647,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getDirection2'] = CargoNow[second_p-1]['flag']
             #TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1] = null
             del TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+            if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
+                if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[second_p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[p-1]['type']
+                    pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[second_p-1]['type']
+                    pass
+            else:
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
             if(p == second_p):
                 #TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
                 del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
@@ -1740,10 +1739,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['taskNumber'] = 1
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'] = "堆垛机%d"%(ddj+2)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['totalTask'] = DdjTotalTask[ddj-1]
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
+                if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                    del TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]
+                    if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[second_p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[second_p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[p-1]['type']
+                        pass
+                    else:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[second_p-1]['type']
+                        pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CALCFloor(second_y)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[second_p-1]['type']
@@ -1790,10 +1802,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['taskType'] = 1
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'] = "堆垛机%d"%(ddj+2)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['totalTask'] = DdjTotalTask[ddj-1]
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
+                if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                    del TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]
+                    if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[second_p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[second_p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[p-1]['type']
+                        pass
+                    else:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[second_p-1]['type']
+                        pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CALCFloor(second_y)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CALCFloor(third_y)
@@ -1898,7 +1923,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']#deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p-1)) +','+CargoNow[p-1]['flag'] #deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p-1)) +','+ 'B' #deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -1914,7 +1939,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + CargoNow[second_p-1]['flag']  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + 'B'  # deal
                 CreatJson()
                 ###
                 initJson()
@@ -1931,10 +1956,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[second_p-1]['type']
                 #TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1] = null
                 del TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+                if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                    del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
+                    if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[second_p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[second_p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[p-1]['type']
+                        pass
+                    else:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[second_p-1]['type']
+                        pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
                 if(p == second_p):
                     #TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
                     del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
@@ -1978,7 +2016,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p-1)) + ',' + CargoNow[p - 1]['flag']  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p-1)) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -1993,7 +2031,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + CargoNow[second_p-1]['flag']  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime + 20
                 CreatJson()
                 
@@ -2010,10 +2048,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CALCFloor(first_y)
                 TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
-                TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
+                if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                    del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
+                    if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[second_p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[second_p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[p-1]['type']
+                        pass
+                    else:
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                        TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType2'] = CargoNow[second_p-1]['type']
+                        pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]['putAssertType2'] = CargoNow[second_p-1]['type']
                 if(p == second_p):
                     #TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1] = null
                     del TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][1]
@@ -2054,7 +2105,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p - 1]['batchNum']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p - 1]['bidBatch']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p - 1]['num']  # deal
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p - 1)) + ',' + CargoNow[p - 1]['flag']  # deal
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p - 1)) + ',' + 'B'  # deal
             TaskFlow['runTime'] = TI + waitTime - returnOutTime
             CreatJson()
         
@@ -2098,10 +2149,23 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['stackerMachines'][0]['taskNumber'] = 1
             TaskFlow['data']['taskContent']['stackerMachines'][0]['equipmentName'] = "堆垛机%d"%(ddj+2)
             TaskFlow['data']['taskContent']['stackerMachines'][0]['totalTask'] = DdjTotalTask[ddj-1]
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
-            TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
+            if abs(CargoNow[p-1]['column'] - CargoNow[second_p-1]['column']) == 1:
+                del TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]
+                if CargoNow[p-1]['column'] > CargoNow[second_p-1]['column']:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[second_p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[second_p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[p-1]['type']
+                    pass
+                else:
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                    TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType2'] = CargoNow[second_p-1]['type']
+                    pass
+            else:
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getPosition'] = CargoNow[p-1]['id']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][0]['getAssertType1'] = CargoNow[p-1]['type']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getPosition'] = CargoNow[second_p-1]['id']
+                TaskFlow['data']['taskContent']['stackerMachines'][0]['stackerGetItems'][1]['getAssertType2'] = CargoNow[second_p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putPosition'] = '一楼出库放货点'
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putAssertType1'] = CargoNow[p-1]['type']
             TaskFlow['data']['taskContent']['stackerMachines'][0]['statckPutItems'][0]['putDirection1'] = CargoNow[p-1]['flag']
@@ -2996,6 +3060,216 @@ def GetOptimizedReport():
 ###
 #GetReport()
 
+#排列组合，C
+def FunC(m,n):
+    a=b=result=1 
+    if m < n:
+        print("n不能于m且均为整数") 
+    elif ((type(m)!=int) or (type(n)!=int)): 
+        print("n不能于m且均为整数") 
+    else:
+        minNI=min(n,m-n)#使运算最简便 
+        for j in range(0,minNI):
+        #使变量a,b让所的分母相乘后除以所有的分
+            a=a*(m-j)
+            b=b*(minNI-j)
+            result=a//b#在此使“/”和“//”均可，因为a除以b为整数 
+    return result
+#print(FunC(4,2))  ---6
+
+#对上货编码按照类型进行排序
+def SortEnterCode(LisCode):
+    item = FunC(len(LisTypeOrder),2)#排列组合次数
+    LisItemTemp = []#储存每个类型的匹配次数
+    temp = len(LisTypeOrder)
+    for i in range(len(LisTypeOrder) - 1):
+        LisItemTemp.append(temp - 1)
+        temp -= 1
+    #print(LisItemTemp)
+    #开始按照 LisTypeOrder 存储的顺序进行匹配
+    num = 0#当前匹配的类型索引
+    numPassive = 1# 当前被匹配的类型索引 
+    for x in range (item):
+        if x+1 > LisItemTemp[num]:
+            num += 1
+            pass
+            #进入下一个匹配
+        for i in range (len(LisCode)):
+            if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
+                if CargoNow[LisCode[i] - 1]['type'] == LisTypeOrder[num]:
+                    for j in range (len(LisCode)):
+                        if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
+                            if CargoNow[LisCode[j] - 1]['type'] == LisTypeOrder[numPassive]:
+                                if j < i:
+                                    temp = LisCode[i]
+                                    LisCode[i] = LisCode[j]
+                                    LisCode[j] = temp
+                                    break
+                        pass
+                pass
+        # 自增或者重置 numPassive
+        if numPassive == len(LisTypeOrder):
+            numPassive = 1
+        else:
+            numPassive += 1
+    pass
+    return LisCode
+
+#根据资产类型计算垛容量
+def CALCcontain(type):
+    if type == 14 or type == 19 or type == 12:
+        return 12
+    elif type == 10:
+        return 60
+    elif type == 13:
+        return 36
+    elif type == 11 or type == 15 or type == 16:
+        return 20
+    elif type == 18:
+        return 90
+    elif type == 17:
+        return 180
+    else:
+        print("CALCcontain type Error!")
+
+### 上货点任务流
+def TaskUpLoad(LisCode):
+    initCode(PlanFlag)
+    global LisGoodsNum
+    LisupLoadParm = CALCupLoadParm(LisCross)
+    LisGoodsNum = CALCLisGoodsNum()
+    LisCrossTime = CALCupLoadFirstCrossTime(LisCross)
+    LisCrossTime = sorted(LisCrossTime.items(), key=lambda item:item[1], reverse = True) #按照 value 倒序排序
+    FoldToDdj()
+    #LisCrossTime =  sorted(LisCrossTime,reverse=True)
+    upLoadNum = len(LisCrossTime)
+    LoadGoodsNum = CALCupLoadGoodsNum(upLoadNum,LisGoodsNum)
+    LisUpLoadType = list(LisGoodsNum[0].keys())
+    for i in range(len(LisUpLoadType)):
+        LisUpLoadType[i] = int(LisUpLoadType[i])
+    LisUpLoadType = sorted(LisUpLoadType)
+    # print(LisUpLoadType)
+    # print(LoadGoodsNum)
+    # print(LisupLoadParm)
+    LisUpLoadTotal = []
+    for i in range(len(LoadGoodsNum)):
+        total = 0
+        for j in LoadGoodsNum[i]:
+            total += j
+        LisUpLoadTotal.append(total)
+        
+    totalNum = 0#入库总箱数
+    for i in LisUpLoadTotal:
+        totalNum += i
+    
+    LisRunTime = [[],[]]
+    LisDdjCode = getLisDdjCode(LisCode)#按照堆垛机分割的数组
+    LisDdjEnterCode = []
+    for i in range(len(LisDdjCode)):
+        LisDdjEnterCode.append([])
+        for j in range(len(LisDdjCode[i])):
+            if CargoNow[LisDdjCode[i][j] - 1]['s1'] == 0 and CargoNow[LisDdjCode[i][j] - 1]['s2'] == 0:
+                LisDdjEnterCode[i].append(LisDdjCode[i][j])
+    LisDdjEnterCodeT = copy.deepcopy(LisDdjEnterCode)
+    #将所有入库编码整合到一个列表中
+    LisEnterCode = []
+    for i in range (len(LisDdjEnterCodeT[-1])+1):
+        for j in range(len(LisDdjCode)):
+            try:
+                LisEnterCode.append(LisDdjEnterCode[j][0])
+            except IndexError:
+                continue
+            if j < len(LisDdjEnterCode) - 1:
+                try:
+                    LisEnterCode.append(LisDdjEnterCode[j][1])
+                    del LisDdjEnterCode[j][0]
+                    del LisDdjEnterCode[j][0]
+                except IndexError:
+                    del LisDdjEnterCode[j][0]
+                    #continue
+            else:
+                del LisDdjEnterCode[j][0]
+        
+    print(LisEnterCode)
+    
+    mod = 0
+    ufmod = 1
+    enterIndex = 0#已读的入库编码的索引
+    upLoad1 = 0#上货点1的已上货数量
+    upLoad2 = 0
+    for i in range (totalNum):
+        mod = CALCmod(str(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
+        false = False
+        initJson()
+        if ufmod > mod:
+            enterIndex += 1
+            ufmod = 1
+        if ((i+1) % 2 == 0):
+            runTime =  LisupLoadParm[0][0] + LisupLoadParm[0][1] * upLoad1
+            LisRunTime[0].append(runTime)
+            upLoad1 += 1
+            TaskFlow['data']['taskContent']['stackerMachines'] = null
+            TaskFlow['version'] = "上货点1"
+            TaskFlow['runTime'] = runTime
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = "上货点1"
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['assertType'] = str(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']) - 10)
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['cumulativeTask'] = LisUpLoadTotal[0]
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['currentTask'] = upLoad1
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['factory'] = CargoNow[LisEnterCode[enterIndex] - 1]['factory']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['batchNum']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['bidBatch']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['checkStatus'] = false
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CALCcontain(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[LisEnterCode[enterIndex] - 1]['line']) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
+            CreatJson()
+        else:
+            #print(CargoNow[LisEnterCode[enterIndex] - 1])
+            runTime =  LisupLoadParm[1][0] + LisupLoadParm[1][1] * upLoad2
+            LisRunTime[1].append(runTime)
+            upLoad2 += 1
+            TaskFlow['data']['taskContent']['stackerMachines'] = null
+            TaskFlow['version'] = "上货点2"
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
+            TaskFlow['runTime'] = runTime
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = "上货点2"
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['assertType'] = str(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']) - 10)
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['cumulativeTask'] = LisUpLoadTotal[1]
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['currentTask'] = upLoad2
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['factory'] = CargoNow[LisEnterCode[enterIndex] - 1]['factory']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['batchNum']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['bidBatch']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['checkStatus'] = false
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CALCcontain(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[LisEnterCode[enterIndex] - 1]['line']) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
+            CreatJson()
+        ufmod += 1 
+        pass
+    
+    # for upLoadName in range(len(LoadGoodsNum)):
+    #     runTime = 0
+    #     readYet = 0
+    #     for i in range(len(LoadGoodsNum[upLoadName])):
+    #         for j in range(LoadGoodsNum[upLoadName][i]):
+    #             runTime =  LisupLoadParm[upLoadName][0] + LisupLoadParm[upLoadName][1]*(j+readYet)
+    #             LisRunTime[upLoadName].append(runTime)
+    #             initJson()
+    #             TaskFlow['data']['taskContent']['stackerMachines'] = null
+    #             TaskFlow['version'] = "上货点%d"%(upLoadName+1)
+    #             TaskFlow['runTime'] = runTime
+    #             TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
+    #             TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = "上货点%d"%(upLoadName+1)
+    #             TaskFlow['data']['taskContent']['loadPointTask'][0]['assertType'] = LisUpLoadType[i]
+    #             TaskFlow['data']['taskContent']['loadPointTask'][0]['cumulativeTask'] = LisUpLoadTotal[upLoadName]
+    #             TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
+    #             CreatJson()
+    #         readYet += LoadGoodsNum[upLoadName][i]
+    #print(LisRunTime)
+    pass
+####
+
 def Fitness(LisCode,DdjData):
     GetDdjDataXYZ(DdjData)
     global LisDdjTime 
@@ -3015,11 +3289,12 @@ def enSimpleCode(LisCode:list,DdjData):
     fp = codecs.open('output.json', 'w+', 'utf-8')
     #fp.write(json.dumps(TaskFlow,ensure_ascii=False,indent=4))
     fp.close()
-    initCode(PlanFlag)
-    TaskUpLoad()#上货点任务流
-    initCode(PlanFlag)
     global LisEnterTime
-    
+    initCode(PlanFlag)
+    LisEnterTime = FoldToDdj()
+    LisCode = SortEnterCode(LisCode)
+    TaskUpLoad(LisCode)#上货点任务流
+    initCode(PlanFlag)
     if(type(LisCode) == list and type(LisCode[0]) == int and type(LisCode[-1]) == int):
         #print("yes!")
         #LisEnterTime = cal(LisCode,5) #叠箱机到堆垛机入库口
@@ -3139,8 +3414,8 @@ def CodeTest():
                     Code.insert(s+c+2,int(CargoNow[i]['item']))
                     pass
                 pass
-            print(CargoNow[i]['sign'])
-            print(CargoNow[i]['id'])
+            # print(CargoNow[i]['sign'])
+            # print(CargoNow[i]['id'])
     return Code
     
 
