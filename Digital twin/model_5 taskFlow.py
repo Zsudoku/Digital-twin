@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-17 21:15:40
+LastEditTime: 2022-06-18 10:37:49
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -1679,7 +1679,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #计算时间
             waitTime1 = GetEnterWaitTime(p,TI)
             waitTime2 = GetEnterWaitTime(second_p,TI)
-            waitTime = waitTime1 + waitTime2
+            waitTime = max(waitTime1 , waitTime2)
             
             TaskFlow['runTime'] = TI + waitTime + 80
             CreatJson()
@@ -1884,6 +1884,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #从送检口移动到下个编码初始位置
             walkTime2 = CALCWalkTime(abs(first_x - last_x),abs(first_y - last_y))
             #计算时间
+            waitTime = 0
             TI += waitTime + grabTime + walkTime1 + walkTime2 + placeTime
             TDI += grabTime + walkTime1 + walkTime2 + placeTime
             inspectTime = GetInspectTime(p)
@@ -1910,7 +1911,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 #等待时间
                 waitTime1 = CALCReturnWaitTime(p,TI)
                 waitTime2 = CALCReturnWaitTime(second_p,TI)
-                waitTime = waitTime1 + waitTime2
+                waitTime = max(waitTime1 , waitTime2)
                 ###回库创建资产
                 initJson()
                 FloorNum = GetFloorNum(inspectY)
@@ -1923,7 +1924,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']#deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p-1)) +','+ 'B' #deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CargoNow[p - 1]['line']) + ',' + 'B' #deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -1939,7 +1940,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[second_p - 1]['line']) + ',' + 'B'  # deal
                 CreatJson()
                 ###
                 initJson()
@@ -2016,7 +2017,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p-1)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[p - 1]['line']) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -2031,7 +2032,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p-1)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[second_p - 1]['line']) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime + 20
                 CreatJson()
                 
@@ -2105,7 +2106,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p - 1]['batchNum']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p - 1]['bidBatch']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p - 1]['num']  # deal
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p - 1)) + ',' + 'B'  # deal
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[p - 1]['line']) + ',' + 'B'  # deal
             TaskFlow['runTime'] = TI + waitTime - returnOutTime
             CreatJson()
         
@@ -3427,6 +3428,7 @@ def test():
     PlanFlag = False
     initCode(PlanFlag)
     LisCode = CodeTest()
+    #LisCode =[9, 1, 12, 10, 17, 14, 16, 15, 18, 13, 2, 3, 5, 19, 6, 8, 7, 11, 20, 4]
     Report = initReportJson()
     DdjData = ddjData_sql.getStacks()
     enSimpleCode(LisCode,DdjData)

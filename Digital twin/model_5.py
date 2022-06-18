@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-17 20:37:22
+LastEditTime: 2022-06-18 10:22:20
 FilePath: \Digita-twin\Digital twin\model_5.py
 '''
 
@@ -1305,7 +1305,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             #计算时间
             waitTime1 = GetEnterWaitTime(p,TI)
             waitTime2 = GetEnterWaitTime(second_p,TI)
-            waitTime = waitTime1 + waitTime2 + 80
+            waitTime = max(waitTime1 , waitTime2)+ 80
             TI += waitTime + grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
             TDI += grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
         else:
@@ -1436,7 +1436,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 #等待时间
                 waitTime1 = CALCReturnWaitTime(p,TI)
                 waitTime2 = CALCReturnWaitTime(second_p,TI)
-                waitTime = waitTime1 + waitTime2
+                waitTime = max(waitTime1 , waitTime2)
                 TI += waitTime + grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
                 TDI += grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 
                 pass
@@ -1457,7 +1457,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 #计算时间
                 waitTime1 = CALCReturnWaitTime(p,TI)
                 waitTime2 = CALCReturnWaitTime(second_p,TI)
-                waitTime = waitTime1 + waitTime2
+                waitTime = max(waitTime1 , waitTime2)
                 TI += waitTime + grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 + walkTime4
                 TDI += grabTime*2 +  walkTime1 + walkTime2 + placeTime*2 + walkTime3 + walkTime4
                 pass
