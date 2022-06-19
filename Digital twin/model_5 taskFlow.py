@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-18 10:37:49
+LastEditTime: 2022-06-18 20:45:37
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -1240,6 +1240,8 @@ def GetInspectXY(p,Flag):
     global ReadInspectTypeNum
     if(CALCjudgeType(p) == 'H'):
         return DirReturnXYZ['%d'%(p+S)]
+    elif(Flag == False):
+        return DirReturnXYZ['%d'%(p)]
     type_p = CALCjudgeType(p)
     if(len(InspectTypeFloorNum) == 0):
         CALCDayInspectIW() 
@@ -1277,19 +1279,19 @@ def GetInspectXY(p,Flag):
         ReadInspectTypeNum['%d'%(Model)] = tempNum
     LisInspectXY = GetLisInspectXY(ddj,p_Floor)
     #print("temp",temp)
-    if(type_p == 'S'):
+    if(type_p == 'S' and Flag == True):
         DirReturnXYZ['%d'%(p)] = LisInspectXY
     return LisInspectXY
 
 #根据两个编码判断送检/回库口是否相同
-def GetSameFlag(p,second_p):
-    if(CALCjudgeType(p) == 'H'):
-        for i in LisReturnTime[0]:
-            p = int(i)
-        for i in LisReturnTime[1]:
-            second_p = int(i)
-    LisP = GetInspectXY(p,False)
-    LisSecond_P = GetInspectXY(second_p,False)
+def GetSameFlag(p,second_p,flag):
+    # if(CALCjudgeType(p) == 'H'):
+    #     for i in LisReturnTime[0]:
+    #         p = int(i)
+    #     for i in LisReturnTime[1]:
+    #         second_p = int(i)
+    LisP = GetInspectXY(p,flag)
+    LisSecond_P = GetInspectXY(second_p,flag)
     if(LisP[1] == LisSecond_P[1]):
         SameFlag = True
     else:
@@ -1492,15 +1494,17 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             second_x = CargoNow[second_p-1]['x']
             second_y = CargoNow[second_p-1]['y']
         elif(p_type=='S'):
-            SameFlag = GetSameFlag(p,second_p)
+            SameFlag = GetSameFlag(p,second_p,True)
             if(SameFlag == True):
                 #送检口相同
                 #去第二个货位取货
                 first_x = CargoNow[second_p-1]['x']
                 first_y = CargoNow[second_p-1]['y']
                 #送检口
-                LisInspectXY = GetInspectXY(p,True)
-                LisInspectXY = GetInspectXY(second_p,True)
+                LisInspectXY = GetInspectXY(p,False)
+                LisInspectXY2 = GetInspectXY(second_p,False)
+                if(LisInspectXY != LisInspectXY2):
+                    print("LisInspectXY2 Error!")
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 second_x = inspectX
@@ -1512,13 +1516,13 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 first_x = CargoNow[second_p-1]['x']
                 first_y = CargoNow[second_p-1]['y']
                 #p的送检口
-                LisInspectXY = GetInspectXY(p,True)
+                LisInspectXY = GetInspectXY(p,False)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 second_x = inspectX
                 second_y = inspectY 
                 #second_p的送检口
-                LisInspectXY = GetInspectXY(second_p,True)
+                LisInspectXY = GetInspectXY(second_p,False)
                 inspectX = LisInspectXY[0]
                 inspectY = LisInspectXY[1]
                 third_x = inspectX
@@ -1526,7 +1530,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 pass
             pass
         elif(p_type == 'H'):
-            SameFlag = GetSameFlag(p,second_p)
+            SameFlag = GetSameFlag(p,second_p,False)
             if(SameFlag == True):
                 #回库口相同，当前堆垛机处于回库口，取两垛货物，从回库口移动到货位1，放一垛货
                 first_x = CargoNow[p-1]['x']
@@ -1728,7 +1732,6 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         global inspectIndex
         global LisInspectTaskNum
         if(TwoFlag == True):
-            #SameFlag = GetSameFlag(p,second_p)
             if(SameFlag == True):
                 initJson()
                 DdjTotalTask[ddj-1] += 1 
@@ -1902,7 +1905,6 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         #print()
     elif(p_type=='H'):
         if(TwoFlag == True):
-            #SameFlag = GetSameFlag(p,second_p)
             if(SameFlag == True):
                 #获取堆垛机当前的位置，取两垛货
                 LisInspectXY = GetInspectXY(p,False)
@@ -1924,7 +1926,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']#deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CargoNow[p - 1]['line']) + ',' + 'B' #deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p)) + ',' + 'B' #deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -1940,7 +1942,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[second_p - 1]['line']) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p)) + ',' + 'B'  # deal
                 CreatJson()
                 ###
                 initJson()
@@ -2004,11 +2006,13 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 
                 waitTime1 = CALCReturnWaitTime(p,TI)
                 waitTime2 = CALCReturnWaitTime(second_p,TI)
-                waitTime = waitTime1 + waitTime2
+                waitTime = max(waitTime1 , waitTime2)
                 
                 initJson()
                 FloorNum = GetFloorNum(inspectY)
                 TaskFlow['version'] = '%d楼检定回库'%(FloorNum)
+                if(FloorNum == 4):
+                    print('error!',p)
                 TaskFlow['data']['taskContent']['stackerMachines'] = null
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = '%d楼检定回库'%(FloorNum)
@@ -2017,7 +2021,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[p - 1]['line']) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p)) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -2032,7 +2036,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[second_p - 1]['line']) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p)) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime + 20
                 CreatJson()
                 
@@ -2106,7 +2110,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p - 1]['batchNum']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p - 1]['bidBatch']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p - 1]['num']  # deal
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[p - 1]['line']) + ',' + 'B'  # deal
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p)) + ',' + 'B'  # deal
             TaskFlow['runTime'] = TI + waitTime - returnOutTime
             CreatJson()
         
@@ -2908,7 +2912,7 @@ def GetOptimizedReport():
     #initCode(PlanFlag)
     #initReportJson()
     LisType = CALCType()
-    print(len(LisType))
+    #print(len(LisType))
     #获取所有类型
     # for i in range(len(LisType)-1):
     #     Report['data']['reports'][0]['reportContent']['optimized_plan']['detail'][Days]['modules'].append({})
@@ -3065,9 +3069,11 @@ def GetOptimizedReport():
 def FunC(m,n):
     a=b=result=1 
     if m < n:
-        print("n不能于m且均为整数") 
+        pass
+        # print("n不能于m且均为整数") 
     elif ((type(m)!=int) or (type(n)!=int)): 
-        print("n不能于m且均为整数") 
+        pass
+        #print("n不能于m且均为整数") 
     else:
         minNI=min(n,m-n)#使运算最简便 
         for j in range(0,minNI):
@@ -3081,6 +3087,8 @@ def FunC(m,n):
 #对上货编码按照类型进行排序
 def SortEnterCode(LisCode):
     item = FunC(len(LisTypeOrder),2)#排列组合次数
+    if item == 1:
+        return LisCode
     LisItemTemp = []#储存每个类型的匹配次数
     temp = len(LisTypeOrder)
     for i in range(len(LisTypeOrder) - 1):
@@ -3191,7 +3199,7 @@ def TaskUpLoad(LisCode):
             else:
                 del LisDdjEnterCode[j][0]
         
-    print(LisEnterCode)
+    #print(LisEnterCode)
     
     mod = 0
     ufmod = 1
@@ -3427,8 +3435,8 @@ def test():
     Days = 0
     PlanFlag = False
     initCode(PlanFlag)
+    LisCode =[42, 16, 21, 17, 50, 23, 12, 44, 27, 39, 48, 41, 55, 36, 22, 13, 37, 57, 31, 45, 46, 38, 26, 56, 61, 47, 19, 60, 53, 65, 32, 2, 66, 43, 51, 18, 1, 62, 58, 59, 52, 49, 8, 5, 7, 24, 6, 63, 34, 69, 4, 54, 40, 28, 3, 68, 35, 64, 33, 20, 11, 25, 29, 10, 67, 15, 30, 14, 9]
     LisCode = CodeTest()
-    #LisCode =[9, 1, 12, 10, 17, 14, 16, 15, 18, 13, 2, 3, 5, 19, 6, 8, 7, 11, 20, 4]
     Report = initReportJson()
     DdjData = ddjData_sql.getStacks()
     enSimpleCode(LisCode,DdjData)
