@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-05-24 15:15:33
+LastEditTime: 2022-06-20 20:20:46
 FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
@@ -781,4 +781,8 @@ report2 = {
 
 # print("123%(s)456"%("***"))
 # fp = codes.open('月优化计划/月度入库计划.json,r,'gb2312')
+
+LisTest = [0,1,2,3,4,5,6,7,8,9]
+for i in range(0,len(LisTest),4):
+    print (i)
 

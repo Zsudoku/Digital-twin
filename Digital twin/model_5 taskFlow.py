@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-18 20:45:37
+LastEditTime: 2022-06-20 19:46:44
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -17,7 +17,7 @@ import datetime
 
 from InPutCodeOptimization import *
 from InPutCodeOriginal import *
-from InPutData import *
+from InPutData2 import *
 import mysql_goodsLocationInfo as CargoNow_sql
 import mysql_productionLineData as ddjData_sql
 import copy
@@ -3230,7 +3230,7 @@ def TaskUpLoad(LisCode):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['bidBatch']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['checkStatus'] = false
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CALCcontain(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[LisEnterCode[enterIndex] - 1]['line']) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(LisEnterCode[enterIndex])) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
             CreatJson()
         else:
@@ -3279,6 +3279,100 @@ def TaskUpLoad(LisCode):
     pass
 ####
 
+#处理SC RS的编码
+def RepeatReadCode(LisCode):
+    LisRS = [[],[],[]]# r s h
+    LisSC = [[],[],[]]# s h c
+    for i in LisCode:
+        if (CargoNow[i - 1]['sign'] == 'RS'):#拿到所有RS的
+            if (CargoNow[i - 1]['s1'] == 0 and CargoNow[i - 1]['s2'] == 0):#拿到RS中 入库的
+                LisRS[0].append(i)
+                pass
+            elif (CargoNow[i - 1]['s1'] == 0 and CargoNow[i - 1]['s2'] == 1):#拿到RS 中 送检的
+                LisRS[1].append(i)
+                pass
+            elif (CargoNow[i - 1]['s1'] == 1 and CargoNow[i - 1]['s2'] == 0):# 拿到 RS中 回库的
+                LisRS[2].append(i)
+                pass
+        elif (CargoNow[i - 1]['sign'] == 'SC'):
+            if (CargoNow[i - 1]['s1'] == 0 and CargoNow[i - 1]['s2'] == 1): #拿到SC 中送检的
+                LisSC[0].append(i)
+                pass
+            elif (CargoNow[i - 1]['s1'] == 1 and CargoNow[i - 1]['s2'] == 0):#拿到 SC 中回库的
+                LisSC[1].append(i)
+                pass
+            elif (CargoNow[i - 1]['s1'] == 1 and CargoNow[i - 1]['s2'] == 1):#拿到SC 中出库的
+                LisSC[2].append(i)
+                pass
+    LisRSCode = []#存放RS的编码 依次存放 每个小列表中的编码的id相同
+    LisSCCode = []
+    if (len(LisRS[0]) == 0 and len(LisSC[0]) == 0):
+        return LisCode
+    elif (len(LisRS[0]) != 0):#对RS处理
+        for i  in range(len(LisRS[0])):
+            LisRSCode.append([])
+            LisRSCode[i].append(LisRS[0][i])
+            for n in range(2):#拿到与R相同id的 送检、回库编码
+                for j in range(len(LisRS[n])):
+                    if CargoNow[LisRSCode[i][0]-1]['id'] == CargoNow[LisRS[n][j]-1]['id']:
+                        LisRSCode[i].append(LisRS[n][j])
+    #print(LisRSCode)    
+    elif (len(LisSC[0]) != 0):#对RS处理
+        for i  in range(len(LisSC[0])):
+            LisSCCode.append([])
+            LisSCCode[i].append(LisSC[0][i])
+            for n in range(1,3):#拿到与R相同id的 送检、回库编码
+                for j in range(len(LisSC[n])):
+                    if CargoNow[LisSCCode[i][0]-1]['id'] == CargoNow[LisSC[n][j]-1]['id']:
+                        LisSCCode[i].append(LisSC[n][j])   
+        #print(LisSCCode)
+    #print(LisCode)
+    for n in range(2):
+        if n == 0:
+            Lis = LisRSCode
+        else:
+            Lis = LisSCCode
+        for i in Lis:
+            LisIndex = []#存放三个数的索引
+            for j in i:
+                for k in range(len(LisCode)):
+                    if j == LisCode[k]:
+                        LisIndex.append(k)
+            #print("LisIndex",LisIndex)
+        #判断索引值是否符合生产实际，如不符合，则调整编码前后次序
+            if (LisIndex[0] < LisIndex[1] and LisIndex[1] < LisIndex[2]):
+                pass
+            elif (LisIndex[0] > LisIndex[1] and LisIndex[0] > LisIndex[2]):
+                temp =  LisCode[LisIndex[0]]
+                LisCode[LisIndex[0]] = LisCode[LisIndex[2]]
+                LisCode[LisIndex[2]] = temp
+                if (LisIndex[1] > LisIndex[2]):
+                    pass
+                else:
+                    temp =  LisCode[LisIndex[1]]
+                    LisCode[LisIndex[1]] = LisCode[LisIndex[2]]
+                    LisCode[LisIndex[2]] = temp
+            elif (LisIndex[1] > LisIndex[0] and LisIndex[1] > LisIndex[2]):
+                temp =  LisCode[LisIndex[1]]
+                LisCode[LisIndex[1]] = LisCode[LisIndex[2]]
+                LisCode[LisIndex[2]] = temp
+                if(LisIndex[0] > LisIndex[1]):
+                    temp =  LisCode[LisIndex[1]]
+                    LisCode[LisIndex[1]] = LisCode[LisIndex[0]]
+                    LisCode[LisIndex[0]] = temp
+            elif(LisIndex[2] > LisIndex[0] and LisIndex[2] > LisIndex[1]):
+                if(LisIndex[0] > LisIndex[1]):
+                    temp =  LisCode[LisIndex[1]]
+                    LisCode[LisIndex[1]] = LisCode[LisIndex[0]]
+                    LisCode[LisIndex[0]] = temp
+                else:
+                    print("RepeatReadCode 1 Error!")
+            else:
+                print("RepeatReadCode 2 Error!",LisIndex)
+    #print(LisCode)
+    
+    return LisCode
+
 def Fitness(LisCode,DdjData):
     GetDdjDataXYZ(DdjData)
     global LisDdjTime 
@@ -3302,6 +3396,7 @@ def enSimpleCode(LisCode:list,DdjData):
     initCode(PlanFlag)
     LisEnterTime = FoldToDdj()
     LisCode = SortEnterCode(LisCode)
+    LisCode = RepeatReadCode(LisCode)
     TaskUpLoad(LisCode)#上货点任务流
     initCode(PlanFlag)
     if(type(LisCode) == list and type(LisCode[0]) == int and type(LisCode[-1]) == int):
@@ -3435,8 +3530,9 @@ def test():
     Days = 0
     PlanFlag = False
     initCode(PlanFlag)
-    LisCode =[42, 16, 21, 17, 50, 23, 12, 44, 27, 39, 48, 41, 55, 36, 22, 13, 37, 57, 31, 45, 46, 38, 26, 56, 61, 47, 19, 60, 53, 65, 32, 2, 66, 43, 51, 18, 1, 62, 58, 59, 52, 49, 8, 5, 7, 24, 6, 63, 34, 69, 4, 54, 40, 28, 3, 68, 35, 64, 33, 20, 11, 25, 29, 10, 67, 15, 30, 14, 9]
-    LisCode = CodeTest()
+    #LisCode =[42, 16, 21, 17, 50, 23, 12, 44, 27, 39, 48, 41, 55, 36, 22, 13, 37, 57, 31, 45, 46, 38, 26, 56, 61, 47, 19, 60, 53, 65, 32, 2, 66, 43, 51, 18, 1, 62, 58, 59, 52, 49, 8, 5, 7, 24, 6, 63, 34, 69, 4, 54, 40, 28, 3, 68, 35, 64, 33, 20, 11, 25, 29, 10, 67, 15, 30, 14, 9]
+    #LisCode = CodeTest()
+    LisCode =[81, 78, 80, 212, 169, 197, 172, 37, 206, 128, 92, 123, 95, 150, 147, 111, 48, 30, 82, 120, 181, 142, 12, 140, 192, 175, 72, 160, 46, 196, 53, 110, 29, 138, 200, 188, 11, 84, 139, 31, 16, 183, 145, 23, 210, 38, 101, 7, 104, 94, 43, 74, 144, 75, 68, 22, 83, 146, 125, 3, 8, 51, 4, 153, 13, 57, 58, 118, 93, 180, 163, 171, 56, 112, 40, 186, 54, 191, 105, 70, 14, 64, 170, 166, 117, 116, 109, 143, 77, 89, 155, 199, 76, 9, 165, 86, 28, 208, 33, 149, 18, 126, 21, 198, 47, 127, 148, 194, 202, 99, 67, 35, 19, 173, 39, 45, 60, 156, 98, 71, 2, 79, 184, 52, 34, 6, 69, 133, 190, 151, 121, 55, 103, 25, 24, 207, 189, 113, 193, 100, 136, 106, 168, 159, 107, 114, 201, 157, 17, 85, 132, 26, 88, 50, 42, 41, 96, 185, 137, 174, 66, 62, 65, 152, 209, 164, 102, 130, 195, 205, 15, 129, 176, 115, 134, 49, 177, 178, 135, 187, 182, 1, 27, 162, 108, 167, 36, 10, 213, 20, 119, 203, 122, 204, 63, 44, 179, 5, 124, 161, 61, 73, 90, 59, 131, 87, 91, 97, 141, 32, 211, 154, 158]
     Report = initReportJson()
     DdjData = ddjData_sql.getStacks()
     enSimpleCode(LisCode,DdjData)
