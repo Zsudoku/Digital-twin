@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-20 19:46:44
+LastEditTime: 2022-06-20 21:41:20
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -18,6 +18,7 @@ import datetime
 from InPutCodeOptimization import *
 from InPutCodeOriginal import *
 from InPutData2 import *
+from jtyStep1 import *
 import mysql_goodsLocationInfo as CargoNow_sql
 import mysql_productionLineData as ddjData_sql
 import copy
@@ -1233,56 +1234,141 @@ def GetLisInspectXY(ddj,floor):
     return DdjInspectXYZ[floor-2][ddj-1]
 
 
+# #根据编码，获得堆垛机送检口的坐标
+# def GetInspectXY(p,Flag):
+#     global DirReturnXYZ
+#     global InspectTypeFloorNum
+#     global ReadInspectTypeNum
+#     if(CALCjudgeType(p) == 'H'):
+#         return DirReturnXYZ['%d'%(p+S)]
+#     elif(Flag == False):
+#         return DirReturnXYZ['%d'%(p)]
+#     type_p = CALCjudgeType(p)
+#     if(len(InspectTypeFloorNum) == 0):
+#         CALCDayInspectIW() 
+#     # print("DdjInspectXYZ",DdjInspectXYZ)
+#     # print("InspectTypeFloorNum",InspectTypeFloorNum)
+#     ddj = CALCStacker(p)
+#     LisInspectXY = [1000,1000]
+#     Model = CargoNow[p-1]['type']
+#     p_Floor = 0
+    
+#     # for i in range(len(InspectTypeFloorNum)):
+#     #     for j in InspectTypeFloorNum[i]:
+#     #         if int(j) == int(Model):
+                
+#     #             InspectTypeFloorNum[i].get('%d'%(int(j)))
+#     #             print(InspectTypeFloorNum[i].get('%d'%(int(j))))
+#     for i in range(len(InspectTypeFloorNum)):
+#         for j in InspectTypeFloorNum[i]:
+#             if int(j) == int(Model):
+#                 temp = InspectTypeFloorNum[i].get('%d'%(int(j)))
+#     presentNum = 0
+#     for i in temp[0]:
+#         Num = ReadInspectTypeNum.get('%d'%(Model)) 
+#         #print(temp[0])
+#         if(Num - presentNum < temp[0].get('%d'%(int(i)))):
+#             p_Floor = int(i)
+#             Num += 1
+#             ReadInspectTypeNum['%d'%(Model)] = Num
+#             break
+#         else:
+#             presentNum = temp[0].get('%d'%(int(i)))
+#     if(Flag == False):
+#         tempNum = ReadInspectTypeNum['%d'%(Model)]
+#         tempNum -= 1
+#         ReadInspectTypeNum['%d'%(Model)] = tempNum
+#     LisInspectXY = GetLisInspectXY(ddj,p_Floor)
+#     #print("temp",temp)
+#     if(type_p == 'S' and Flag == True):
+#         DirReturnXYZ['%d'%(p)] = LisInspectXY
+#     return LisInspectXY
 #根据编码，获得堆垛机送检口的坐标
 def GetInspectXY(p,Flag):
+    # global DirReturnXYZ
+    # global InspectTypeFloorNum
+    # global ReadInspectTypeNum
+    # if(CALCjudgeType(p) == 'H'):
+    #     return DirReturnXYZ['%d'%(p+S)]
+    # elif(Flag == False):
+    #     return DirReturnXYZ['%d'%(p)]
+    # type_p = CALCjudgeType(p)
+    # if(len(InspectTypeFloorNum) == 0):
+    #     CALCDayInspectIW() 
+    # # print("DdjInspectXYZ",DdjInspectXYZ)
+    # # print("InspectTypeFloorNum",InspectTypeFloorNum)
+    # ddj = CALCStacker(p)
+    # LisInspectXY = [1000,1000]
+    # Model = CargoNow[p-1]['type']
+    # p_Floor = 0
+    
+    # # for i in range(len(InspectTypeFloorNum)):
+    # #     for j in InspectTypeFloorNum[i]:
+    # #         if int(j) == int(Model):
+                
+    # #             InspectTypeFloorNum[i].get('%d'%(int(j)))
+    # #             print(InspectTypeFloorNum[i].get('%d'%(int(j))))
+    # for i in range(len(InspectTypeFloorNum)):
+    #     for j in InspectTypeFloorNum[i]:
+    #         if int(j) == int(Model):
+    #             temp = InspectTypeFloorNum[i].get('%d'%(int(j)))
+    # presentNum = 0
+    # for i in temp[0]:
+    #     Num = ReadInspectTypeNum.get('%d'%(Model)) 
+    #     #print(temp[0])
+    #     if(Num - presentNum < temp[0].get('%d'%(int(i)))):
+    #         p_Floor = int(i)
+    #         Num += 1
+    #         ReadInspectTypeNum['%d'%(Model)] = Num
+    #         break
+    #     else:
+    #         presentNum = temp[0].get('%d'%(int(i)))
+    # if(Flag == False):
+    #     tempNum = ReadInspectTypeNum['%d'%(Model)]
+    #     tempNum -= 1
+    #     ReadInspectTypeNum['%d'%(Model)] = tempNum
+    #LisInspectXY = GetLisInspectXY(ddj,p_Floor)
+    # #print("temp",temp)
+    # if(type_p == 'S'  and Flag == True):
+    #     DirReturnXYZ['%d'%(p)] = LisInspectXY
     global DirReturnXYZ
-    global InspectTypeFloorNum
-    global ReadInspectTypeNum
+    global InspectFloor
+    type_p = CALCjudgeType(p)
     if(CALCjudgeType(p) == 'H'):
         return DirReturnXYZ['%d'%(p+S)]
     elif(Flag == False):
         return DirReturnXYZ['%d'%(p)]
-    type_p = CALCjudgeType(p)
-    if(len(InspectTypeFloorNum) == 0):
-        CALCDayInspectIW() 
-    # print("DdjInspectXYZ",DdjInspectXYZ)
-    # print("InspectTypeFloorNum",InspectTypeFloorNum)
+    if len(InspectFloor) == 0:
+        InspectFloor = DistributeCollection(CargoNow)
+    #获取所在送检编码的楼层
+    p_type = CargoNow[p - 1]['type']
+    if (p_type == 11 or p_type == 15 or p_type == 16):
+        LisFloorNum = [0,4,5]
+    elif (p_type == 10):
+        LisFloorNum = [1,2]
+    elif (p_type == 12 or p_type == 14):
+        LisFloorNum = [3]
+    else:
+        print("GetInspectXY p_type Error!")
+        LisFloorNum = 'inf'
+    for i in LisFloorNum:
+        for j in range(len(InspectFloor[i])):
+            if p == InspectFloor[i][j]:
+                if (i == 0):
+                    FloorNum = 2# 送检编码所在楼层已确定
+                elif (i == 4 or i == 5):
+                    FloorNum = 5
+                elif (i == 1):
+                    FloorNum = 3
+                elif(i == 3 or i == 2):
+                    FloorNum = 4
+                else:
+                    print("LisFloorNum i Error!")
     ddj = CALCStacker(p)
-    LisInspectXY = [1000,1000]
-    Model = CargoNow[p-1]['type']
-    p_Floor = 0
-    
-    # for i in range(len(InspectTypeFloorNum)):
-    #     for j in InspectTypeFloorNum[i]:
-    #         if int(j) == int(Model):
-                
-    #             InspectTypeFloorNum[i].get('%d'%(int(j)))
-    #             print(InspectTypeFloorNum[i].get('%d'%(int(j))))
-    for i in range(len(InspectTypeFloorNum)):
-        for j in InspectTypeFloorNum[i]:
-            if int(j) == int(Model):
-                temp = InspectTypeFloorNum[i].get('%d'%(int(j)))
-    presentNum = 0
-    for i in temp[0]:
-        Num = ReadInspectTypeNum.get('%d'%(Model)) 
-        #print(temp[0])
-        if(Num - presentNum < temp[0].get('%d'%(int(i)))):
-            p_Floor = int(i)
-            Num += 1
-            ReadInspectTypeNum['%d'%(Model)] = Num
-            break
-        else:
-            presentNum = temp[0].get('%d'%(int(i)))
-    if(Flag == False):
-        tempNum = ReadInspectTypeNum['%d'%(Model)]
-        tempNum -= 1
-        ReadInspectTypeNum['%d'%(Model)] = tempNum
-    LisInspectXY = GetLisInspectXY(ddj,p_Floor)
-    #print("temp",temp)
-    if(type_p == 'S' and Flag == True):
+    LisInspectXY = GetLisInspectXY(ddj,FloorNum)
+    if(type_p == 'S'  and Flag == True):
         DirReturnXYZ['%d'%(p)] = LisInspectXY
     return LisInspectXY
-
 #根据两个编码判断送检/回库口是否相同
 def GetSameFlag(p,second_p,flag):
     # if(CALCjudgeType(p) == 'H'):
