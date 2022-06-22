@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-22 14:49:48
+LastEditTime: 2022-06-22 19:41:44
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -32,7 +32,7 @@ global PlanFlag
 # H = 14
 # C = 17
 LineTimeList=[ 31.84, 32.69, 34.55, 35.41, 37.29, 38.15, 40.02, 40.88, 42.78, 44.70, 46.58 ]
-LisCross = [[[1,3,47.11],[3,4,17.78]],[[2,3,5.17],[3,4,17.78]]] #程天宇计算
+LisCross = [[[1,3,48],[3,4,17.78]],[[2,3,5.17],[3,4,17.78]]] #程天宇计算
 #各种类型的上货数量  
 # LisGoodsNum = [{'10':8,'11':6,'13':6,'15':7,'16':12}]
 # dirInspect = {'10':8,'15':6}
@@ -472,7 +472,7 @@ def upLoad():
 
 #计算上货点的上货频率
 def CALCupLoadFre(lostTime,upLoadNum):
-    return lostTime*upLoadNum
+    return lostTime*upLoadNum + 10
 
 
 #找出上货点的对应数标
@@ -1521,7 +1521,7 @@ def GetEnterWaitTime(p,TI):
     # else:
     #     del LisEnterTime[ddj-1][0] 
     if(enterTime > TI):
-        return enterTime - TI
+        return enterTime - TI + 60
     else:
         return 0
 #读码函数
@@ -3184,32 +3184,58 @@ def SortEnterCode(LisCode):
         LisItemTemp.append(temp - 1)
         temp -= 1
     #print(LisItemTemp)
+    LisMatchType = []
+    indexInit = 1 #初始，要匹配的LisTypeOrder 下标
+    indexStand = 1 # indexInit 初始化的指标
+    for i in range(len(LisItemTemp)):
+        LisMatchType.append([])
+        for j in range(LisItemTemp[i]):
+            LisMatchType[i].append(int(LisTypeOrder[indexInit]))
+            indexInit += 1
+        indexStand += 1
+        indexInit = indexStand
+    #print(LisMatchType)
     #开始按照 LisTypeOrder 存储的顺序进行匹配
     num = 0#当前匹配的类型索引
-    numPassive = 1# 当前被匹配的类型索引 
-    for x in range (item):
-        if x+1 > LisItemTemp[num]:
+    #numPassive = 1# 当前被匹配的类型索引 
+    for x in range(item):
+        if x+1 == LisItemTemp[num]:
             num += 1
-            pass
             #进入下一个匹配
         for i in range (len(LisCode)):
             if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
-                if CargoNow[LisCode[i] - 1]['type'] == LisTypeOrder[num]:
+                if CargoNow[LisCode[i] - 1]['type'] == int(LisTypeOrder[num]):
                     for j in range (len(LisCode)):
                         if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
-                            if CargoNow[LisCode[j] - 1]['type'] == LisTypeOrder[numPassive]:
+                            if CargoNow[LisCode[j] - 1]['type'] in LisMatchType[num]:
                                 if j < i:
                                     temp = LisCode[i]
                                     LisCode[i] = LisCode[j]
                                     LisCode[j] = temp
                                     break
-                        pass
-                pass
-        # 自增或者重置 numPassive
-        if numPassive == len(LisTypeOrder):
-            numPassive = 1
-        else:
-            numPassive += 1
+    #  for x in range (item):
+    #     if x+1 == LisItemTemp[num]:
+    #         num += 1
+    #         #进入下一个匹配
+    #     for i in range (len(LisCode)):
+    #         if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
+    #             if CargoNow[LisCode[i] - 1]['type'] == int(LisTypeOrder[num]):
+    #                 for j in range (len(LisCode)):
+    #                     if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
+    #                         if CargoNow[LisCode[j] - 1]['type'] == int(LisTypeOrder[numPassive]):
+    #                             if j < i:
+    #                                 temp = LisCode[i]
+    #                                 LisCode[i] = LisCode[j]
+    #                                 LisCode[j] = temp
+    #                                 break
+    #                     pass
+    #             pass
+    #     # 自增或者重置 numPassive
+    #     if numPassive == len(LisTypeOrder) - 1:
+    #         numPassive = num + 1
+    #     else:
+    #         numPassive += 1
+    
     pass
     return LisCode
 
@@ -3487,6 +3513,7 @@ def enSimpleCode(LisCode:list,DdjData):
         LisEnterTime = FoldToDdj()
         LisCode = SortEnterCode(LisCode)
         LisCode = RepeatReadCode(LisCode)
+        
         TaskUpLoad(LisCode)#上货点任务流
         initCode(PlanFlag)
     if(type(LisCode) == list and type(LisCode[0]) == int and type(LisCode[-1]) == int):
@@ -3623,7 +3650,7 @@ def test():
     #LisCode =[42, 16, 21, 17, 50, 23, 12, 44, 27, 39, 48, 41, 55, 36, 22, 13, 37, 57, 31, 45, 46, 38, 26, 56, 61, 47, 19, 60, 53, 65, 32, 2, 66, 43, 51, 18, 1, 62, 58, 59, 52, 49, 8, 5, 7, 24, 6, 63, 34, 69, 4, 54, 40, 28, 3, 68, 35, 64, 33, 20, 11, 25, 29, 10, 67, 15, 30, 14, 9]
     #LisCode = CodeTest()
     #LisCode =[29, 6, 24, 50, 11, 23, 26, 12, 57, 36, 30, 48, 34, 19, 32, 1, 41, 17, 21, 28, 14, 52, 9, 53, 31, 45, 25, 56, 46, 7, 5, 51, 47, 39, 22, 27, 38, 54, 40,15, 44, 20, 55, 42, 2, 13, 4, 8, 33, 18, 49, 37, 16, 35, 43, 10, 3]
-    LisCode = [304, 14, 240, 176, 42, 253, 342, 208, 255, 83, 87, 58, 276, 72, 327, 248, 224, 280, 212, 244, 254, 10, 247, 245, 63, 103, 312, 20, 293, 196, 168, 344,278, 100, 306, 307, 318, 221, 266, 186, 289, 6, 99, 211, 316, 324, 57, 152,39, 339, 97, 130, 66, 199, 89, 282, 7, 223, 19, 341, 263, 69, 8, 226, 1, 305, 118, 201, 114, 195, 237, 256, 299, 53, 101, 145, 3, 249, 82, 79, 131, 94,47, 274, 135, 313, 214, 170, 155, 36, 141, 203, 106, 213, 122, 121, 74, 264, 159, 286, 21, 178, 323, 49, 34, 314, 242, 41, 207, 279, 123, 332, 98, 161,165, 225, 143, 205, 222, 281, 181, 187, 68, 73, 171, 55, 92, 33, 217, 294, 75, 231, 59, 269, 200, 193, 67, 48, 105, 163, 162, 37, 77, 227, 43, 24, 93, 275, 154, 258, 109, 309, 177, 183, 12, 238, 321, 296, 290, 219, 233, 142, 331, 335, 243, 251, 326, 56, 273, 308, 172, 330, 311, 78, 194, 65, 96, 232, 108, 111, 328, 188, 322, 110, 50, 184, 334, 204, 228, 285, 126, 84, 25, 300, 70, 206, 336, 40, 303, 46, 45, 151, 252, 9, 287, 156, 102, 310, 298, 340, 215, 153, 267, 220, 120, 38, 119, 189, 317, 28, 44, 51, 234, 18, 22, 117, 333, 144, 64, 85, 216, 31, 35, 230, 32, 81, 291, 15, 80, 197, 284, 257, 61, 173, 137, 60, 218, 337, 148, 175, 76, 182, 272, 113, 180, 191, 112, 125, 4, 17, 116, 62, 283, 29, 292, 16, 262, 295, 23, 90, 88, 190, 198, 345, 301, 179, 185, 169, 107, 147, 86, 235, 320, 241, 164, 319, 239, 5, 13, 11, 270, 71, 91, 174, 297, 133, 265, 95, 150, 209, 139, 27, 149, 54, 26, 129, 288, 343, 268, 104, 325, 250, 271, 261, 52, 210, 124, 138, 302, 192, 246, 146, 2, 136, 140, 132, 329, 260, 128, 236, 315, 277, 134, 259, 127, 157, 160, 202, 167, 338, 158, 115, 229, 30, 166
+    LisCode = [304,  240, 176, 42, 253, 342, 208, 255, 83, 87, 58, 276, 72, 327, 248, 224, 280, 212, 244, 254, 10, 247, 245, 63, 103, 312, 20, 293, 196, 168, 344,278, 100, 306, 307, 318, 221, 266, 186, 289, 6, 99, 211, 316, 324, 57, 152,39, 339, 97, 130, 66, 199, 89, 282, 7, 223, 19, 341, 263, 69, 8, 226, 1, 305, 118, 201, 114, 195, 237, 256, 299, 53, 101, 145, 3, 249, 82, 79, 131, 94,47, 274, 135, 313, 214, 170, 155, 36, 141, 203, 106, 213, 122, 121, 74, 264, 159, 286, 21, 178, 323, 49, 34, 314, 242, 41, 207, 279, 123, 332, 98, 161,165, 225, 143, 205, 222, 281, 181, 187, 68, 73, 171, 55, 92, 33, 217, 294, 75, 231, 59, 269, 200, 193, 67, 48, 105, 163, 162, 37, 77, 227, 43, 24, 93, 275, 154, 258, 109, 309, 177, 183, 12, 238, 321, 296, 290, 219, 233, 142, 331, 335, 243, 251, 326, 56, 273, 308, 172, 330, 311, 78, 194, 65, 96, 232, 108, 111, 328, 188, 322, 110, 50, 184, 334, 204, 228, 285, 126, 84, 25, 300, 70, 206, 336, 40, 303, 46, 45, 151, 252, 9, 287, 156, 102, 310, 298, 340, 215, 153, 267, 220, 120, 38, 119, 189, 317, 28, 44, 51, 234, 18, 22, 117, 333, 144, 64, 85, 216, 31, 35, 230, 32, 81, 291, 15, 80, 197, 284, 257, 61, 173, 137, 60, 218, 337, 148, 175, 76, 182, 272, 113, 180, 191, 112, 125, 14, 4, 17, 116, 62, 283, 29, 292, 16, 262, 295, 23, 90, 88, 190, 198, 345, 301, 179, 185, 169, 107, 147, 86, 235, 320, 241, 164, 319, 239, 5, 13, 11, 270, 71, 91, 174, 297, 133, 265, 95, 150, 209, 139, 27, 149, 54, 26, 129, 288, 343, 268, 104, 325, 250, 271, 261, 52, 210, 124, 138, 302, 192, 246, 146, 2, 136, 140, 132, 329, 260, 128, 236, 315, 277, 134, 259, 127, 157, 160, 202, 167, 338, 158, 115, 229, 30, 166
 ]
     Report = initReportJson()
     DdjData = ddjData_sql.getStacks()

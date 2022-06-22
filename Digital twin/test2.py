@@ -1,12 +1,13 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-06-20 20:20:46
+LastEditTime: 2022-06-22 17:01:33
 FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
 import codecs
 import copy
+import os
 # firstNum = 20
 # arithNUm = 15
 # ListNUM = []
@@ -782,7 +783,42 @@ report2 = {
 # print("123%(s)456"%("***"))
 # fp = codes.open('月优化计划/月度入库计划.json,r,'gb2312')
 
-LisTest = [0,1,2,3,4,5,6,7,8,9]
-for i in range(0,len(LisTest),4):
-    print (i)
+# LisTest = [0,1,2,3,4,5,6,7,8,9]
+# for i in range(0,len(LisTest),4):
+#     print (i)
 
+# fp = codecs.open('F:\\Digita-twin\\original_2022-04-01.json', 'r', 'utf-8')
+# a = 0
+
+# for i in fp:
+#     print(i)
+#     a += 1
+#     if(a == 3):
+#         break
+# 数据路径
+path = "F:\\Digita-twin\\original_2022-04-01.json"
+# 读取文件数据
+with open("F:\\Digita-twin\\original_2022-04-01.json", "r",encoding='utf-8') as f:
+    row_data = json.load(f)
+# 读取每一条json数据
+test = []
+for d in row_data:
+    if(d['version'] == '上货点1' or d['version'] == '上货点2'):
+        test .append(d)
+    #print(d)
+#print(row_data[3])
+for i in range(len(test)):
+    for j in range(i,len(test)):
+        if test[i]['runTime'] > test[j]['runTime']:
+            temp = test[i]
+            test[i] = test[j]
+            test[j] = temp
+#print(test)
+fp = codecs.open('outputReport.json', 'w+', 'utf-8')
+fp.write(json.dumps(test,ensure_ascii=False,indent=4))
+fp.close()
+a = test[0]['data']['taskContent']["loadPointTask"][0]['assertType']
+for i in test:
+    if a != i['data']['taskContent']["loadPointTask"][0]['assertType']:
+        print(i['runTime'])
+        a = i['data']['taskContent']["loadPointTask"][0]['assertType']

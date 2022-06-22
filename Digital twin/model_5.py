@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-21 10:12:36
+LastEditTime: 2022-06-22 19:44:33
 FilePath: \Digita-twin\Digital twin\model_5.py
 '''
 
@@ -1780,32 +1780,58 @@ def SortEnterCode(LisCode):
         LisItemTemp.append(temp - 1)
         temp -= 1
     #print(LisItemTemp)
+    LisMatchType = []
+    indexInit = 1 #初始，要匹配的LisTypeOrder 下标
+    indexStand = 1 # indexInit 初始化的指标
+    for i in range(len(LisItemTemp)):
+        LisMatchType.append([])
+        for j in range(LisItemTemp[i]):
+            LisMatchType[i].append(int(LisTypeOrder[indexInit]))
+            indexInit += 1
+        indexStand += 1
+        indexInit = indexStand
+    #print(LisMatchType)
     #开始按照 LisTypeOrder 存储的顺序进行匹配
     num = 0#当前匹配的类型索引
-    numPassive = 1# 当前被匹配的类型索引 
-    for x in range (item):
-        if x+1 > LisItemTemp[num]:
+    #numPassive = 1# 当前被匹配的类型索引 
+    for x in range(item):
+        if x+1 == LisItemTemp[num]:
             num += 1
-            pass
             #进入下一个匹配
         for i in range (len(LisCode)):
             if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
-                if CargoNow[LisCode[i] - 1]['type'] == LisTypeOrder[num]:
+                if CargoNow[LisCode[i] - 1]['type'] == int(LisTypeOrder[num]):
                     for j in range (len(LisCode)):
                         if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
-                            if CargoNow[LisCode[j] - 1]['type'] == LisTypeOrder[numPassive]:
+                            if CargoNow[LisCode[j] - 1]['type'] in LisMatchType[num]:
                                 if j < i:
                                     temp = LisCode[i]
                                     LisCode[i] = LisCode[j]
                                     LisCode[j] = temp
                                     break
-                        pass
-                pass
-        # 自增或者重置 numPassive
-        if numPassive == len(LisTypeOrder):
-            numPassive = 1
-        else:
-            numPassive += 1
+    #  for x in range (item):
+    #     if x+1 == LisItemTemp[num]:
+    #         num += 1
+    #         #进入下一个匹配
+    #     for i in range (len(LisCode)):
+    #         if CargoNow[LisCode[i] - 1]['s1'] == 0 and CargoNow[LisCode[i] - 1]['s2'] == 0:
+    #             if CargoNow[LisCode[i] - 1]['type'] == int(LisTypeOrder[num]):
+    #                 for j in range (len(LisCode)):
+    #                     if CargoNow[LisCode[j] - 1]['s1'] == 0 and CargoNow[LisCode[j] - 1]['s2'] == 0:
+    #                         if CargoNow[LisCode[j] - 1]['type'] == int(LisTypeOrder[numPassive]):
+    #                             if j < i:
+    #                                 temp = LisCode[i]
+    #                                 LisCode[i] = LisCode[j]
+    #                                 LisCode[j] = temp
+    #                                 break
+    #                     pass
+    #             pass
+    #     # 自增或者重置 numPassive
+    #     if numPassive == len(LisTypeOrder) - 1:
+    #         numPassive = num + 1
+    #     else:
+    #         numPassive += 1
+    
     pass
     return LisCode
 
