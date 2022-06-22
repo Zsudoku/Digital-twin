@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-20 21:33:35
+LastEditTime: 2022-06-21 10:12:36
 FilePath: \Digita-twin\Digital twin\model_5.py
 '''
 
@@ -637,7 +637,7 @@ def CALCStacker(id):
 
     if(id==-1):
         return 0
-    
+    #print(idToL[id])
     return idToL[id];
 
 

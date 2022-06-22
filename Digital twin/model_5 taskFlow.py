@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-19 15:33:19
 LastEditors: ZSudoku
-LastEditTime: 2022-06-20 21:41:20
+LastEditTime: 2022-06-22 14:49:48
 FilePath: \Digita-twin\Digital twin\model_5 taskFlow.py
 立库模块，主要计算堆垛机的任务
 
@@ -17,7 +17,7 @@ import datetime
 
 from InPutCodeOptimization import *
 from InPutCodeOriginal import *
-from InPutData2 import *
+from InPutData4 import *
 from jtyStep1 import *
 import mysql_goodsLocationInfo as CargoNow_sql
 import mysql_productionLineData as ddjData_sql
@@ -89,6 +89,7 @@ global ReadInspectTypeNum
 global DirReturnXYZ
 global LisTypeOrder#入库的顺序（类型）
 global DirEnterTypeNum#入库资产的类型以及对应的箱数
+global InspectFloor
 global rrr#每个堆垛机对应的line，二维list
 global ans#所有line编号,一维set
 global r#所有入库的编号,一维set
@@ -193,6 +194,7 @@ def initCode(flag):
     global DirReturnXYZ
     global LisTypeOrder#入库的顺序（类型）
     global DirEnterTypeNum#入库资产的类型以及对应的箱数
+    global InspectFloor
     global rrr#每个堆垛机对应的line，二维list
     global ans#所有line编号,一维set
     global r#所有入库的编号,一维set
@@ -231,7 +233,7 @@ def initCode(flag):
     InspectTypeFloorNum = []
     ReadInspectTypeNum = []
     LisDdjTime = []
-    
+    InspectFloor = []
     if(flag == False):
         # CargoNow = [{'x': 1868.62036, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 1, 'type': 10, 'id': 'A-5-1-1', 'bidBatch': '', 'factory': '', 'num': 1}, {'x': 1901.27039, 'y': 0.7738123, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 1, 'column': 52, 'type': 10, 'id': 'B-6-52-1', 'bidBatch': '', 'factory': '', 'num': 2}, {'x': 1894.86646, 'y': 0.7738123, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 1, 'column': 42, 'type': 10, 'id': 'A-7-42-1', 'bidBatch': '', 'factory': '', 'num': 3}, {'x': 1896.14722, 'y': 0.7738123, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 1, 'column': 44, 'type': 10, 'id': 'B-8-44-1', 'bidBatch': '', 'factory': '', 'num': 4}, {'x': 1891.02551, 'y': 0.7738123, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 1, 'column': 36, 'type': 10, 'id': 'A-9-36-1', 'bidBatch': '', 'factory': '', 'num': 5}, {'x': 1883.98486, 'y': 0.7738123, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 1, 'column': 25, 'type': 10, 'id': 'B-10-25-1', 'bidBatch': '', 'factory': '', 'num': 6}, {'x': 1877.58582, 'y': 1.54167175, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 2, 'column': 15, 'type': 10, 'id': 'A-11-15-2', 'bidBatch': '', 'factory': '', 'num': 7}, {'x': 1873.74841, 'y': 0.7738123, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 1, 'column': 9, 'type': 10, 'id': 'B-12-9-1', 'bidBatch': '', 'factory': '', 'num': 8}, {'x': 1883.3446, 'y': 0.7738123, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 1, 'column': 24, 'type': 11, 'id': 'A-13-24-1', 'bidBatch': '', 'factory': '', 'num': 9}, {'x': 1887.82837, 'y': 0.7738123, 'z': 50.3567772, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 1, 'column': 31, 'type': 11, 'id': 'B-14-31-1', 'bidBatch': '', 'factory': '', 'num': 10}, {'x': 1898.70679, 'y': 0.7738123, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 48, 'type': 11, 'id': 'A-15-48-1', 'bidBatch': '', 'factory': '', 'num': 11}, {'x': 1869.26843, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 2, 'type': 11, 'id': 'A-5-2-1', 'bidBatch': '', 'factory': '', 'num': 12}, {'x': 1900.63, 'y': 0.7738123, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 1, 'column': 51, 'type': 11, 'id': 'B-6-51-1', 'bidBatch': '', 'factory': '', 'num': 13}, {'x': 1885.26343, 'y': 0.7738123, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 1, 'column': 27, 'type': 11, 'id': 'A-7-27-1', 'bidBatch': '', 'factory': '', 'num': 14}, {'x': 1898.0625, 'y': 0.7738123, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 1, 'column': 47, 'type': 13, 'id': 'B-8-47-1', 'bidBatch': '', 'factory': '', 'num': 15}, {'x': 1871.82764, 'y': 0.7738123, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 1, 'column': 6, 'type': 13, 'id': 'A-9-6-1', 'bidBatch': '', 'factory': '', 'num': 16}, {'x': 1881.42786, 'y': 0.7738123, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 1, 'column': 21, 'type': 13, 'id': 'B-10-21-1', 'bidBatch': '', 'factory': '', 'num': 17}, {'x': 1885.90771, 'y': 1.54167175, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 2, 'column': 28, 'type': 13, 'id': 'A-11-28-2', 'bidBatch': '', 'factory': '', 'num': 18}, {'x': 1886.54578, 'y': 0.7738123, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 1, 'column': 29, 'type': 13, 'id': 'B-12-29-1', 'bidBatch': '', 'factory': '', 'num': 19}, {'x': 1901.27039, 'y': 0.7738123, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 1, 'column': 52, 'type': 13, 'id': 'A-13-52-1', 'bidBatch': '', 'factory': '', 'num': 20}, {'x': 1875.66882, 'y': 0.7738123, 'z': 50.3567772, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 1, 'column': 12, 'type': 15, 'id': 'B-14-12-1', 'bidBatch': '', 'factory': '', 'num': 21}, {'x': 1895.50488, 'y': 0.7738123, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 43, 'type': 15, 'id': 'A-15-43-1', 'bidBatch': '', 'factory': '', 'num': 22}, {'x': 1889.10876, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 33, 'type': 15, 'id': 'A-5-33-1', 'bidBatch': '', 'factory': '', 'num': 23}, {'x': 1899.98157, 'y': 0.7738123, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 1, 'column': 50, 'type': 15, 'id': 'B-6-50-1', 'bidBatch': '', 'factory': '', 'num': 24}, {'x': 1883.3446, 'y': 0.7738123, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 1, 'column': 24, 'type': 15, 'id': 'A-7-24-1', 'bidBatch': '', 'factory': '', 'num': 25}, {'x': 1873.74841, 'y': 0.7738123, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 1, 'column': 9, 'type': 15, 'id': 'B-8-9-1', 'bidBatch': '', 'factory': '', 'num': 26}, {'x': 1887.192, 'y': 1.5416708, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 2, 'column': 30, 'type': 15, 'id': 'A-9-30-2', 'bidBatch': '', 'factory': '', 'num': 27}, {'x': 1879.50464, 'y': 0.7738123, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 1, 'column': 18, 'type': 16, 'id': 'B-10-18-1', 'bidBatch': '', 'factory': '', 'num': 28}, {'x': 1898.70679, 'y': 1.54167175, 'z': 45.8976822, 's1': 0, 's2': 0, 'flag': 'A', 'line': 11, 'row': 2, 'column': 48, 'type': 16, 'id': 'A-11-48-2', 'bidBatch': '', 'factory': '', 'num': 29}, {'x': 1894.2262, 'y': 3.84524536, 'z': 47.6289978, 's1': 0, 's2': 0, 'flag': 'B', 'line': 12, 'row': 5, 'column': 41, 'type': 16, 'id': 'B-12-41-5', 'bidBatch': '', 'factory': '', 'num': 30}, {'x': 1898.0625, 'y': 0.7738123, 'z': 48.6279373, 's1': 0, 's2': 0, 'flag': 'A', 'line': 13, 'row': 1, 'column': 47, 'type': 16, 'id': 'A-13-47-1', 'bidBatch': '', 'factory': '', 'num': 31}, {'x': 1869.90466, 'y': 0.7738123, 'z': 50.3567772, 's1': 0, 's2': 0, 'flag': 'B', 'line': 14, 'row': 1, 'column': 3, 'type': 16, 'id': 'B-14-3-1', 'bidBatch': '', 'factory': '', 'num': 32}, {'x': 1891.65967, 'y': 0.7738123, 'z': 51.35709, 's1': 0, 's2': 0, 'flag': 'A', 'line': 15, 'row': 1, 'column': 37, 'type': 16, 'id': 'A-15-37-1', 'bidBatch': '', 'factory': '', 'num': 33}, {'x': 1869.90466, 'y': 0.7738123, 'z': 36.62432, 's1': 0, 's2': 0, 'flag': 'A', 'line': 5, 'row': 1, 'column': 3, 'type': 16, 'id': 'A-5-3-1', 'bidBatch': '', 'factory': '', 'num': 34}, {'x': 1880.78748, 'y': 0.7738123, 'z': 38.3443832, 's1': 0, 's2': 0, 'flag': 'B', 'line': 6, 'row': 1, 'column': 20, 'type': 16, 'id': 'B-6-20-1', 'bidBatch': '', 'factory': '', 'num': 35}, {'x': 1869.26843, 'y': 0.7738123, 'z': 40.41486, 's1': 0, 's2': 0, 'flag': 'A', 'line': 7, 'row': 1, 'column': 2, 'type': 16, 'id': 'A-7-2-1', 'bidBatch': '', 'factory': '', 'num': 36}, {'x': 1876.94336, 'y': 0.7738123, 'z': 42.17527, 's1': 0, 's2': 0, 'flag': 'B', 'line': 8, 'row': 1, 'column': 14, 'type': 16, 'id': 'B-8-14-1', 'bidBatch': '', 'factory': '', 'num': 37}, {'x': 1899.34912, 'y': 1.5416708, 'z': 43.1676674, 's1': 0, 's2': 0, 'flag': 'A', 'line': 9, 'row': 2, 'column': 49, 'type': 16, 'id': 'A-9-49-2', 'bidBatch': '', 'factory': '', 'num': 38}, {'x': 1876.94336, 'y': 1.54167175, 'z': 44.90394, 's1': 0, 's2': 0, 'flag': 'B', 'line': 10, 'row': 2, 'column': 14, 'type': 16, 'id': 'B-10-14-2', 'bidBatch': '', 'factory': '', 'num': 39}, {'x': 1901.27039, 'y': 5.380984, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 7, 'column': 52, 'type': 10, 'id': 'A-9-52-7', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 40}, {'x': 1901.27039, 'y': 5.380984, 'z': 36.62432, 's1': 1, 's2': 0, 'flag': 'A', 'line': 5, 'row': 7, 'column': 52, 'type': 10, 'id': 'A-5-52-7', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 41}, {'x': 1901.27039, 'y': 6.14884233, 'z': 40.41486, 's1': 1, 's2': 0, 'flag': 'A', 'line': 7, 'row': 8, 'column': 52, 'type': 10, 'id': 'A-7-52-8', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 42}, {'x': 1901.27039, 'y': 12.2917309, 'z': 45.8976822, 's1': 1, 's2': 0, 'flag': 'A', 'line': 11, 'row': 16, 'column': 52, 'type': 10, 'id': 'A-11-52-16', 'bidBatch': '2019年第一批', 'factory': '宁夏隆基', 'num': 43}, {'x': 1901.27039, 'y': 10.7560148, 'z': 45.8976822, 's1': 1, 's2': 0, 'flag': 'A', 'line': 11, 'row': 14, 'column': 52, 'type': 10, 'id': 'A-11-52-14', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 44}, {'x': 1901.27039, 'y': 7.68457127, 'z': 47.6289978, 's1': 1, 's2': 0, 'flag': 'B', 'line': 12, 'row': 10, 'column': 52, 'type': 10, 'id': 'B-12-52-10', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 45}, {'x': 1901.27039, 'y': 9.988155, 'z': 48.6279373, 's1': 1, 's2': 0, 'flag': 'A', 'line': 13, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-13-52-13', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 46}, {'x': 1901.27039, 'y': 9.988155, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-9-52-13', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 47}, {'x': 1901.27039, 'y': 1.54167271, 'z': 42.17527, 's1': 1, 's2': 0, 'flag': 'B', 'line': 8, 'row': 2, 'column': 52, 'type': 15, 'id': 'B-8-52-2', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 48}, {'x': 1901.27039, 'y': 6.916702, 'z': 43.1676674, 's1': 1, 's2': 0, 'flag': 'A', 'line': 9, 'row': 9, 'column': 52, 'type': 15, 'id': 'A-9-52-9', 'bidBatch': '2016年第一批', 'factory': '深圳科陆', 'num': 49}, {'x': 1901.27039, 'y': 13.8274679, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 18, 'column': 52, 'type': 15, 'id': 'B-6-52-18', 'bidBatch': '2016年第一批', 'factory': '苏源杰瑞', 'num': 50}, {'x': 1901.27039, 'y': 9.220296, 'z': 47.6289978, 's1': 1, 's2': 0, 'flag': 'B', 'line': 12, 'row': 12, 'column': 52, 'type': 15, 'id': 'B-12-52-12', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 51}, 
         #             {'x': 1901.27039, 'y': 6.916702, 'z': 50.35678, 's1': 1, 's2': 0, 'flag': 'B', 'line': 14, 'row': 9, 'column': 52, 'type': 15, 'id': 'B-14-52-9', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 52}, {'x': 1901.27039, 'y': 2.3095293, 'z': 38.3443832, 's1': 1, 's2': 0, 'flag': 'B', 'line': 6, 'row': 3, 'column': 52, 'type': 15, 'id': 'B-6-52-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 53}, {'x': 1901.27039, 'y': 5.380984, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 7, 'column': 52, 'type': 10, 'id': 'A-9-52-7', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 54}, {'x': 1901.27039, 'y': 5.380984, 'z': 36.62432, 's1': 0, 's2': 1, 'flag': 'A', 'line': 5, 'row': 7, 'column': 52, 'type': 10, 'id': 'A-5-52-7', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 55}, {'x': 1901.27039, 'y': 6.14884233, 'z': 40.41486, 's1': 0, 's2': 1, 'flag': 'A', 'line': 7, 'row': 8, 'column': 52, 'type': 10, 'id': 'A-7-52-8', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 56}, {'x': 1901.27039, 'y': 12.2917309, 'z': 45.8976822, 's1': 0, 's2': 1, 'flag': 'A', 'line': 11, 'row': 16, 'column': 52, 'type': 10, 'id': 'A-11-52-16', 'bidBatch': '2019年第一批', 'factory': '宁夏隆基', 'num': 57}, {'x': 1901.27039, 'y': 10.7560148, 'z': 45.8976822, 's1': 0, 's2': 1, 'flag': 'A', 'line': 11, 'row': 14, 'column': 52, 'type': 10, 'id': 'A-11-52-14', 'bidBatch': '2019年第一批', 'factory': '杭州炬华', 'num': 58}, {'x': 1901.27039, 'y': 7.68457127, 'z': 47.6289978, 's1': 0, 's2': 1, 'flag': 'B', 'line': 12, 'row': 10, 'column': 52, 'type': 10, 'id': 'B-12-52-10', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 59}, {'x': 1901.27039, 'y': 9.988155, 'z': 48.6279373, 's1': 0, 's2': 1, 'flag': 'A', 'line': 13, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-13-52-13', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 60}, {'x': 1901.27039, 'y': 9.988155, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-9-52-13', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 61}, {'x': 1901.27039, 'y': 1.54167271, 'z': 42.17527, 's1': 0, 's2': 1, 'flag': 'B', 'line': 8, 'row': 2, 'column': 52, 'type': 15, 'id': 'B-8-52-2', 'bidBatch': '2019年第一批', 'factory': '苏源杰瑞', 'num': 62}, {'x': 1901.27039, 'y': 6.916702, 'z': 43.1676674, 's1': 0, 's2': 1, 'flag': 'A', 'line': 9, 'row': 9, 'column': 52, 'type': 15, 'id': 'A-9-52-9', 'bidBatch': '2016年第一批', 'factory': '深圳科陆', 'num': 63}, {'x': 1901.27039, 'y': 13.8274679, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 18, 'column': 52, 'type': 15, 'id': 'B-6-52-18', 'bidBatch': '2016年第一批', 'factory': '苏源杰瑞', 'num': 64}, {'x': 1901.27039, 'y': 9.220296, 'z': 47.6289978, 's1': 0, 's2': 1, 'flag': 'B', 'line': 12, 'row': 12, 'column': 52, 'type': 15, 'id': 'B-12-52-12', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 65}, {'x': 1901.27039, 'y': 6.916702, 'z': 50.35678, 's1': 0, 's2': 1, 'flag': 'B', 'line': 14, 'row': 9, 'column': 52, 'type': 15, 'id': 'B-14-52-9', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 66}, {'x': 1901.27039, 'y': 2.3095293, 'z': 38.3443832, 's1': 0, 's2': 1, 'flag': 'B', 'line': 6, 'row': 3, 'column': 52, 'type': 15, 'id': 'B-6-52-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 67}, {'x': 1901.27039, 'y': 9.988155, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-13-52-13', 'bidBatch': '2020年第一批', 'factory': '宁波三星', 'num': 68}, {'x': 1901.27039, 'y': 9.988155, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 13, 'column': 52, 'type': 10, 'id': 'A-9-52-13', 'bidBatch': '2019年第二批', 'factory': '深圳科陆', 'num': 69}, {'x': 1901.27039, 'y': 8.452438, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 11, 'column': 52, 'type': 10, 'id': 'A-11-52-11', 'bidBatch': '2016年第一批', 'factory': '苏源杰瑞', 'num': 70}, {'x': 1901.27039, 'y': 6.916702, 'z': 44.90394, 's1': 1, 's2': 1, 'flag': 'B', 'line': 10, 'row': 9, 'column': 52, 'type': 11, 'id': 'B-10-52-9', 'bidBatch': '2020年第一批', 'factory': '深圳科陆', 'num': 71}, {'x': 1901.27039, 'y': 6.916702, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 9, 'column': 52, 'type': 11, 'id': 'A-13-52-9', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 72}, {'x': 1901.27039, 'y': 11.5238724, 'z': 40.41486, 's1': 1, 's2': 1, 'flag': 'A', 'line': 7, 'row': 15, 'column': 52, 'type': 11, 'id': 'A-7-52-15', 'bidBatch': '2021年第一批', 'factory': '深圳科陆', 'num': 73}, {'x': 1901.27039, 'y': 11.5238724, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 15, 'column': 52, 'type': 11, 'id': 'B-6-52-15', 'bidBatch': '2019年第一批', 'factory': '深圳科陆', 'num': 74}, {'x': 1901.27039, 'y': 13.8274679, 'z': 50.35678, 's1': 1, 's2': 1, 'flag': 'B', 'line': 14, 'row': 18, 'column': 52, 'type': 11, 'id': 'B-14-52-18', 'bidBatch': '2019年第二批', 'factory': '苏源杰瑞', 'num': 75}, {'x': 1901.27039, 'y': 4.613105, 'z': 47.6289978, 's1': 1, 's2': 1, 'flag': 'B', 'line': 12, 'row': 6, 'column': 52, 'type': 11, 'id': 'B-12-52-6', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 76}, {'x': 1896.7876, 'y': 1.54167175, 'z': 36.62432, 's1': 1, 's2': 1, 'flag': 'A', 'line': 5, 'row': 2, 'column': 45, 'type': 13, 'id': 'A-5-45-2', 'bidBatch': '2020年第一批', 'factory': '宁夏隆基', 'num': 77}, {'x': 1898.70679, 'y': 0.7738123, 'z': 43.1676674, 's1': 1, 's2': 1, 'flag': 'A', 'line': 9, 'row': 1, 'column': 48, 'type': 13, 'id': 'A-9-48-1', 'bidBatch': '2019年第二批', 'factory': '宁波三星', 'num': 78}, {'x': 1898.70679, 'y': 0.7738123, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 1, 'column': 48, 'type': 13, 'id': 'B-6-48-1', 'bidBatch': '2019年第二批', 'factory': '宁夏隆基', 'num': 79}, {'x': 1900.63, 'y': 1.54167175, 'z': 48.6279373, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 2, 'column': 51, 'type': 13, 'id': 'A-13-51-2', 'bidBatch': '2019年第一批', 'factory': '深圳科陆', 'num': 80}, {'x': 1901.27039, 'y': 1.54167175, 'z': 45.8976822, 's1': 1, 's2': 1, 'flag': 'A', 'line': 11, 'row': 2, 'column': 52, 'type': 13, 'id': 'A-11-52-2', 'bidBatch': '2019年第一批', 'factory': '宁波三星', 'num': 81}, {'x': 1901.27039, 'y': 2.3095293, 'z': 38.3443832, 's1': 1, 's2': 1, 'flag': 'B', 'line': 6, 'row': 3, 'column': 52, 'type': 15, 'id': 'B-6-52-3', 'bidBatch': '2016年第一批', 'factory': '宁夏隆基', 'num': 82}, {'x': 1901.27039, 'y': 2.3095293, 'z': 48.62794, 's1': 1, 's2': 1, 'flag': 'A', 'line': 13, 'row': 3, 'column': 52, 'type': 15, 'id': 'A-13-52-3', 'bidBatch': '2019年第二批', 'factory': '苏源杰瑞', 'num': 83}, {'x': 1901.27039, 'y': 13.8274679, 'z': 40.41486, 's1': 1, 's2': 1, 'flag': 'A', 'line': 7, 'row': 18, 'column': 52, 'type': 15, 'id': 'A-7-52-18', 'bidBatch': '2020年第一批', 'factory': '苏源杰瑞', 'num': 84}]
@@ -1524,6 +1526,7 @@ def GetEnterWaitTime(p,TI):
         return 0
 #读码函数
 def ReadCode(TI,TDI,p,second_p,third_p):
+    global DirInspectCodeTime
     global DdjTotalTask
     global LisReturnTime
     #编码类型
@@ -2012,7 +2015,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']#deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p)) + ',' + 'B' #deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] =str(CALCStacker(p) + 2) + ',' + 'B' #deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -2028,7 +2031,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p) + 2) + ',' + 'B'  # deal
                 CreatJson()
                 ###
                 initJson()
@@ -2097,8 +2100,8 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 initJson()
                 FloorNum = GetFloorNum(inspectY)
                 TaskFlow['version'] = '%d楼检定回库'%(FloorNum)
-                if(FloorNum == 4):
-                    print('error!',p)
+                # if(FloorNum == 4):
+                #     print('error!',p)
                 TaskFlow['data']['taskContent']['stackerMachines'] = null
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['taskNumber'] = 1
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['equipmentName'] = '%d楼检定回库'%(FloorNum)
@@ -2107,7 +2110,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p) + 2) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime
                 CreatJson()
                 
@@ -2122,7 +2125,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[second_p-1]['batchNum']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[second_p-1]['bidBatch']  # deal
                 TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[second_p-1]['num']  # deal
-                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p)) + ',' + 'B'  # deal
+                TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(second_p) + 2) + ',' + 'B'  # deal
                 TaskFlow['runTime'] = TI + waitTime - returnOutTime + 20
                 CreatJson()
                 
@@ -2196,7 +2199,7 @@ def ReadCode(TI,TDI,p,second_p,third_p):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['arrivedBatch'] = CargoNow[p - 1]['batchNum']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[p - 1]['bidBatch']  # deal
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CargoNow[p - 1]['num']  # deal
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p)) + ',' + 'B'  # deal
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(p) + 2) + ',' + 'B'  # deal
             TaskFlow['runTime'] = TI + waitTime - returnOutTime
             CreatJson()
         
@@ -3316,7 +3319,7 @@ def TaskUpLoad(LisCode):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['bidBatch']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['checkStatus'] = false
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CALCcontain(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(LisEnterCode[enterIndex])) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(LisEnterCode[enterIndex]) + 2) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
             CreatJson()
         else:
@@ -3337,7 +3340,7 @@ def TaskUpLoad(LisCode):
             TaskFlow['data']['taskContent']['loadPointTask'][0]['bidBatch'] = CargoNow[LisEnterCode[enterIndex] - 1]['bidBatch']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['checkStatus'] = false
             TaskFlow['data']['taskContent']['loadPointTask'][0]['contain'] = CALCcontain(int(CargoNow[LisEnterCode[enterIndex] - 1]['type']))
-            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CargoNow[LisEnterCode[enterIndex] - 1]['line']) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
+            TaskFlow['data']['taskContent']['loadPointTask'][0]['strackerNo'] = str(CALCStacker(LisEnterCode[enterIndex]) + 2) + ',' + CargoNow[LisEnterCode[enterIndex] - 1]['flag']
             TaskFlow['data']['taskContent']['loadPointTask'][0]['outTask'] = C
             CreatJson()
         ufmod += 1 
@@ -3480,11 +3483,12 @@ def enSimpleCode(LisCode:list,DdjData):
     fp.close()
     global LisEnterTime
     initCode(PlanFlag)
-    LisEnterTime = FoldToDdj()
-    LisCode = SortEnterCode(LisCode)
-    LisCode = RepeatReadCode(LisCode)
-    TaskUpLoad(LisCode)#上货点任务流
-    initCode(PlanFlag)
+    if R > 0:
+        LisEnterTime = FoldToDdj()
+        LisCode = SortEnterCode(LisCode)
+        LisCode = RepeatReadCode(LisCode)
+        TaskUpLoad(LisCode)#上货点任务流
+        initCode(PlanFlag)
     if(type(LisCode) == list and type(LisCode[0]) == int and type(LisCode[-1]) == int):
         #print("yes!")
         #LisEnterTime = cal(LisCode,5) #叠箱机到堆垛机入库口
@@ -3618,7 +3622,9 @@ def test():
     initCode(PlanFlag)
     #LisCode =[42, 16, 21, 17, 50, 23, 12, 44, 27, 39, 48, 41, 55, 36, 22, 13, 37, 57, 31, 45, 46, 38, 26, 56, 61, 47, 19, 60, 53, 65, 32, 2, 66, 43, 51, 18, 1, 62, 58, 59, 52, 49, 8, 5, 7, 24, 6, 63, 34, 69, 4, 54, 40, 28, 3, 68, 35, 64, 33, 20, 11, 25, 29, 10, 67, 15, 30, 14, 9]
     #LisCode = CodeTest()
-    LisCode =[81, 78, 80, 212, 169, 197, 172, 37, 206, 128, 92, 123, 95, 150, 147, 111, 48, 30, 82, 120, 181, 142, 12, 140, 192, 175, 72, 160, 46, 196, 53, 110, 29, 138, 200, 188, 11, 84, 139, 31, 16, 183, 145, 23, 210, 38, 101, 7, 104, 94, 43, 74, 144, 75, 68, 22, 83, 146, 125, 3, 8, 51, 4, 153, 13, 57, 58, 118, 93, 180, 163, 171, 56, 112, 40, 186, 54, 191, 105, 70, 14, 64, 170, 166, 117, 116, 109, 143, 77, 89, 155, 199, 76, 9, 165, 86, 28, 208, 33, 149, 18, 126, 21, 198, 47, 127, 148, 194, 202, 99, 67, 35, 19, 173, 39, 45, 60, 156, 98, 71, 2, 79, 184, 52, 34, 6, 69, 133, 190, 151, 121, 55, 103, 25, 24, 207, 189, 113, 193, 100, 136, 106, 168, 159, 107, 114, 201, 157, 17, 85, 132, 26, 88, 50, 42, 41, 96, 185, 137, 174, 66, 62, 65, 152, 209, 164, 102, 130, 195, 205, 15, 129, 176, 115, 134, 49, 177, 178, 135, 187, 182, 1, 27, 162, 108, 167, 36, 10, 213, 20, 119, 203, 122, 204, 63, 44, 179, 5, 124, 161, 61, 73, 90, 59, 131, 87, 91, 97, 141, 32, 211, 154, 158]
+    #LisCode =[29, 6, 24, 50, 11, 23, 26, 12, 57, 36, 30, 48, 34, 19, 32, 1, 41, 17, 21, 28, 14, 52, 9, 53, 31, 45, 25, 56, 46, 7, 5, 51, 47, 39, 22, 27, 38, 54, 40,15, 44, 20, 55, 42, 2, 13, 4, 8, 33, 18, 49, 37, 16, 35, 43, 10, 3]
+    LisCode = [304, 14, 240, 176, 42, 253, 342, 208, 255, 83, 87, 58, 276, 72, 327, 248, 224, 280, 212, 244, 254, 10, 247, 245, 63, 103, 312, 20, 293, 196, 168, 344,278, 100, 306, 307, 318, 221, 266, 186, 289, 6, 99, 211, 316, 324, 57, 152,39, 339, 97, 130, 66, 199, 89, 282, 7, 223, 19, 341, 263, 69, 8, 226, 1, 305, 118, 201, 114, 195, 237, 256, 299, 53, 101, 145, 3, 249, 82, 79, 131, 94,47, 274, 135, 313, 214, 170, 155, 36, 141, 203, 106, 213, 122, 121, 74, 264, 159, 286, 21, 178, 323, 49, 34, 314, 242, 41, 207, 279, 123, 332, 98, 161,165, 225, 143, 205, 222, 281, 181, 187, 68, 73, 171, 55, 92, 33, 217, 294, 75, 231, 59, 269, 200, 193, 67, 48, 105, 163, 162, 37, 77, 227, 43, 24, 93, 275, 154, 258, 109, 309, 177, 183, 12, 238, 321, 296, 290, 219, 233, 142, 331, 335, 243, 251, 326, 56, 273, 308, 172, 330, 311, 78, 194, 65, 96, 232, 108, 111, 328, 188, 322, 110, 50, 184, 334, 204, 228, 285, 126, 84, 25, 300, 70, 206, 336, 40, 303, 46, 45, 151, 252, 9, 287, 156, 102, 310, 298, 340, 215, 153, 267, 220, 120, 38, 119, 189, 317, 28, 44, 51, 234, 18, 22, 117, 333, 144, 64, 85, 216, 31, 35, 230, 32, 81, 291, 15, 80, 197, 284, 257, 61, 173, 137, 60, 218, 337, 148, 175, 76, 182, 272, 113, 180, 191, 112, 125, 4, 17, 116, 62, 283, 29, 292, 16, 262, 295, 23, 90, 88, 190, 198, 345, 301, 179, 185, 169, 107, 147, 86, 235, 320, 241, 164, 319, 239, 5, 13, 11, 270, 71, 91, 174, 297, 133, 265, 95, 150, 209, 139, 27, 149, 54, 26, 129, 288, 343, 268, 104, 325, 250, 271, 261, 52, 210, 124, 138, 302, 192, 246, 146, 2, 136, 140, 132, 329, 260, 128, 236, 315, 277, 134, 259, 127, 157, 160, 202, 167, 338, 158, 115, 229, 30, 166
+]
     Report = initReportJson()
     DdjData = ddjData_sql.getStacks()
     enSimpleCode(LisCode,DdjData)
