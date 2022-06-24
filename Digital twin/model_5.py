@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-22 19:44:33
+LastEditTime: 2022-06-23 10:39:45
 FilePath: \Digita-twin\Digital twin\model_5.py
 '''
 
@@ -13,6 +13,7 @@ import mysql_productionLineData as ddjData_sql
 import copy
 from jtyStep1 import *
 from InPutData2 import *
+import time
 #CargoNow = CargoNow_sql.getGoodsLocationInfoVice()
 # R = 39
 # S = 14
@@ -1970,7 +1971,7 @@ def CALCLisCode(CargoNowt):
 #print(len(LisCode))
 #ThisCargoNow = CargoNow_sql.getGoodsLocationInfoVice()
 
-
+time_start = time.time()  # 记录开始时间
 ThisCargoNow = CargoOriginal[0]
 LisCode = CALCLisCode(ThisCargoNow)
 #LisCode =[24, 31, 16, 27, 68, 50, 43, 34, 20, 25, 30, 17, 67, 11, 14, 60, 46, 1, 35, 65, 8, 44, 41, 42, 3, 54, 4, 51, 37, 55, 10, 58, 53, 7, 21, 47, 40, 39, 18, 23, 22, 36, 5, 9, 29, 32, 2, 28, 6, 57, 61, 56, 59, 49, 15, 13, 48, 12, 62, 52, 19, 69, 66, 33,26, 45, 63, 64, 38]
@@ -1985,3 +1986,12 @@ print(enSimpleCode(LisCode,DdjData,ThisCargoNow))
 # print(len(CargoNow_sql.getGoodsLocationInfoVice()))
 #print(ddjData_sql.getStacks()[0])
 print(DirInspectCodeTime)
+
+    
+#time_start = time.time()  # 记录开始时间
+# for i in range(len(ThisCargoNow)):
+#     x = ThisCargoNow[i]['x'] + ThisCargoNow[5]['x']
+#print(ThisCargoNow[9]['x'])
+time_end = time.time()  # 记录结束时间
+time_sum = round(time_end - time_start,3)  # 计算的时间差为程序的执行时间，单位为秒/s
+print(len(ThisCargoNow),time_sum)

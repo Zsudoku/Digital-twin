@@ -1,7 +1,7 @@
 '''
 Date: 2022-04-05 17:19:52
 LastEditors: ZSudoku
-LastEditTime: 2022-06-22 17:01:33
+LastEditTime: 2022-06-24 13:11:38
 FilePath: \Digita-twin\Digital twin\test2.py
 '''
 from __future__ import unicode_literals
@@ -821,4 +821,5 @@ a = test[0]['data']['taskContent']["loadPointTask"][0]['assertType']
 for i in test:
     if a != i['data']['taskContent']["loadPointTask"][0]['assertType']:
         print(i['runTime'])
+        print(i['data']['taskContent']["loadPointTask"][0]['assertType'])
         a = i['data']['taskContent']["loadPointTask"][0]['assertType']
