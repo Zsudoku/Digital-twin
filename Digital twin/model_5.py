@@ -1,7 +1,7 @@
 '''
 Date: 2022-05-28 18:34:49
 LastEditors: ZSudoku
-LastEditTime: 2022-06-23 10:39:45
+LastEditTime: 2022-06-25 16:50:20
 FilePath: \Digita-twin\Digital twin\model_5.py
 '''
 
@@ -601,8 +601,21 @@ def FoldToDdj():
             LisToDdjX[3].append(LisToDdj[i])
         elif i%11 == 8 or i%11 == 9:
             LisToDdjX[4].append(LisToDdj[i])
-        
-    return LisToDdjX
+    #根据堆垛机的入库顺序，根据flag划分A 和 B
+    # A的时间小于B的时间
+    LisToDdjF = []
+    for i in range(len(LisToDdjX)):
+        LisToDdjF.append([])
+        LisToDdjF[i].append([])
+        LisToDdjF[i].append([])
+        for j in range(len(LisToDdjX[i])):
+            if ((j % 2 == 0) or (i == len(LisToDdjX) - 1)):
+                LisToDdjF[i][0].append(LisToDdjX[i][j])
+            else:
+                LisToDdjF[i][1].append(LisToDdjX[i][j])
+    # print(LisToDdjX)
+    # print(LisToDdjF)
+    return LisToDdjF
 
 ####model_4 over
 
@@ -1126,15 +1139,40 @@ def CALCReturnWaitTime(p,TI):
 
 #计算入库的等待时间
 def GetEnterWaitTime(p,TI):
+    global upEnterType
+    global nowEnterType
+    global EnterTypeNum
     global LisEnterTime
+    
     ddj = CALCStacker(p)
-    #enterTime = LisEnterTime[ddj-1][0].get('%d'%(ddj))
-    enterTime = LisEnterTime[ddj-1][0]
-    del LisEnterTime[ddj-1][0] 
-    if(enterTime > TI):
-        return enterTime
+    nowEnterType = int(CargoNow[p - 1]['type'])
+    if (CargoNow[p - 1]['flag'] == 'A'):
+        flagIndex = 0
+    elif (CargoNow[p - 1]['flag'] == 'B'):
+        flagIndex = 1
+    if upEnterType > 0:
+        if nowEnterType == upEnterType:
+            enterTime = LisEnterTime[ddj-1][flagIndex][0] + EnterTypeNum * 600
+        else:
+            EnterTypeNum += 1
+            enterTime = LisEnterTime[ddj-1][flagIndex][0] + EnterTypeNum * 600
     else:
-        return 0
+        enterTime = LisEnterTime[ddj-1][flagIndex][0]
+    upEnterType = nowEnterType
+    try:
+        del LisEnterTime[ddj-1][flagIndex][0] 
+    except IndexError:
+        print("IndexError")
+        return 600
+        pass
+    # if(LisEnterTime[ddj-1][flagIndex] == None):
+    #     pass
+    # else:
+    #     del LisEnterTime[ddj-1][flagIndex][0] 
+    if(enterTime > TI):
+        return enterTime - TI + 600
+    else:
+        return 600
 #读码函数
 def ReadCode(TI,TDI,p,second_p,third_p):
     global DirInspectCodeTime
@@ -1189,12 +1227,19 @@ def ReadCode(TI,TDI,p,second_p,third_p):
         #一次作业两垛资产 类型相同
         TwoFlag = True
         if(p_type=='R'):
-            #入库 放两垛资产
-            first_x = CargoNow[p-1]['x']
-            first_y = CargoNow[p-1]['y']
-            
-            second_x = CargoNow[second_p-1]['x']
-            second_y = CargoNow[second_p-1]['y']
+            if(CargoNow[p-1]['flag'] != CargoNow[second_p-1]['flag']):
+                #相同方向，只入库一垛
+                TwoFlag = False
+                first_x = CargoNow[p-1]['x']
+                first_y = CargoNow[p-1]['y']
+                pass
+            else:
+                #入库 放两垛资产
+                first_x = CargoNow[p-1]['x']
+                first_y = CargoNow[p-1]['y']
+                
+                second_x = CargoNow[second_p-1]['x']
+                second_y = CargoNow[second_p-1]['y']
         elif(p_type=='S'):
             SameFlag = GetSameFlag(p,second_p,True)
             if(SameFlag == True):
